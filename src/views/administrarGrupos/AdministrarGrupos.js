@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import Autosuggest from 'react-autosuggest'
+
 import { CCard, CCardBody, CCol, CCardHeader, CRow, CForm, CFormLabel, CFormInput, CButton, CButtonGroup, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell } from '@coreui/react'
 
 const AdministrarGrupos = () => {
   const [nombre, setNombre] = useState('')
-  const [descripcion, setDescripcion] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
   const [grupos, setGrupos] = useState([])
   const [expandedGrupoId, setExpandedGrupoId] = useState(null)
+  const [profesores, setProfesores] = useState([])
+  const [selectedProfesor, setSelectedProfesor] = useState(null)
+  const [emails, setEmails] = useState('')
 
   useEffect(() => {
     axios.get('http://localhost:8091/api/grupos')
@@ -20,13 +24,16 @@ const AdministrarGrupos = () => {
       })
   }, [])
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log('Nombre del Grupo:', nombre)
-    console.log('Descripción:', descripcion)
-    setModalVisible(false) // Cerrar el modal después de agregar el grupo
-  }
-
+  useEffect(() => {
+    axios.get('http://localhost:8091/api/profesores')
+      .then(response => {
+        setProfesores(response.data)
+      })
+      .catch(error => {
+        console.error('Error fetching profesores:', error)
+      })
+  }, [])
+  
   const toggleExpand = (grupoId) => {
     setExpandedGrupoId(expandedGrupoId === grupoId ? null : grupoId)
   }
@@ -62,6 +69,43 @@ const AdministrarGrupos = () => {
           })
       }
     })
+  }
+
+  const handleFileUpload = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      Papa.parse(e.target.files[0], {
+        complete: (result) => {
+          const emailsArray = result.data.map((row) => row.email).filter((email) => email)
+          setEmails(emailsArray.join(', '))
+        },
+        header: true
+      })
+    }
+  }
+  
+  const handleCreateGroup = (e) => {
+    e.preventDefault()
+    if (!selectedProfesor || !nombre) {
+      alert('Por favor, completa todos los campos.')
+      return
+    }
+    const emailsArray = emails.split(',').map(email => email.trim()).filter(email => email !== '')
+    const grupoDTO = {
+      nombre: nombre,
+      profesorEmail: selectedProfesor,
+      correosEstudiantes: emailsArray.length > 0 ? emailsArray : null
+    }
+    axios.post('http://localhost:8091/api/grupos', grupoDTO)
+      .then(response => {
+        alert('Grupo creado exitosamente.')
+        setModalVisible(false)
+        // Actualiza la lista de grupos si es necesario
+        setGrupos([...grupos, response.data])
+      })
+      .catch(error => {
+        console.error('Error creando el grupo:', error)
+        alert('Error creando el grupo.')
+      })
   }
   
   return (
@@ -130,29 +174,50 @@ const AdministrarGrupos = () => {
           <CModalTitle>Crear Nuevo Grupo</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <CForm onSubmit={handleSubmit}>
-            <CFormLabel htmlFor="nombre">Nombre del Grupo</CFormLabel>
-            <CFormInput
-              type="text"
-              id="nombre"
-              placeholder="Ingrese el nombre del grupo"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-            />
-            <CFormLabel htmlFor="descripcion" className="mt-3">Descripción</CFormLabel>
-            <CFormInput
-              type="text"
-              id="descripcion"
-              placeholder="Ingrese una descripción"
-              value={descripcion}
-              onChange={(e) => setDescripcion(e.target.value)}
-            />
-          </CForm>
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={() => setModalVisible(false)}>Cancelar</CButton>
-          <CButton color="primary" onClick={handleSubmit}>Crear Grupo</CButton>
-        </CModalFooter>
+  <CForm onSubmit={handleCreateGroup}>
+    <CFormLabel htmlFor="nombre">Nombre del Grupo</CFormLabel>
+    <CFormInput
+      type="text"
+      id="nombre"
+      placeholder="Ingrese el nombre del grupo"
+      value={nombre}
+      onChange={(e) => setNombre(e.target.value)}
+    />
+    <CFormLabel htmlFor="profesor" className="mt-3">Selecciona un Profesor</CFormLabel>
+    <select
+      className="mt-1 block w-full p-2 border border-gray-300 rounded"
+      value={selectedProfesor ?? ''}
+      onChange={e => setSelectedProfesor(e.target.value)}
+    >
+      <option value="" disabled>Selecciona un profesor</option>
+      {profesores.map(profesor => (
+        <option key={profesor.email} value={profesor.email}>
+          {profesor.nombre}
+        </option>
+      ))}
+    </select>
+    <CFormLabel htmlFor="emails" className="mt-3">Correos de Estudiantes (separados por comas)</CFormLabel>
+    <CFormInput
+      type="text"
+      id="emails"
+      placeholder="Ingresa los correos de los estudiantes"
+      value={emails}
+      onChange={(e) => setEmails(e.target.value)}
+    />
+    <CFormLabel htmlFor="file" className="mt-3">Subir archivo CSV</CFormLabel>
+    <CFormInput
+      type="file"
+      id="file"
+      accept=".csv"
+      onChange={handleFileUpload}
+    />
+  </CForm>
+</CModalBody>
+<CModalFooter>
+  <CButton color="secondary" onClick={() => setModalVisible(false)}>Cancelar</CButton>
+  <CButton color="primary" onClick={handleCreateGroup}>Crear Grupo</CButton>
+    </CModalFooter>
+
       </CModal>
     </>
   )
