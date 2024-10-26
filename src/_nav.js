@@ -28,6 +28,16 @@ const _nav = [
   },
   {
     component: CNavTitle,
+    name: 'Crear grupo',
+  },
+  {
+    component: CNavItem,
+    name: 'Administrar Grupos',
+    to: '/administrarGrupos',
+    icon: <CIcon icon={cilChartPie} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavTitle,
     name: 'Theme',
   },
   {
