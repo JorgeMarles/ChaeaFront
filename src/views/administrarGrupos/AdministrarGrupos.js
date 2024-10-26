@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import Autosuggest from 'react-autosuggest'
+import Papa from 'papaparse'
 
 import { CCard, CCardBody, CCol, CCardHeader, CRow, CForm, CFormLabel, CFormInput, CButton, CButtonGroup, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell } from '@coreui/react'
 
@@ -13,6 +14,12 @@ const AdministrarGrupos = () => {
   const [profesores, setProfesores] = useState([])
   const [selectedProfesor, setSelectedProfesor] = useState(null)
   const [emails, setEmails] = useState('')
+  const [selectedGrupo, setSelectedGrupo] = useState(null)
+  const [students, setStudents] = useState([])
+  const [suggestions, setSuggestions] = useState([]) 
+  const [selectedStudents, setSelectedStudents] = useState([]) 
+  const [profesor, setProfesor] = useState(null)
+  const [profesorSuggestions, setProfesorSuggestions] = useState([])
 
   useEffect(() => {
     axios.get('http://localhost:8091/api/grupos')
@@ -33,6 +40,17 @@ const AdministrarGrupos = () => {
         console.error('Error fetching profesores:', error)
       })
   }, [])
+
+  useEffect(() => {
+    axios.get('http://localhost:8091/api/estudiantes')
+      .then(response => {
+        setStudents(response.data)
+      })
+      .catch(error => {
+        console.error('Error fetching estudiantes:', error)
+      })
+  }, [])
+  
   
   const toggleExpand = (grupoId) => {
     setExpandedGrupoId(expandedGrupoId === grupoId ? null : grupoId)
@@ -69,44 +87,151 @@ const AdministrarGrupos = () => {
           })
       }
     })
-  }
+  }    
 
-  const handleFileUpload = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      Papa.parse(e.target.files[0], {
+  const handleFileUpload = (file, updatedStudents) => {
+    if (file) {
+      Papa.parse(file, {
         complete: (result) => {
-          const emailsArray = result.data.map((row) => row.email).filter((email) => email)
-          setEmails(emailsArray.join(', '))
+          // Verifica si existe la columna "correo" o "email" y utiliza la que encuentre
+          const emailsArray = result.data.map((row) => row.correo || row.email).filter((email) => email)
+          const csvStudents = emailsArray.map(email => ({ email, fromCSV: true }))
+          
+          // Verificar duplicados antes de agregar
+          const uniqueCsvStudents = csvStudents.filter(csvStudent => 
+            !updatedStudents.some(selectedStudent => selectedStudent.email === csvStudent.email)
+          )
+          
+          setSelectedStudents([...updatedStudents, ...uniqueCsvStudents])
         },
         header: true
       })
     }
   }
+
+  const handleFileChange = (e) => {
+    // Limpiar estudiantes agregados desde el archivo CSV anterior
+    const updatedStudents = selectedStudents.filter(student => !student.fromCSV)
+    setSelectedStudents(updatedStudents)
+  
+    if (!e.target.files || e.target.files.length === 0) {
+      // Si no hay archivos seleccionados, solo actualizar la lista de estudiantes
+      return
+    }
+  
+    // Llamar a handleFileUpload para procesar el nuevo archivo
+    handleFileUpload(e.target.files[0], updatedStudents)
+  }
   
   const handleCreateGroup = (e) => {
     e.preventDefault()
-    if (!selectedProfesor || !nombre) {
-      alert('Por favor, completa todos los campos.')
+    if (!profesor || !nombre) {
+      Swal.fire({
+        title: 'Campos incompletos',
+        text: 'Por favor, completa todos los campos.',
+        icon: 'warning'
+      })
       return
     }
-    const emailsArray = emails.split(',').map(email => email.trim()).filter(email => email !== '')
+    const emailsArray = selectedStudents.map(student => student.email)
     const grupoDTO = {
       nombre: nombre,
-      profesorEmail: selectedProfesor,
+      profesorEmail: profesor.email,
       correosEstudiantes: emailsArray.length > 0 ? emailsArray : null
     }
     axios.post('http://localhost:8091/api/grupos', grupoDTO)
       .then(response => {
-        alert('Grupo creado exitosamente.')
+        Swal.fire({
+          title: '¡Grupo creado exitosamente!',
+          text: 'El grupo ha sido creado con éxito.',
+          icon: 'success'
+        })
         setModalVisible(false)
-        // Actualiza la lista de grupos si es necesario
         setGrupos([...grupos, response.data])
+        clearForm() // Limpiar la lista de estudiantes seleccionados y otros campos del formulario
       })
       .catch(error => {
         console.error('Error creando el grupo:', error)
-        alert('Error creando el grupo.')
+        Swal.fire({
+          title: 'Error',
+          text: 'Hubo un error al crear el grupo.',
+          icon: 'error'
+        })
       })
   }
+  
+  
+  
+  const getSuggestions = (value) => {
+    const inputValue = value.trim().toLowerCase()
+    const inputLength = inputValue.length
+  
+    return inputLength === 0 ? [] : students.filter(student =>
+      student.email.toLowerCase().slice(0, inputLength) === inputValue
+    )
+  }
+  
+  const getSuggestionValue = suggestion => suggestion.email
+  
+  const renderSuggestion = suggestion => (
+    <div>
+      {suggestion.email}
+    </div>
+  )
+  
+  const onSuggestionsFetchRequested = ({ value }) => {
+    setSuggestions(getSuggestions(value))
+  }
+  
+  const onSuggestionsClearRequested = () => {
+    setSuggestions([])
+  }
+
+  const onSuggestionSelected = (event, { suggestion }) => {
+    if (!selectedStudents.some(student => student.email === suggestion.email)) {
+      setSelectedStudents([...selectedStudents, suggestion])
+    }
+    setEmails('') // Limpiar el campo de búsqueda después de seleccionar un estudiante
+  }
+  
+
+  const clearForm = () => {
+    setNombre('')
+    setProfesor(null)
+    setEmails('')
+    setSelectedStudents([])
+    document.getElementById('file').value = null // Limpiar el input del archivo CSV
+  }
+
+  const getProfesorSuggestions = (value) => {
+    const inputValue = value.trim().toLowerCase()
+    const inputLength = inputValue.length
+  
+    return inputLength === 0 ? [] : profesores.filter(profesor =>
+      profesor.nombre.toLowerCase().slice(0, inputLength) === inputValue
+    )
+  }
+  
+  const getProfesorSuggestionValue = suggestion => suggestion.nombre
+  
+  const renderProfesorSuggestion = suggestion => (
+    <div>
+      {suggestion.nombre}
+    </div>
+  )
+  
+  const onProfesorSuggestionsFetchRequested = ({ value }) => {
+    setProfesorSuggestions(getProfesorSuggestions(value))
+  }
+  
+  const onProfesorSuggestionsClearRequested = () => {
+    setProfesorSuggestions([])
+  }
+  
+  const onProfesorSuggestionSelected = (event, { suggestion }) => {
+    setProfesor(suggestion)
+  }
+  
   
   return (
     <>
@@ -135,16 +260,13 @@ const AdministrarGrupos = () => {
                   <CTableBody>
                     {grupos.map(grupo => (
                       <React.Fragment key={grupo.id}>
-                        <CTableRow>
+                        <CTableRow onClick={() => toggleExpand(grupo.id)} style={{ cursor: 'pointer' }}>
                           <CTableDataCell>{grupo.nombre}</CTableDataCell>
                           <CTableDataCell>{grupo.profesor.nombre}</CTableDataCell>
-                          <CTableDataCell onClick={() => toggleExpand(grupo.id)} style={{ cursor: 'pointer' }}>
-                            {grupo.estudiantes.length}
-                          </CTableDataCell>
+                          <CTableDataCell>{grupo.estudiantes.length}</CTableDataCell>
                           <CTableDataCell>
-                            <CButton color="danger" size="sm" onClick={() => handleDelete(grupo)}> - </CButton>
+                            <CButton color="danger" size="sm" onClick={(e) => { e.stopPropagation(); handleDelete(grupo); }}> - </CButton>
                           </CTableDataCell>
-
                         </CTableRow>
                         {expandedGrupoId === grupo.id && (
                           <CTableRow>
@@ -161,7 +283,7 @@ const AdministrarGrupos = () => {
                         )}
                       </React.Fragment>
                     ))}
-                  </CTableBody>
+              </CTableBody>
                 </CTable>
               )}
             </CCardBody>
@@ -169,7 +291,7 @@ const AdministrarGrupos = () => {
         </CCol>
       </CRow>
 
-      <CModal visible={modalVisible} onClose={() => setModalVisible(false)}>
+      <CModal visible={modalVisible} onClose={() => { setModalVisible(false); clearForm(); }}>
         <CModalHeader onClose={() => setModalVisible(false)}>
           <CModalTitle>Crear Nuevo Grupo</CModalTitle>
         </CModalHeader>
@@ -183,35 +305,57 @@ const AdministrarGrupos = () => {
       value={nombre}
       onChange={(e) => setNombre(e.target.value)}
     />
-    <CFormLabel htmlFor="profesor" className="mt-3">Selecciona un Profesor</CFormLabel>
-    <select
-      className="mt-1 block w-full p-2 border border-gray-300 rounded"
-      value={selectedProfesor ?? ''}
-      onChange={e => setSelectedProfesor(e.target.value)}
-    >
-      <option value="" disabled>Selecciona un profesor</option>
-      {profesores.map(profesor => (
-        <option key={profesor.email} value={profesor.email}>
-          {profesor.nombre}
-        </option>
-      ))}
-    </select>
-    <CFormLabel htmlFor="emails" className="mt-3">Correos de Estudiantes (separados por comas)</CFormLabel>
-    <CFormInput
-      type="text"
-      id="emails"
-      placeholder="Ingresa los correos de los estudiantes"
-      value={emails}
-      onChange={(e) => setEmails(e.target.value)}
-    />
-    <CFormLabel htmlFor="file" className="mt-3">Subir archivo CSV</CFormLabel>
+    <CFormLabel htmlFor="buscarProfesor">Buscar Profesor</CFormLabel>
+      <Autosuggest
+    suggestions={profesorSuggestions}
+    onSuggestionsFetchRequested={onProfesorSuggestionsFetchRequested}
+    onSuggestionsClearRequested={onProfesorSuggestionsClearRequested}
+    getSuggestionValue={getProfesorSuggestionValue}
+    renderSuggestion={renderProfesorSuggestion}
+    inputProps={{
+      placeholder: 'Escribe el nombre del profesor',
+      value: profesor ? profesor.nombre : '',
+      onChange: (e, { newValue }) => {
+        if (!newValue) setProfesor(null)
+        else setProfesor({ nombre: newValue }) // Evitar error cuando 'newValue' es nulo
+      }
+    }}
+    onSuggestionSelected={onProfesorSuggestionSelected}
+  />
+
+    <CFormLabel htmlFor="buscarEstudiantes">Buscar estudiantes</CFormLabel>
+    <Autosuggest
+      suggestions={suggestions}
+      onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+      onSuggestionsClearRequested={onSuggestionsClearRequested}
+      getSuggestionValue={getSuggestionValue}
+      renderSuggestion={renderSuggestion}
+      inputProps={{
+      placeholder: 'Escribe un correo electrónico',
+      value: emails,
+      onChange: (e, { newValue }) => setEmails(newValue)
+      }}
+  onSuggestionSelected={onSuggestionSelected}
+/>
+
+    <CFormLabel htmlFor="file" className="mt-3">Subir archivo CSV (Columna: correo/email)</CFormLabel>
     <CFormInput
       type="file"
       id="file"
-      accept=".csv"
-      onChange={handleFileUpload}
+     accept=".csv"
+     onChange={handleFileChange}
     />
+
+    <CFormLabel className="mt-3">Estudiantes seleccionados</CFormLabel>
+      <ul>
+      {selectedStudents.map(student => (
+      <li key={student.email}>
+      {student.email}
+     </li>
+      ))}
+    </ul>
   </CForm>
+
 </CModalBody>
 <CModalFooter>
   <CButton color="secondary" onClick={() => setModalVisible(false)}>Cancelar</CButton>
