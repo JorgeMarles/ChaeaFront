@@ -94,20 +94,29 @@ const AdministrarGrupos = () => {
     })
   }    
 
-  const handleFileChangeAddStudents = (e, setSelectedNewStudents, selectedNewStudents) => {
+  const handleFileChangeAddStudents = (e, setSelectedNewStudents) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      // Si no hay archivos seleccionados, solo actualizar la lista de estudiantes
+      return;
+    }
+  
+    const updatedNewStudents = [];
+    setSelectedNewStudents(updatedNewStudents);
+  
     const file = e.target.files[0];
     if (file) {
       Papa.parse(file, {
         complete: (result) => {
           const emailsArray = result.data.map((row) => row.correo || row.email).filter((email) => email);
-          const uniqueCsvStudents = emailsArray.filter(email => !selectedNewStudents.includes(email));
-          setSelectedNewStudents(prevStudents => [...prevStudents, ...uniqueCsvStudents]);
+          const uniqueCsvStudents = emailsArray.filter(email => !updatedNewStudents.includes(email));
+          setSelectedNewStudents([...updatedNewStudents, ...uniqueCsvStudents]);
           console.log("Estudiantes agregados desde CSV:", uniqueCsvStudents); // Verificar correos añadidos desde CSV
         },
         header: true
       });
     }
   }
+  
   
 
   const handleFileChange = (e, setSelectedStudents) => {
@@ -127,7 +136,7 @@ const AdministrarGrupos = () => {
 
   const handleFileChangeCreateGroup = (e) => {
     // Limpiar estudiantes agregados desde el archivo CSV anterior
-    const updatedStudents = selectedStudents.filter(student => !student.fromCSV);
+    const updatedStudents = [];
     setSelectedStudents(updatedStudents);
   
     if (!e.target.files || e.target.files.length === 0) {
@@ -220,6 +229,7 @@ const AdministrarGrupos = () => {
       });
   }
 
+  
 
   const getSuggestions = (value) => {
     const inputValue = value.trim().toLowerCase();
