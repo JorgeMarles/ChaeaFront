@@ -37,6 +37,16 @@ const _nav = [
     to: '/administrarGrupos',
     icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
   },
+  {
+    component: CNavTitle,
+    name: 'Grupos',
+  },
+  {
+    component: CNavItem,
+    name: 'Administrar Grupos',
+    to: '/profesorGrupos',
+    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+  },
   //ACTUALIZAR USER
   {
     component: CNavTitle,

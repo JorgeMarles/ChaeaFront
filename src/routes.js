@@ -11,7 +11,8 @@ const AdministrarGrupos = React.lazy(() => import('./views/administrarGrupos/Adm
 const ActualizarEstudiante= React.lazy(() => import('./views/miCuenta/actualizarEstudiante/ActualizarEstudiante.js'))
 //ACTUALIZAR CUENTA DE PROFESOR
 const ActualizarProfesor= React.lazy(() => import('./views/miCuenta/actualizarProfesor/ActualizarProfesor.js'))
-
+//Profesor grupos
+const ProfesorGrupos = React.lazy(() => import('./views/profesorGrupos/ProfesorGrupos'))
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -89,9 +90,11 @@ const routes = [
   { path: '/charts', name: 'Charts', element: Charts },
   //CHAEA DEVELOP
   //
-  //admin grupos
+  //admin  TOTAL grupos
   { path: '/administrarGrupos', name: 'Administrar Grupos', element: AdministrarGrupos },
-  //MI CUENTA DESPLEGABLE
+  // Profesor Administrar Grupos
+  { path: '/profesorGrupos', name: 'Administrar Grupos', element: ProfesorGrupos },
+  // DESPLEGABLE DE CUENTAS
   { path: '/miCuenta', name: 'Mi Cuenta', element: ActualizarEstudiante, exact: true },
   //Actualizar mi cuenta user
   { path: '/miCuenta/actualizarEstudiante', name: 'Actualizar Cuenta de Estudiante', element: ActualizarEstudiante },
