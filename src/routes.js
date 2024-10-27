@@ -5,7 +5,13 @@ const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 
 //CHAEA DEVELOP
+//admin grupos
 const AdministrarGrupos = React.lazy(() => import('./views/administrarGrupos/AdministrarGrupos'))
+//ACTUALIZAR CUENTA DE USUARIO
+const ActualizarEstudiante= React.lazy(() => import('./views/miCuenta/actualizarEstudiante/ActualizarEstudiante.js'))
+//ACTUALIZAR CUENTA DE PROFESOR
+const ActualizarProfesor= React.lazy(() => import('./views/miCuenta/actualizarProfesor/ActualizarProfesor.js'))
+
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -82,8 +88,15 @@ const routes = [
   { path: '/buttons/button-groups', name: 'Button Groups', element: ButtonGroups },
   { path: '/charts', name: 'Charts', element: Charts },
   //CHAEA DEVELOP
-  { path: '/administrarGrupos', name: 'Administrar Grupos', element: AdministrarGrupos },
   //
+  //admin grupos
+  { path: '/administrarGrupos', name: 'Administrar Grupos', element: AdministrarGrupos },
+  //MI CUENTA DESPLEGABLE
+  { path: '/miCuenta', name: 'Mi Cuenta', element: ActualizarEstudiante, exact: true },
+  //Actualizar mi cuenta user
+  { path: '/miCuenta/actualizarEstudiante', name: 'Actualizar Cuenta de Estudiante', element: ActualizarEstudiante },
+  //Actualizar cuenta profesor
+  { path: '/miCuenta/actualizarProfesor', name: 'Actualizar Cuenta de Profesor', element: ActualizarProfesor },
   { path: '/forms', name: 'Forms', element: FormControl, exact: true },
   { path: '/forms/form-control', name: 'Form Control', element: FormControl },
   { path: '/forms/select', name: 'Select', element: Select },

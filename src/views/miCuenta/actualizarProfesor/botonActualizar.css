@@ -1,0 +1,13 @@
+.custom-warning-button {
+    background-color: #f9b115;
+    border-color: #f9b115;
+    color: black;
+    transition: transform 0.2s, background-color 0.2s;
+  }
+  
+  .custom-warning-button:hover {
+    transform: scale(1.05); 
+    background-color: #e0a10d; 
+    cursor: pointer; 
+    color: black;
+  }

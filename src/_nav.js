@@ -12,6 +12,7 @@ import {
   cilPuzzle,
   cilSpeedometer,
   cilStar,
+  cilMoodGood
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -25,16 +26,51 @@ const _nav = [
       color: 'info',
       text: 'NEW',
     },
-  },
+  }, //ADMIN GRUPOS 
   {
     component: CNavTitle,
-    name: 'Crear grupo',
+    name: 'Crear grupo (ADMIN TOTAL)',
   },
   {
     component: CNavItem,
     name: 'Administrar Grupos',
     to: '/administrarGrupos',
-    icon: <CIcon icon={cilChartPie} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+  },
+  //ACTUALIZAR USER
+  {
+    component: CNavTitle,
+    name: 'ESTUDIANTE',
+  },
+  {
+    component: CNavGroup,
+    name: 'Mi Cuenta',
+    to: '/miCuenta',
+    icon: <CIcon icon={cilMoodGood} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Actualizar Cuenta',
+        to: '/miCuenta/actualizarEstudiante',
+      },
+    ],
+  },
+  {
+    component: CNavTitle,
+    name: 'PROFESOR',
+  },
+  {
+    component: CNavGroup,
+    name: 'Mi Cuenta',
+    to: '/miCuenta',
+    icon: <CIcon icon={cilMoodGood} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Actualizar Cuenta',
+        to: '/miCuenta/actualizarProfesor',
+      },
+    ],
   },
   {
     component: CNavTitle,
