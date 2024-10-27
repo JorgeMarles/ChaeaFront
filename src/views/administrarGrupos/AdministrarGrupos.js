@@ -404,7 +404,7 @@ const AdministrarGrupos = () => {
                       <React.Fragment key={grupo.id}>
                         <CTableRow onClick={() => toggleExpand(grupo.id)} style={{ cursor: 'pointer' }}>
                           <CTableDataCell>{grupo.nombre}</CTableDataCell>
-                          <CTableDataCell>{grupo.profesor.nombre}+{grupo.profesor.correo}</CTableDataCell>
+                          <CTableDataCell>{`${grupo.profesor.nombre} (${grupo.profesor.email})`}</CTableDataCell>
                           <CTableDataCell>{grupo.estudiantes.length}</CTableDataCell>
                           <CTableDataCell>
                             <CButton color="danger" size="sm" onClick={(e) => { e.stopPropagation(); handleDelete(grupo); }}> - </CButton>
