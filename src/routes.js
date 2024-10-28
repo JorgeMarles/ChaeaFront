@@ -1,4 +1,5 @@
 import React from 'react'
+import EstudianteVistaCuestionario from './views/estudianteVistaCuestionarios/EstudianteVistaCuestionarios.js'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
@@ -13,6 +14,8 @@ const ActualizarEstudiante= React.lazy(() => import('./views/miCuenta/actualizar
 const ActualizarProfesor= React.lazy(() => import('./views/miCuenta/actualizarProfesor/ActualizarProfesor.js'))
 //Profesor grupos
 const ProfesorGrupos = React.lazy(() => import('./views/profesorGrupos/ProfesorGrupos'))
+//Estudiante Vista Cuestionarios
+const EstudianteVistaCuestionarios = React.lazy(() => import('./views/estudianteVistaCuestionarios/EstudianteVistaCuestionarios.js'))
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -100,6 +103,8 @@ const routes = [
   { path: '/miCuenta/actualizarEstudiante', name: 'Actualizar Cuenta de Estudiante', element: ActualizarEstudiante },
   //Actualizar cuenta profesor
   { path: '/miCuenta/actualizarProfesor', name: 'Actualizar Cuenta de Profesor', element: ActualizarProfesor },
+  //Vistas Cuestionarios Estudiante
+  { path: '/estudianteVistaCuestionarios', name: 'Vista de mis Cuestionarios', element: EstudianteVistaCuestionarios },
   { path: '/forms', name: 'Forms', element: FormControl, exact: true },
   { path: '/forms/form-control', name: 'Form Control', element: FormControl },
   { path: '/forms/select', name: 'Select', element: Select },

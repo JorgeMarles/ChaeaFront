@@ -17,16 +17,7 @@ import {
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
 const _nav = [
-  {
-    component: CNavItem,
-    name: 'Dashboard',
-    to: '/dashboard',
-    icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-    badge: {
-      color: 'info',
-      text: 'NEW',
-    },
-  }, //ADMIN GRUPOS 
+ //ADMIN GRUPOS 
   {
     component: CNavTitle,
     name: 'Crear grupo (ADMIN TOTAL)',
@@ -51,6 +42,12 @@ const _nav = [
   {
     component: CNavTitle,
     name: 'ESTUDIANTE',
+  },
+  {
+    component: CNavItem,
+    name: 'Cuestionarios',
+    to: '/estudianteVistaCuestionarios',
+    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
   },
   {
     component: CNavGroup,
@@ -85,6 +82,16 @@ const _nav = [
   {
     component: CNavTitle,
     name: 'Theme',
+  },
+  {
+    component: CNavItem,
+    name: 'Dashboard',
+    to: '/dashboard',
+    icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
+    badge: {
+      color: 'info',
+      text: 'NEW',
+    },
   },
   {
     component: CNavItem,
