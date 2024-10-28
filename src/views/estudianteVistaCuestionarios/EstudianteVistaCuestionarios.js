@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import jwt_decode from 'jsonwebtoken';
 import { CAlert, CCard, CCardBody, CCardTitle, CCol, CNav, CNavItem, CNavLink, CRow, CTabContent, CTabPane, CButton } from '@coreui/react';
-import { useState } from 'react';
 
 const EstudianteVistaCuestionario = () => {
-  const estudianteLogueado = {
-    email: "omar@ufps.edu.co",
-    nombre: "Omar Villamizar",
-    codigo: "1152239"
-  };
-
+  const [estudianteLogueado, setEstudianteLogueado] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const token = searchParams.get("token");
+    if (token) {
+      console.log(token)
+      try {
+        const decoded = jwt_decode(token);
+        setEstudianteLogueado(decoded.user);
+      } catch (error) {
+        console.error("Token inválido", error);
+      }
+    }
+  }, [searchParams]);
+
+  if (!estudianteLogueado) {
+    return <p>Cargando...</p>;
+  }
 
   return (
     <div>

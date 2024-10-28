@@ -1,5 +1,5 @@
 import React from 'react'
-import EstudianteVistaCuestionario from './views/estudianteVistaCuestionarios/EstudianteVistaCuestionarios.js'
+
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
