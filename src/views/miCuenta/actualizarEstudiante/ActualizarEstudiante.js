@@ -2,13 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { CForm, CCol, CFormInput, CFormSelect, CButton } from '@coreui/react';
 import Swal from 'sweetalert2';
 import './botonActualizar.css';
+import { useNavigate, useOutletContext } from 'react-router-dom';
+import { dateFromMsToString } from '../../../util/dateUtils';
+import { updateUserInfo } from '../../../util/services/userService';
 
 const ActualizarEstudiante = () => {
   // Estado y funciones de manejadores
+  const user = useOutletContext();
+  const navigate = useNavigate();
+  
   const [formData, setFormData] = useState({
-    codigo: '',
-    fechaNacimiento: '',
-    genero: '',
+    codigo: user.codigo,
+    fechaNacimiento: dateFromMsToString(user.fechaNacimiento),
+    genero: user.genero,
   });
 
   const clearForm = () => {
@@ -38,12 +44,11 @@ const ActualizarEstudiante = () => {
     }
 
     console.log('Form data submitted:', formData);
-    
+    const userUpd = {...user, ...formData};
     // Simulación de llamada al backend
-    fakeBackendCall(formData)
-      .then(response => {
+    updateUserInfo(userUpd)
+      .then(response => {        
         if (response.ok) {
-          clearForm();
           Swal.fire({
             title: '¡Cuenta actualizada!',
             text: 'Los datos de la cuenta han sido actualizados correctamente.',
@@ -107,9 +112,9 @@ const ActualizarEstudiante = () => {
           onChange={handleChange}
         >
           <option value="">Choose...</option>
-          <option value="Masculino">Masculino</option>
-          <option value="Femenino">Femenino</option>
-          <option value="Prefiero no decirlo">Prefiero no decirlo</option>
+          <option value="MASCULINO">Masculino</option>
+          <option value="FEMENINO">Femenino</option>
+          <option value="NO_DECIR">Prefiero no decirlo</option>
         </CFormSelect>
       </CCol>
       <CCol xs={12}>

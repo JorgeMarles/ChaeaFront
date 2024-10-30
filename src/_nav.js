@@ -52,13 +52,13 @@ const _nav = [
   {
     component: CNavGroup,
     name: 'Mi Cuenta',
-    to: '/miCuenta',
+    to: '/cuenta',
     icon: <CIcon icon={cilMoodGood} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
         name: 'Actualizar Cuenta',
-        to: '/miCuenta/actualizarEstudiante',
+        to: '/cuenta/actualizar-cuenta-estudiante',
       },
     ],
   },

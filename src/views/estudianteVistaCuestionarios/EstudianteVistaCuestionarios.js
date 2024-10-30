@@ -1,34 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import jwt_decode from 'jsonwebtoken';
+import { useOutletContext, useSearchParams } from 'react-router-dom';
+
 import { CAlert, CCard, CCardBody, CCardTitle, CCol, CNav, CNavItem, CNavLink, CRow, CTabContent, CTabPane, CButton } from '@coreui/react';
 
 const EstudianteVistaCuestionario = () => {
-  const [estudianteLogueado, setEstudianteLogueado] = useState(null);
+  const user = useOutletContext();
   const [activeTab, setActiveTab] = useState(0);
-  const [searchParams] = useSearchParams();
-
-  useEffect(() => {
-    const token = searchParams.get("token");
-    if (token) {
-      console.log(token)
-      try {
-        const decoded = jwt_decode(token);
-        setEstudianteLogueado(decoded.user);
-      } catch (error) {
-        console.error("Token inválido", error);
-      }
-    }
-  }, [searchParams]);
-
-  if (!estudianteLogueado) {
-    return <p>Cargando...</p>;
-  }
 
   return (
     <div>
       <CAlert color="info" className="mb-4">
-        Bienvenid@ Estudiante {estudianteLogueado.nombre}
+        Bienvenid@ Estudiante {user.nombre}
       </CAlert>
 
       <CNav variant="tabs" role="tablist">

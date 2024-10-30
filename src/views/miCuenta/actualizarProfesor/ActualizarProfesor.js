@@ -2,12 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { CForm, CCol, CFormInput, CFormSelect, CButton } from '@coreui/react';
 import Swal from 'sweetalert2';
 import './botonActualizar.css';
+import { updateUserInfo } from '../../../util/services/userService';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 
 const ActualizarCuentaProfesor = () => {
+  const user = useOutletContext();
+  const navigate = useNavigate();
+
   // Estado y funciones de manejadores
   const [formData, setFormData] = useState({
-    codigo: '',
-    carrera: '',
+    codigo: user.codigo,
+    carrera: user.carrera,
   });
 
   const clearForm = () => {
@@ -39,10 +44,11 @@ const ActualizarCuentaProfesor = () => {
     console.log('Form data submitted:', formData);
     
     // Simulación de llamada al backend
-    fakeBackendCall(formData)
-      .then(response => {
+    const userUpd = {...user, ...formData};
+    // Simulación de llamada al backend
+    updateUserInfo(userUpd)
+      .then(response => {        
         if (response.ok) {
-          clearForm();
           Swal.fire({
             title: '¡Cuenta actualizada!',
             text: 'Los datos de la cuenta han sido actualizados correctamente.',

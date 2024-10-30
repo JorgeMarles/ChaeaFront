@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { Roles } from './util/userUtils.js'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
@@ -9,13 +9,25 @@ const Typography = React.lazy(() => import('./views/theme/typography/Typography'
 //admin grupos
 const AdministrarGrupos = React.lazy(() => import('./views/administrarGrupos/AdministrarGrupos'))
 //ACTUALIZAR CUENTA DE USUARIO
-const ActualizarEstudiante= React.lazy(() => import('./views/miCuenta/actualizarEstudiante/ActualizarEstudiante.js'))
+const ActualizarEstudiante = React.lazy(
+  () => import('./views/miCuenta/actualizarEstudiante/ActualizarEstudiante.js'),
+)
 //ACTUALIZAR CUENTA DE PROFESOR
-const ActualizarProfesor= React.lazy(() => import('./views/miCuenta/actualizarProfesor/ActualizarProfesor.js'))
+const ActualizarProfesor = React.lazy(
+  () => import('./views/miCuenta/actualizarProfesor/ActualizarProfesor.js'),
+)
 //Profesor grupos
 const ProfesorGrupos = React.lazy(() => import('./views/profesorGrupos/ProfesorGrupos'))
 //Estudiante Vista Cuestionarios
-const EstudianteVistaCuestionarios = React.lazy(() => import('./views/estudianteVistaCuestionarios/EstudianteVistaCuestionarios.js'))
+const EstudianteVistaCuestionarios = React.lazy(
+  () => import('./views/estudianteVistaCuestionarios/EstudianteVistaCuestionarios.js'),
+)
+const ResponderCuestionario = React.lazy(
+  () => import('./views/estudianteVistaCuestionarios/ResponderCuestionario.jsx')
+)
+
+const Login = React.lazy(() => import('./views/pages/login/Login.js'))
+////////////////////////////////////////////////
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -91,20 +103,6 @@ const routes = [
   { path: '/buttons/dropdowns', name: 'Dropdowns', element: Dropdowns },
   { path: '/buttons/button-groups', name: 'Button Groups', element: ButtonGroups },
   { path: '/charts', name: 'Charts', element: Charts },
-  //CHAEA DEVELOP
-  //
-  //admin  TOTAL grupos
-  { path: '/administrarGrupos', name: 'Administrar Grupos', element: AdministrarGrupos },
-  // Profesor Administrar Grupos
-  { path: '/profesorGrupos', name: 'Administrar Grupos', element: ProfesorGrupos },
-  // DESPLEGABLE DE CUENTAS
-  { path: '/miCuenta', name: 'Mi Cuenta', element: ActualizarEstudiante, exact: true },
-  //Actualizar mi cuenta user
-  { path: '/miCuenta/actualizarEstudiante', name: 'Actualizar Cuenta de Estudiante', element: ActualizarEstudiante },
-  //Actualizar cuenta profesor
-  { path: '/miCuenta/actualizarProfesor', name: 'Actualizar Cuenta de Profesor', element: ActualizarProfesor },
-  //Vistas Cuestionarios Estudiante
-  { path: '/estudianteVistaCuestionarios', name: 'Vista de mis Cuestionarios', element: EstudianteVistaCuestionarios },
   { path: '/forms', name: 'Forms', element: FormControl, exact: true },
   { path: '/forms/form-control', name: 'Form Control', element: FormControl },
   { path: '/forms/select', name: 'Select', element: Select },
@@ -126,4 +124,95 @@ const routes = [
   { path: '/widgets', name: 'Widgets', element: Widgets },
 ]
 
+
+const sinasignar = [
+  //CHAEA DEVELOP
+  //
+  //admin  TOTAL grupos
+  // Profesor Administrar Grupos
+  { path: '/profesorGrupos', name: 'Administrar Grupos', element: ProfesorGrupos },
+  // DESPLEGABLE DE CUENTAS
+  //Actualizar mi cuenta user
+  {
+    path: '/miCuenta/actualizarEstudiante',
+    name: 'Actualizar Cuenta de Estudiante',
+    element: ActualizarEstudiante,
+  },
+  //Actualizar cuenta profesor
+  {
+    path: '/miCuenta/actualizarProfesor',
+    name: 'Actualizar Cuenta de Profesor',
+    element: ActualizarProfesor,
+  },
+  //Vistas Cuestionarios Estudiante
+  {
+    path: '/estudianteVistaCuestionarios',
+    name: 'Vista de mis Cuestionarios',
+    element: EstudianteVistaCuestionarios,
+  },
+]
+
+const protectedRoutes = [
+  {
+    path: '/cuenta/actualizar-cuenta-estudiante/',
+    name: 'Actualizar mi cuenta',
+    element: ActualizarEstudiante,
+    roles: [Roles.ESTUDIANTE_ACTIVO, Roles.ESTUDIANTE_INCOMPLETO],
+  },
+  {
+    path: '/cuestionarios/',
+    name: 'Cuestionarios',
+    element: EstudianteVistaCuestionarios,
+    roles: [Roles.ESTUDIANTE_ACTIVO],
+  },
+  {
+    path: '/cuestionario/:id/responder/',
+    name: 'Responder cuestionario',
+    element: ResponderCuestionario,
+    roles: [Roles.ESTUDIANTE_ACTIVO],
+  },
+  {
+    path: '/cuestionario/:id/resultado/',
+    name: 'Resultado de cuestionario',
+    element: null,
+    roles: [Roles.ESTUDIANTE_ACTIVO],
+  },
+
+  {
+    path: '/cuenta/actualizar-cuenta-profesor/',
+    name: 'Actualizar mi cuenta',
+    element: ActualizarProfesor,
+    roles: [
+      Roles.PROFESOR_ACTIVO,
+      Roles.PROFESOR_INACTIVO,
+      Roles.PROFESOR_INCOMPLETO,
+      Roles.PROFESOR_NO_APROBADO,
+      Roles.ADMINISTRADOR
+    ],
+  },
+  {
+    path: '/grupos/',
+    name: 'Mis Grupos',
+    element: ProfesorGrupos,
+    roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
+  },
+  {
+    path: '/grupos/aplicaciones-cuestionarios/',
+    name: 'Resultados de Grupos',
+    element: null,
+    roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
+  },
+  {
+    path: '/estudiante/:id/resultados/',
+    name: 'Resultado de Estudiante',
+    element: null,
+    roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
+  },
+
+  { path: '/cuentas/', name: 'Administrar cuentas', element: null, roles: [Roles.ADMINISTRADOR] },
+]
+
 export default routes
+export {
+  protectedRoutes
+}
