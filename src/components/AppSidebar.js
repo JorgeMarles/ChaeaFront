@@ -24,11 +24,11 @@ import { getRole } from '../util/userUtils'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
-  const auth = useAuth();
-  const [rol, setRol] = useState([]);
-  const navigate = useNavigate();
+  const auth = useAuth()
+  const [rol, setRol] = useState([])
+  const navigate = useNavigate()
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const nuser = await auth.getUser()
       if (!nuser) {
         // Redirect them to the /login page, but save the current location they were
@@ -36,11 +36,11 @@ const AppSidebar = () => {
         // along to that page after they login, which is a nicer user experience
         // than dropping them off on the home page.
         navigate('/login')
-      } else{
-        const rol = getRole(nuser);
-        setRol(rol);
+      } else {
+        const rol = getRole(nuser)
+        setRol(rol)
       }
-    })();
+    })()
   }, [])
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
@@ -59,7 +59,11 @@ const AppSidebar = () => {
       <CSidebarHeader className="border-bottom">
         <CSidebarBrand to="/">
           <CIcon customClassName="sidebar-brand-full" icon={logo} height={32} />
-          <CIcon customClassName="sidebar-brand-narrow" icon={sygnet} height={32} />
+          <CIcon
+            customClassName="sidebar-brand-narrow"
+            icon={sygnet}
+            height={32}
+          />
         </CSidebarBrand>
         <CCloseButton
           className="d-lg-none"
@@ -70,7 +74,9 @@ const AppSidebar = () => {
       <AppSidebarNav items={navigation} rol={rol} />
       <CSidebarFooter className="border-top d-none d-lg-flex">
         <CSidebarToggler
-          onClick={() => dispatch({ type: 'set', sidebarUnfoldable: !unfoldable })}
+          onClick={() =>
+            dispatch({ type: 'set', sidebarUnfoldable: !unfoldable })
+          }
         />
       </CSidebarFooter>
     </CSidebar>

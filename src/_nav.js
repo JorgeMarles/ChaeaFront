@@ -12,32 +12,26 @@ import {
   cilPuzzle,
   cilSpeedometer,
   cilStar,
-  cilMoodGood
+  cilMoodGood,
+  cilGroup,
+  cilUser,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 import { Roles } from './util/userUtils'
 
 const _nav = [
- //ADMIN GRUPOS 
-  {
-    component: CNavTitle,
-    name: 'Crear grupo (ADMIN TOTAL)',
-  },
-  {
-    component: CNavItem,
-    name: 'Administrar Grupos',
-    to: '/administrarGrupos',
-    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-  },
+  //ADMINISTRAR GRUPOS
   {
     component: CNavTitle,
     name: 'Grupos',
+    roles: [Roles.PROFESOR_ACTIVO, Roles.ADMINISTRADOR],
   },
   {
     component: CNavItem,
-    name: 'Administrar Grupos',
-    to: '/profesorGrupos',
-    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+    name: 'Grupos',
+    to: '/grupos/',
+    icon: <CIcon icon={cilGroup} customClassName="nav-icon" />,
+    roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
   },
   //MI CUENTA
   {
@@ -50,7 +44,7 @@ const _nav = [
     name: 'Actualizar Cuenta',
     icon: <CIcon icon={cilMoodGood} customClassName="nav-icon" />,
     to: '/cuenta/actualizar-cuenta-estudiante',
-    roles: [Roles.ESTUDIANTE_ACTIVO, Roles.ESTUDIANTE_INCOMPLETO]
+    roles: [Roles.ESTUDIANTE_ACTIVO, Roles.ESTUDIANTE_INCOMPLETO],
   },
   {
     component: CNavItem,
@@ -59,29 +53,42 @@ const _nav = [
     to: '/cuenta/actualizar-cuenta-profesor',
     roles: [
       Roles.PROFESOR_ACTIVO,
-      Roles.PROFESOR_INACTIVO,
       Roles.PROFESOR_INCOMPLETO,
       Roles.PROFESOR_NO_APROBADO,
-      Roles.ADMINISTRADOR
-    ]
+      Roles.ADMINISTRADOR,
+    ],
   },
-  /////////
+  /////////CUESTIONARIOS
+  {
+    component: CNavTitle,
+    name: 'Cuestionarios',
+  },
   {
     component: CNavItem,
-    name: 'Cuestionarios',
-    to: '/estudianteVistaCuestionarios',
+    name: 'Resultados cuestionarios',
+    to: '/grupos/aplicaciones-cuestionarios/',
+    roles: [Roles.PROFESOR_ACTIVO, Roles.ADMINISTRADOR],
     icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
   },
   {
+    component: CNavItem,
+    name: 'Mis cuestionarios',
+    to: '/cuestionarios/',
+    roles: [Roles.ESTUDIANTE_ACTIVO],
+    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+  },
+  /////CUENTAS ADMINISTRADOR
+  {
     component: CNavTitle,
-    name: 'PROFESOR',
-    roles: [
-      Roles.PROFESOR_ACTIVO,
-      Roles.PROFESOR_INACTIVO,
-      Roles.PROFESOR_INCOMPLETO,
-      Roles.PROFESOR_NO_APROBADO,
-      Roles.ADMINISTRADOR
-    ]
+    name: 'Cuentas',
+    roles: [Roles.ADMINISTRADOR],
+  },
+  {
+    component: CNavItem,
+    name: 'Administrar cuentas',
+    to: '/cuentas/',
+    roles: [Roles.ADMINISTRADOR],
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
   },
   ///////////////////////////////////////////////////////////////////////
   {

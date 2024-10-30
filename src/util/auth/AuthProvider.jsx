@@ -23,7 +23,12 @@ function AuthProvider({ children }) {
   };
 
   let getUser = async () => {
-    return getUserInfo();
+    try{
+      return await getUserInfo();
+    }catch(error){
+      console.error("Error in getUser from authprovider ", error);
+      return null;
+    }
   }
  
 

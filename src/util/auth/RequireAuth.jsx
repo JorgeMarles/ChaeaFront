@@ -11,8 +11,9 @@ function RequireAuth({ roles }) {
   const navigate = useNavigate()
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const nuser = await auth.getUser()
+
       setUser(nuser)
 
       if (!nuser) {
@@ -21,16 +22,23 @@ function RequireAuth({ roles }) {
         // along to that page after they login, which is a nicer user experience
         // than dropping them off on the home page.
         navigate('/login')
-      } else{
-        const rol = getRole(nuser);
-        console.log("User ",nuser," with rol ", getRoleKey(rol), " trying access resource with roles ", roles.map(e => getRoleKey(e)));
-        
-        if(!roles.includes(rol)){
-          navigate("/")
+      } else {
+        const rol = getRole(nuser)
+        console.log(
+          'User ',
+          nuser,
+          ' with rol ',
+          getRoleKey(rol),
+          ' trying access resource with roles ',
+          roles.map((e) => getRoleKey(e)),
+        )
+
+        if (!roles.includes(rol)) {
+          navigate('/')
         }
       }
       setLoading(false)
-    })();
+    })()
   }, [])
 
   return loading ? <CSpinner variant="grow" /> : <Outlet context={user} />

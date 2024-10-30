@@ -3,11 +3,15 @@ import { Roles } from './util/userUtils.js'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
-const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
+const Typography = React.lazy(
+  () => import('./views/theme/typography/Typography'),
+)
 
 //CHAEA DEVELOP
 //admin grupos
-const AdministrarGrupos = React.lazy(() => import('./views/administrarGrupos/AdministrarGrupos'))
+const AdministrarGrupos = React.lazy(
+  () => import('./views/administrarGrupos/AdministrarGrupos'),
+)
 //ACTUALIZAR CUENTA DE USUARIO
 const ActualizarEstudiante = React.lazy(
   () => import('./views/miCuenta/actualizarEstudiante/ActualizarEstudiante.js'),
@@ -17,13 +21,19 @@ const ActualizarProfesor = React.lazy(
   () => import('./views/miCuenta/actualizarProfesor/ActualizarProfesor.js'),
 )
 //Profesor grupos
-const ProfesorGrupos = React.lazy(() => import('./views/profesorGrupos/ProfesorGrupos'))
+const ProfesorGrupos = React.lazy(
+  () => import('./views/profesorGrupos/ProfesorGrupos'),
+)
 //Estudiante Vista Cuestionarios
 const EstudianteVistaCuestionarios = React.lazy(
-  () => import('./views/estudianteVistaCuestionarios/EstudianteVistaCuestionarios.js'),
+  () =>
+    import(
+      './views/estudianteVistaCuestionarios/EstudianteVistaCuestionarios.js'
+    ),
 )
 const ResponderCuestionario = React.lazy(
-  () => import('./views/estudianteVistaCuestionarios/ResponderCuestionario.jsx')
+  () =>
+    import('./views/estudianteVistaCuestionarios/ResponderCuestionario.jsx'),
 )
 
 const Login = React.lazy(() => import('./views/pages/login/Login.js'))
@@ -31,14 +41,22 @@ const Login = React.lazy(() => import('./views/pages/login/Login.js'))
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
-const Breadcrumbs = React.lazy(() => import('./views/base/breadcrumbs/Breadcrumbs'))
+const Breadcrumbs = React.lazy(
+  () => import('./views/base/breadcrumbs/Breadcrumbs'),
+)
 const Cards = React.lazy(() => import('./views/base/cards/Cards'))
 const Carousels = React.lazy(() => import('./views/base/carousels/Carousels'))
 const Collapses = React.lazy(() => import('./views/base/collapses/Collapses'))
-const ListGroups = React.lazy(() => import('./views/base/list-groups/ListGroups'))
+const ListGroups = React.lazy(
+  () => import('./views/base/list-groups/ListGroups'),
+)
 const Navs = React.lazy(() => import('./views/base/navs/Navs'))
-const Paginations = React.lazy(() => import('./views/base/paginations/Paginations'))
-const Placeholders = React.lazy(() => import('./views/base/placeholders/Placeholders'))
+const Paginations = React.lazy(
+  () => import('./views/base/paginations/Paginations'),
+)
+const Placeholders = React.lazy(
+  () => import('./views/base/placeholders/Placeholders'),
+)
 const Popovers = React.lazy(() => import('./views/base/popovers/Popovers'))
 const Progress = React.lazy(() => import('./views/base/progress/Progress'))
 const Spinners = React.lazy(() => import('./views/base/spinners/Spinners'))
@@ -48,23 +66,39 @@ const Tooltips = React.lazy(() => import('./views/base/tooltips/Tooltips'))
 
 // Buttons
 const Buttons = React.lazy(() => import('./views/buttons/buttons/Buttons'))
-const ButtonGroups = React.lazy(() => import('./views/buttons/button-groups/ButtonGroups'))
-const Dropdowns = React.lazy(() => import('./views/buttons/dropdowns/Dropdowns'))
+const ButtonGroups = React.lazy(
+  () => import('./views/buttons/button-groups/ButtonGroups'),
+)
+const Dropdowns = React.lazy(
+  () => import('./views/buttons/dropdowns/Dropdowns'),
+)
 
 //Forms
-const ChecksRadios = React.lazy(() => import('./views/forms/checks-radios/ChecksRadios'))
-const FloatingLabels = React.lazy(() => import('./views/forms/floating-labels/FloatingLabels'))
-const FormControl = React.lazy(() => import('./views/forms/form-control/FormControl'))
-const InputGroup = React.lazy(() => import('./views/forms/input-group/InputGroup'))
+const ChecksRadios = React.lazy(
+  () => import('./views/forms/checks-radios/ChecksRadios'),
+)
+const FloatingLabels = React.lazy(
+  () => import('./views/forms/floating-labels/FloatingLabels'),
+)
+const FormControl = React.lazy(
+  () => import('./views/forms/form-control/FormControl'),
+)
+const InputGroup = React.lazy(
+  () => import('./views/forms/input-group/InputGroup'),
+)
 const Layout = React.lazy(() => import('./views/forms/layout/Layout'))
 const Range = React.lazy(() => import('./views/forms/range/Range'))
 const Select = React.lazy(() => import('./views/forms/select/Select'))
-const Validation = React.lazy(() => import('./views/forms/validation/Validation'))
+const Validation = React.lazy(
+  () => import('./views/forms/validation/Validation'),
+)
 
 const Charts = React.lazy(() => import('./views/charts/Charts'))
 
 // Icons
-const CoreUIIcons = React.lazy(() => import('./views/icons/coreui-icons/CoreUIIcons'))
+const CoreUIIcons = React.lazy(
+  () => import('./views/icons/coreui-icons/CoreUIIcons'),
+)
 const Flags = React.lazy(() => import('./views/icons/flags/Flags'))
 const Brands = React.lazy(() => import('./views/icons/brands/Brands'))
 
@@ -101,22 +135,39 @@ const routes = [
   { path: '/buttons', name: 'Buttons', element: Buttons, exact: true },
   { path: '/buttons/buttons', name: 'Buttons', element: Buttons },
   { path: '/buttons/dropdowns', name: 'Dropdowns', element: Dropdowns },
-  { path: '/buttons/button-groups', name: 'Button Groups', element: ButtonGroups },
+  {
+    path: '/buttons/button-groups',
+    name: 'Button Groups',
+    element: ButtonGroups,
+  },
   { path: '/charts', name: 'Charts', element: Charts },
   { path: '/forms', name: 'Forms', element: FormControl, exact: true },
   { path: '/forms/form-control', name: 'Form Control', element: FormControl },
   { path: '/forms/select', name: 'Select', element: Select },
-  { path: '/forms/checks-radios', name: 'Checks & Radios', element: ChecksRadios },
+  {
+    path: '/forms/checks-radios',
+    name: 'Checks & Radios',
+    element: ChecksRadios,
+  },
   { path: '/forms/range', name: 'Range', element: Range },
   { path: '/forms/input-group', name: 'Input Group', element: InputGroup },
-  { path: '/forms/floating-labels', name: 'Floating Labels', element: FloatingLabels },
+  {
+    path: '/forms/floating-labels',
+    name: 'Floating Labels',
+    element: FloatingLabels,
+  },
   { path: '/forms/layout', name: 'Layout', element: Layout },
   { path: '/forms/validation', name: 'Validation', element: Validation },
   { path: '/icons', exact: true, name: 'Icons', element: CoreUIIcons },
   { path: '/icons/coreui-icons', name: 'CoreUI Icons', element: CoreUIIcons },
   { path: '/icons/flags', name: 'Flags', element: Flags },
   { path: '/icons/brands', name: 'Brands', element: Brands },
-  { path: '/notifications', name: 'Notifications', element: Alerts, exact: true },
+  {
+    path: '/notifications',
+    name: 'Notifications',
+    element: Alerts,
+    exact: true,
+  },
   { path: '/notifications/alerts', name: 'Alerts', element: Alerts },
   { path: '/notifications/badges', name: 'Badges', element: Badges },
   { path: '/notifications/modals', name: 'Modals', element: Modals },
@@ -124,13 +175,16 @@ const routes = [
   { path: '/widgets', name: 'Widgets', element: Widgets },
 ]
 
-
 const sinasignar = [
   //CHAEA DEVELOP
   //
   //admin  TOTAL grupos
   // Profesor Administrar Grupos
-  { path: '/profesorGrupos', name: 'Administrar Grupos', element: ProfesorGrupos },
+  {
+    path: '/profesorGrupos',
+    name: 'Administrar Grupos',
+    element: ProfesorGrupos,
+  },
   // DESPLEGABLE DE CUENTAS
   //Actualizar mi cuenta user
   {
@@ -184,10 +238,9 @@ const protectedRoutes = [
     element: ActualizarProfesor,
     roles: [
       Roles.PROFESOR_ACTIVO,
-      Roles.PROFESOR_INACTIVO,
       Roles.PROFESOR_INCOMPLETO,
       Roles.PROFESOR_NO_APROBADO,
-      Roles.ADMINISTRADOR
+      Roles.ADMINISTRADOR,
     ],
   },
   {
@@ -209,10 +262,13 @@ const protectedRoutes = [
     roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
   },
 
-  { path: '/cuentas/', name: 'Administrar cuentas', element: null, roles: [Roles.ADMINISTRADOR] },
+  {
+    path: '/cuentas/',
+    name: 'Administrar cuentas',
+    element: null,
+    roles: [Roles.ADMINISTRADOR],
+  },
 ]
 
 export default routes
-export {
-  protectedRoutes
-}
+export { protectedRoutes }

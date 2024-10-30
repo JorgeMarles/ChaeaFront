@@ -5,15 +5,13 @@ import Autosuggest from 'react-autosuggest'
 import Papa from 'papaparse'
 
 import { CCard, CCardBody, CCol, CCardHeader, CRow, CForm, CFormLabel, CFormInput, CButton, CButtonGroup, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell, CAlert } from '@coreui/react'
+import { useOutletContext } from 'react-router-dom'
 
-const profesorLogueado = {
-    email: "claudiagomez@ufps.edu.co",
-    nombre: "Claudia Gomez",
-    codigo: "1152299"
-  };
 
 const ProfesorGrupos = () => {
-  const [nombre, setNombre] = useState('')
+  const user = useOutletContext();
+  
+  const [nombre, setNombre] = useState(user.nombre)
   const [modalVisible, setModalVisible] = useState(false)
   const [grupos, setGrupos] = useState([])
   const [expandedGrupoId, setExpandedGrupoId] = useState(null)
@@ -31,7 +29,7 @@ const ProfesorGrupos = () => {
   const [newStudentEmail, setNewStudentEmail] = useState('');
   const [selectedNewStudents, setSelectedNewStudents] = useState([]);
 
-
+/////////////////////////NO SIRVEEEEE (desarrollarlos desde grupoService y ponerles el token (guiarse de userService))
   useEffect(() => {
     axios.get('http://localhost:8091/api/grupos')
       .then(response => {
@@ -61,7 +59,6 @@ const ProfesorGrupos = () => {
         console.error('Error fetching estudiantes:', error)
       })
   }, [])
-  
   
   const toggleExpand = (grupoId) => {
     setExpandedGrupoId(expandedGrupoId === grupoId ? null : grupoId)
@@ -172,7 +169,7 @@ const ProfesorGrupos = () => {
     const emailsArray = selectedStudents.map(student => student.email);
     const grupoDTO = {
       nombre: nombre,
-      profesorEmail: profesorLogueado.email,
+      profesorEmail: user.email,
       correosEstudiantes: emailsArray.length > 0 ? emailsArray : null
     };
   
@@ -342,6 +339,7 @@ const ProfesorGrupos = () => {
         });
     });
 }
+  /////////////////////////NO SIRVEEEEE
 
   
   return (
@@ -349,7 +347,7 @@ const ProfesorGrupos = () => {
             <CRow>
             <CCol xs={12}>
             <CAlert color="info" className="mb-4">
-            Bienvenid@ Profesor {profesorLogueado.nombre}
+            Bienvenid@ Profesor {user.nombre}
             </CAlert>
                 <CCard className="mb-4">
                 <CCardHeader className="d-flex justify-content-between align-items-center">
@@ -359,7 +357,7 @@ const ProfesorGrupos = () => {
                     </CButtonGroup>
                 </CCardHeader>
                 <CCardBody>
-                    {grupos.filter(grupo => grupo.profesor.email === profesorLogueado.email).length === 0 ? (
+                    {grupos.filter(grupo => grupo.profesor.email === user.email).length === 0 ? (
                     <p>No hay grupos disponibles</p>
                     ) : (
                     <CTable hover responsive>
@@ -371,7 +369,7 @@ const ProfesorGrupos = () => {
                         </CTableRow>
                         </CTableHead>
                         <CTableBody>
-                        {grupos.filter(grupo => grupo.profesor.email === profesorLogueado.email).map(grupo => (
+                        {grupos.filter(grupo => grupo.profesor.email === user.email).map(grupo => (
                             <React.Fragment key={grupo.id}>
                             <CTableRow onClick={() => toggleExpand(grupo.id)} style={{ cursor: 'pointer' }}>
                                 <CTableDataCell>{grupo.nombre}</CTableDataCell>

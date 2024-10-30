@@ -25,7 +25,7 @@ const Login = () => {
     } else if (token) {
       const info = decodeJwt(token);
       auth.signin(token, () =>
-         navigate("/cuenta/actualizar-cuenta-estudiante")
+         navigate("/")
       );
       // Manejo de token
     }

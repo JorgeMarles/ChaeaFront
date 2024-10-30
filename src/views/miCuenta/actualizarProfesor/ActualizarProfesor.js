@@ -55,13 +55,13 @@ const ActualizarCuentaProfesor = () => {
             icon: 'success'
           });
         } else {
-          throw new Error('Error al actualizar la cuenta');
+          throw new Error('Error al actualizar la cuenta: ');
         }
       })
       .catch(error => {
         Swal.fire({
           title: 'Error',
-          text: error.message,
+          text: error,
           icon: 'error'
         });
       });
