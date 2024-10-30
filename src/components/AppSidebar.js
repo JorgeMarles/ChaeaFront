@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import {
@@ -18,9 +18,30 @@ import { sygnet } from 'src/assets/brand/sygnet'
 
 // sidebar nav config
 import navigation from '../_nav'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../util/auth/AuthProvider'
+import { getRole } from '../util/userUtils'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
+  const auth = useAuth();
+  const [rol, setRol] = useState([]);
+  const navigate = useNavigate();
+  useEffect(() => {
+    (async () => {
+      const nuser = await auth.getUser()
+      if (!nuser) {
+        // Redirect them to the /login page, but save the current location they were
+        // trying to go to when they were redirected. This allows us to send them
+        // along to that page after they login, which is a nicer user experience
+        // than dropping them off on the home page.
+        navigate('/login')
+      } else{
+        const rol = getRole(nuser);
+        setRol(rol);
+      }
+    })();
+  }, [])
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
 
@@ -46,7 +67,7 @@ const AppSidebar = () => {
           onClick={() => dispatch({ type: 'set', sidebarShow: false })}
         />
       </CSidebarHeader>
-      <AppSidebarNav items={navigation} />
+      <AppSidebarNav items={navigation} rol={rol} />
       <CSidebarFooter className="border-top d-none d-lg-flex">
         <CSidebarToggler
           onClick={() => dispatch({ type: 'set', sidebarUnfoldable: !unfoldable })}

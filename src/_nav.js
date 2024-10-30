@@ -15,6 +15,7 @@ import {
   cilMoodGood
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+import { Roles } from './util/userUtils'
 
 const _nav = [
  //ADMIN GRUPOS 
@@ -38,11 +39,33 @@ const _nav = [
     to: '/profesorGrupos',
     icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
   },
-  //ACTUALIZAR USER
+  //MI CUENTA
   {
     component: CNavTitle,
-    name: 'ESTUDIANTE',
+    name: 'Mi Cuenta',
   },
+  //ACTUALIZAR USER
+  {
+    component: CNavItem,
+    name: 'Actualizar Cuenta',
+    icon: <CIcon icon={cilMoodGood} customClassName="nav-icon" />,
+    to: '/cuenta/actualizar-cuenta-estudiante',
+    roles: [Roles.ESTUDIANTE_ACTIVO, Roles.ESTUDIANTE_INCOMPLETO]
+  },
+  {
+    component: CNavItem,
+    name: 'Actualizar Cuenta',
+    icon: <CIcon icon={cilMoodGood} customClassName="nav-icon" />,
+    to: '/cuenta/actualizar-cuenta-profesor',
+    roles: [
+      Roles.PROFESOR_ACTIVO,
+      Roles.PROFESOR_INACTIVO,
+      Roles.PROFESOR_INCOMPLETO,
+      Roles.PROFESOR_NO_APROBADO,
+      Roles.ADMINISTRADOR
+    ]
+  },
+  /////////
   {
     component: CNavItem,
     name: 'Cuestionarios',
@@ -50,35 +73,17 @@ const _nav = [
     icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
   },
   {
-    component: CNavGroup,
-    name: 'Mi Cuenta',
-    to: '/cuenta',
-    icon: <CIcon icon={cilMoodGood} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Actualizar Cuenta',
-        to: '/cuenta/actualizar-cuenta-estudiante',
-      },
-    ],
-  },
-  {
     component: CNavTitle,
     name: 'PROFESOR',
+    roles: [
+      Roles.PROFESOR_ACTIVO,
+      Roles.PROFESOR_INACTIVO,
+      Roles.PROFESOR_INCOMPLETO,
+      Roles.PROFESOR_NO_APROBADO,
+      Roles.ADMINISTRADOR
+    ]
   },
-  {
-    component: CNavGroup,
-    name: 'Mi Cuenta',
-    to: '/miCuenta',
-    icon: <CIcon icon={cilMoodGood} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Actualizar Cuenta',
-        to: '/miCuenta/actualizarProfesor',
-      },
-    ],
-  },
+  ///////////////////////////////////////////////////////////////////////
   {
     component: CNavTitle,
     name: 'Theme',
