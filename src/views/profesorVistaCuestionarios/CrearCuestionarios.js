@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CButton, CCard, CCardBody,CCardHeader,CForm,CFormLabel,CFormInput,CRow,CCol, CListGroup, CListGroupItem, CCollapse,CTable,CTableHead, CTableBody, CTableRow,CTableHeaderCell,CTableDataCell,CFormSelect,} from '@coreui/react';
+import Swal from 'sweetalert2';
 
 const CrearCuestionario = () => {
   const navigate = useNavigate();
@@ -35,9 +36,9 @@ const CrearCuestionario = () => {
   };
 
   const handleAddOpcion = () => {
-    setOpciones([...opciones, { id: opciones.length + 1, titulo: '' }]);
+    setOpciones([...opciones, { id: opciones.length + 1, titulo: '', valor: 1, categoriaId: null }]); 
   };
-
+  
   const handleOpcionChange = (index, field, value) => {
     const newOpciones = [...opciones];
     newOpciones[index][field] = value;
@@ -45,26 +46,53 @@ const CrearCuestionario = () => {
   };
 
   const handleCrearCuestionario = () => {
+    // Verificar que los campos principales no estén vacíos
+    if (
+      nombre.trim() === '' ||
+      siglas.trim() === '' ||
+      descripcion.trim() === '' ||
+      autor.trim() === '' ||
+      version.trim() === '' ||
+      preguntas.length === 0
+    ) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Campos incompletos',
+        text: 'Por favor, asegúrate de que todos los campos estén llenos y que exista al menos una pregunta.'
+      });
+      return;
+    }
+  
+    // Crear objeto de cuestionario
     const cuestionario = {
       nombre,
       siglas,
       descripcion,
       autor,
       version,
-      categorias,
-      preguntas: preguntas.map((pregunta) => ({
-        pregunta: pregunta.titulo,
-        orden: pregunta.id,
-        opciones: pregunta.opciones.map((opcion, index) => ({
-          orden: index + 1,
-          respuesta: opcion.titulo,
-          valor: opcion.valor,
-          categoriaId: opcion.categoriaId,
-        })),
-      })),
+      preguntas
     };
-  
     console.log("Cuestionario generado:", JSON.stringify(cuestionario, null, 2));
+    // Lógica para enviar el cuestionario al endpoint irá aquí
+  
+    // Mostrar alerta de éxito
+    Swal.fire({
+      icon: 'success',
+      title: 'Cuestionario Creado',
+      text: `El cuestionario "${nombre}" ha sido creado con éxito.`
+    });
+  
+    // Reiniciar los campos
+    setNombre('');
+    setSiglas('');
+    setDescripcion('');
+    setAutor('');
+    setVersion('');
+    setPreguntaTitulo('');
+    setPreguntaCategoria('');
+    setOpciones([{ id: 1, titulo: '', valor: 0, categoriaId: null }]);
+    setPreguntas([]);
+    setCategorias([]);
   };
   
   
@@ -74,25 +102,29 @@ const CrearCuestionario = () => {
   };
 
   const handleAddPregunta = () => {
-    // Validar que la pregunta tenga un título, una categoría seleccionada y al menos una opción válida
     if (
-      preguntaTitulo.trim() !== '' &&
-      opciones.some((opcion) => opcion.titulo.trim() !== '')
+      preguntaTitulo.trim() !== '' && // Verificar que el título de la pregunta no esté vacío
+      opciones.every((opcion) => opcion.titulo.trim() !== '' && opcion.categoriaId !== undefined && opcion.valor !== undefined) // Verificar que cada opción tenga título, categoría y valor
     ) {
       const newPregunta = {
         id: preguntas.length + 1,
         titulo: preguntaTitulo,
-        categoria: categorias.find((cat) => cat.id.toString() === preguntaCategoria)?.nombre || '',
-        opciones: opciones.filter((opcion) => opcion.titulo.trim() !== ''),
+        opciones: opciones.filter((opcion) => opcion.titulo.trim() !== '') // Filtrar solo las opciones con título
       };
       setPreguntas([...preguntas, newPregunta]);
       // Reiniciar campos
       setPreguntaTitulo('');
-      setPreguntaCategoria('');
-      setOpciones([{ id: 1, titulo: '' }]);
+      setOpciones([{ id: 1, titulo: '', valor: 0, categoriaId: null }]);
+    } else {
+      // Mostrar una alerta utilizando SweetAlert
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Campos incompletos, asegúrate de que hay título de pregunta y que los campos de opción están completos.'
+      });
     }
   };
-
+  
   const toggleExpand = (id) => {
     setExpandedPreguntaId(expandedPreguntaId === id ? null : id);
   };
@@ -128,7 +160,7 @@ const CrearCuestionario = () => {
           </CRow>
           <CRow className="mb-3">
             <CCol md="6">
-              <CFormLabel htmlFor="descripcion">Descripción</CFormLabel>
+              <CFormLabel htmlFor="descripcion">Descripción corta</CFormLabel>
               <CFormInput
                 id="descripcion"
                 value={descripcion}
@@ -157,31 +189,36 @@ const CrearCuestionario = () => {
               />
             </CCol>
           </CRow>
-  
-          {/* Categorías */}
-          <hr />
-          <h5>Categorías</h5>
-          <CRow className="mb-3">
-            <CCol md="6">
-              <CFormLabel htmlFor="categoriaNombre">Nombre de la Categoría</CFormLabel>
-              <CFormInput
-                id="categoriaNombre"
-                value={categoriaNombre}
-                onChange={(e) => setCategoriaNombre(e.target.value)}
-                placeholder="Ingrese el nombre de la categoría"
-              />
-            </CCol>
-            <CCol md="6" className="d-flex align-items-end">
-              <CButton color="primary" onClick={handleAddCategoria}>
-                Agregar Categoría
-              </CButton>
-            </CCol>
-          </CRow>
-          <CListGroup className="mb-3">
-            {categorias.map((categoria) => (
-              <CListGroupItem key={categoria.id}>{categoria.nombre}</CListGroupItem>
-            ))}
-          </CListGroup>
+
+            {/* Categorías */}
+            <hr />
+            <h5>Categorías</h5>
+            <CRow className="mb-3">
+              <CCol md="6">
+                <CFormLabel htmlFor="categoriaNombre">Nombre de la Categoría</CFormLabel>
+                <CFormInput
+                  id="categoriaNombre"
+                  value={categoriaNombre}
+                  onChange={(e) => setCategoriaNombre(e.target.value)}
+                  placeholder="Ingrese el nombre de la categoría"
+                />
+              </CCol>
+              <CCol md="6" className="d-flex align-items-end">
+                <CButton color="primary" onClick={handleAddCategoria}>
+                  Agregar Categoría
+                </CButton>
+              </CCol>
+            </CRow>
+
+            <CListGroup className="mb-3">
+              {categorias.map((categoria) => (
+                <CListGroupItem key={categoria.id} className="d-flex justify-content-between align-items-center">
+                  {categoria.nombre}
+                  <CButton color="danger" size="sm" onClick={() => handleDeleteCategoria(categoria.id)}>X</CButton>
+                </CListGroupItem>
+              ))}
+            </CListGroup>
+
   
           {/* Preguntas */}
           <hr />
@@ -197,53 +234,54 @@ const CrearCuestionario = () => {
               />
             </CCol>
           </CRow>
-  
+
           <CRow className="mb-3">
-            <CCol md="6">
-              {opciones.map((opcion, index) => (
-                <div key={opcion.id} className="d-flex align-items-center mb-2">
-                  <CFormLabel className="me-2">Opción {index + 1}</CFormLabel>
-                  <CFormInput
-                    value={opcion.titulo}
-                    onChange={(e) => handleOpcionChange(index, "titulo", e.target.value)}
-                    placeholder={`Ingrese la opción ${index + 1}`}
-                    className="me-2"
-                  />
-                  <CFormInput
-                    type="number"
-                    value={opcion.valor}
-                    onChange={(e) => handleOpcionChange(index, "valor", parseFloat(e.target.value))}
-                    placeholder="Valor"
-                    className="me-2"
-                    style={{ width: "80px" }}
-                  />
-                  <select
-                    className="form-select me-2"
-                    value={opcion.categoriaId || ""}
-                    onChange={(e) => handleOpcionChange(index, "categoriaId", parseInt(e.target.value))}
-                  >
-                    <option value="">Seleccione Categoría</option>
-                    {categorias.map((categoria) => (
-                      <option key={categoria.id} value={categoria.id}>
-                        {categoria.nombre}
-                      </option>
-                    ))}
-                  </select>
-                  <CButton
-                    color="danger"
-                    size="sm"
-                    className="ms-2"
-                    onClick={() => handleDeleteOpcion(index)}
-                  >
-                    X
-                  </CButton>
-                </div>
-              ))}
-              <CButton color="primary" onClick={handleAddOpcion}>
-                Agregar Opción
-              </CButton>
-            </CCol>
-          </CRow>
+              <CCol md="6">
+                {opciones.map((opcion, index) => (
+                  <div key={opcion.id} className="d-flex align-items-center mb-2">
+                    <CFormLabel className="me-2" style={{ minWidth: '100px' }}>Opción {index + 1}</CFormLabel>
+                    <CFormInput
+                      value={opcion.titulo}
+                      onChange={(e) => handleOpcionChange(index, "titulo", e.target.value)}
+                      placeholder={`Ingrese la opción ${index + 1}`}
+                      className="me-2"
+                    />
+                    <CFormInput
+                      type="number"
+                      value={opcion.valor}
+                      onChange={(e) => handleOpcionChange(index, "valor", parseFloat(e.target.value))}
+                      placeholder="Valor"
+                      className="me-2"
+                      style={{ width: "80px" }}
+                    />
+                    <select
+                      className="form-select me-2"
+                      value={opcion.categoriaId || ""}
+                      onChange={(e) => handleOpcionChange(index, "categoriaId", parseInt(e.target.value))}
+                    >
+                      <option value="">Seleccione Categoría</option>
+                      {categorias.map((categoria) => (
+                        <option key={categoria.id} value={categoria.id}>
+                          {categoria.nombre}
+                        </option>
+                      ))}
+                    </select>
+                    <CButton
+                      color="danger"
+                      size="sm"
+                      className="ms-2"
+                      onClick={() => handleDeleteOpcion(index)}
+                    >
+                      X
+                    </CButton>
+                  </div>
+                ))}
+                <CButton color="primary" onClick={handleAddOpcion}>
+                  Agregar Opción
+                </CButton>
+              </CCol>
+            </CRow>
+
   
           <CButton color="success" onClick={handleAddPregunta}>
             Finalizar Pregunta
@@ -251,62 +289,68 @@ const CrearCuestionario = () => {
   
           {/* Lista de preguntas */}
           <CTable hover responsive className="mt-3">
-            <CTableHead>
-              <CTableRow>
-                <CTableHeaderCell>Orden</CTableHeaderCell>
-                <CTableHeaderCell>Título de la Pregunta</CTableHeaderCell>
-                <CTableHeaderCell>Opciones</CTableHeaderCell>
-                <CTableHeaderCell className="text-end">Acciones</CTableHeaderCell>
+                    <CTableHead>
+                      <CTableRow>
+                        <CTableHeaderCell>Orden</CTableHeaderCell>
+                        <CTableHeaderCell>Título de la Pregunta</CTableHeaderCell>
+                        <CTableHeaderCell>Opciones</CTableHeaderCell>
+                        <CTableHeaderCell className="text-end">Acciones</CTableHeaderCell>
+                      </CTableRow>
+                    </CTableHead>
+                    <CTableBody>
+          {preguntas.map((pregunta) => (
+            <React.Fragment key={pregunta.id}>
+              <CTableRow onClick={() => toggleExpand(pregunta.id)} style={{ cursor: "pointer" }}>
+                <CTableDataCell>{pregunta.id}</CTableDataCell>
+                <CTableDataCell>{pregunta.titulo}</CTableDataCell>
+                <CTableDataCell>{pregunta.opciones.length}</CTableDataCell>
+                <CTableDataCell className="text-end">
+                  <CButton
+                    color="danger"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Evitar que el evento se propague
+                      handleDeletePregunta(pregunta.id);
+                    }}
+                  >
+                    -
+                  </CButton>
+                </CTableDataCell>
               </CTableRow>
-            </CTableHead>
-            <CTableBody>
-              {preguntas.map((pregunta) => (
-                <React.Fragment key={pregunta.id}>
-                  <CTableRow onClick={() => toggleExpand(pregunta.id)} style={{ cursor: "pointer" }}>
-                    <CTableDataCell>{pregunta.id}</CTableDataCell>
-                    <CTableDataCell>{pregunta.titulo}</CTableDataCell>
-                    <CTableDataCell>{pregunta.opciones.length}</CTableDataCell>
-                    <CTableDataCell className="text-end">
-                      <CButton color="danger" size="sm" onClick={(e) => handleDeletePregunta(e, pregunta.id)}>
-                        -
-                      </CButton>
-                    </CTableDataCell>
-                  </CTableRow>
-                  {expandedPreguntaId === pregunta.id && (
-                    <CTableRow>
-                      <CTableDataCell colSpan="4">
-                        <CCollapse visible={expandedPreguntaId === pregunta.id}>
-                          <CTable hover>
-                            <CTableHead>
-                              <CTableRow>
-                                <CTableHeaderCell>Orden</CTableHeaderCell>
-                                <CTableHeaderCell>Opción</CTableHeaderCell>
-                                <CTableHeaderCell>Categoría</CTableHeaderCell>
-                                <CTableHeaderCell>Valor</CTableHeaderCell>
-                              </CTableRow>
-                            </CTableHead>
-                            <CTableBody>
-                              {pregunta.opciones.map((opcion, index) => (
-                                <CTableRow key={opcion.id}>
-                                  <CTableDataCell>{index + 1}</CTableDataCell>
-                                  <CTableDataCell>{opcion.titulo}</CTableDataCell>
-                                  <CTableDataCell>
-                                    {categorias.find((cat) => cat.id === opcion.categoriaId)?.nombre || "Sin categoría"}
-                                  </CTableDataCell>
-                                  <CTableDataCell>{opcion.valor}</CTableDataCell>
-                                </CTableRow>
-                              ))}
-                            </CTableBody>
-                          </CTable>
-                        </CCollapse>
-                      </CTableDataCell>
-                    </CTableRow>
-                  )}
-                </React.Fragment>
-              ))}
-            </CTableBody>
+              {expandedPreguntaId === pregunta.id && (
+                <CTableRow>
+                  <CTableDataCell colSpan="4">
+                    <CCollapse visible={expandedPreguntaId === pregunta.id}>
+                      <CTable hover>
+                        <CTableHead>
+                          <CTableRow>
+                            <CTableHeaderCell>Orden</CTableHeaderCell>
+                            <CTableHeaderCell>Opción</CTableHeaderCell>
+                            <CTableHeaderCell>Categoría</CTableHeaderCell>
+                            <CTableHeaderCell>Valor</CTableHeaderCell>
+                          </CTableRow>
+                        </CTableHead>
+                        <CTableBody>
+                          {pregunta.opciones.map((opcion, index) => (
+                            <CTableRow key={opcion.id}>
+                              <CTableDataCell>{index + 1}</CTableDataCell>
+                              <CTableDataCell>{opcion.titulo}</CTableDataCell>
+                              <CTableDataCell>
+                                {categorias.find((cat) => cat.id === opcion.categoriaId)?.nombre || "Sin categoría"}
+                              </CTableDataCell>
+                              <CTableDataCell>{opcion.valor}</CTableDataCell>
+                            </CTableRow>
+                          ))}
+                        </CTableBody>
+                      </CTable>
+                    </CCollapse>
+                  </CTableDataCell>
+                </CTableRow>
+              )}
+            </React.Fragment>
+          ))}
+        </CTableBody>
           </CTable>
-  
           <CButton color="success" onClick={handleCrearCuestionario}>
             Crear Cuestionario
           </CButton>
