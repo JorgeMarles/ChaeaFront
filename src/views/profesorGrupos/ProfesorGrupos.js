@@ -6,12 +6,11 @@ import Papa from 'papaparse'
 
 import { CCard, CCardBody, CCol, CCardHeader, CRow, CForm, CFormLabel, CFormInput, CButton, CButtonGroup, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CTable, CTableHead, CTableRow, CTableHeaderCell, CTableBody, CTableDataCell, CAlert } from '@coreui/react'
 import { useOutletContext } from 'react-router-dom'
-
+import { getGroups, getProfesores, getEstudiantes, deleteGrupo, createGrupo, addStudentsToGroup, deleteStudentFromGroup, getGroupById } from '../../util/services/grupoService';
 
 const ProfesorGrupos = () => {
   const user = useOutletContext();
-  
-  const [nombre, setNombre] = useState(user.nombre)
+  const [nombre, setNombre] = useState('')
   const [modalVisible, setModalVisible] = useState(false)
   const [grupos, setGrupos] = useState([])
   const [expandedGrupoId, setExpandedGrupoId] = useState(null)
@@ -30,36 +29,30 @@ const ProfesorGrupos = () => {
   const [selectedNewStudents, setSelectedNewStudents] = useState([]);
 
 /////////////////////////NO SIRVEEEEE (desarrollarlos desde grupoService y ponerles el token (guiarse de userService))
-  useEffect(() => {
-    axios.get('http://localhost:8091/api/grupos')
-      .then(response => {
-        setGrupos(response.data)
-      })
-      .catch(error => {
-        console.error('Error fetching grupos:', error)
-      })
-  }, [])
-
-  useEffect(() => {
-    axios.get('http://localhost:8091/api/profesores')
-      .then(response => {
-        setProfesores(response.data)
-      })
-      .catch(error => {
-        console.error('Error fetching profesores:', error)
-      })
-  }, [])
-
-  useEffect(() => {
-    axios.get('http://localhost:8091/api/estudiantes')
-      .then(response => {
-        setStudents(response.data)
-      })
-      .catch(error => {
-        console.error('Error fetching estudiantes:', error)
-      })
-  }, [])
+    useEffect(() => {
+      getGroups()
+        .then(data => setGrupos(data))
+        .catch(error => {
+          console.error('Error fetching grupos:', error);
+        });
+    }, []);
   
+    useEffect(() => {
+      getProfesores()
+        .then(data => setProfesores(data))
+        .catch(error => {
+          console.error('Error fetching profesores:', error);
+        });
+    }, []);
+  
+    useEffect(() => {
+      getEstudiantes()
+        .then(data => setStudents(data))
+        .catch(error => {
+          console.error('Error fetching estudiantes:', error);
+        });
+    }, []);
+
   const toggleExpand = (grupoId) => {
     setExpandedGrupoId(expandedGrupoId === grupoId ? null : grupoId)
   }
@@ -76,43 +69,41 @@ const ProfesorGrupos = () => {
       cancelButtonText: "Cancelar"
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`http://localhost:8091/api/grupos/${grupo.id}`)
-          .then(response => {
-            setGrupos(grupos.filter(g => g.id !== grupo.id))
+        deleteGrupo(grupo.id)
+          .then(() => {
+            setGrupos(grupos.filter(g => g.id !== grupo.id));
             Swal.fire({
               title: "¡Eliminado!",
               text: "El grupo ha sido eliminado.",
               icon: "success"
-            })
+            });
           })
           .catch(error => {
-            console.error('Error deleting grupo:', error)
+            console.error('Error deleting grupo:', error);
             Swal.fire({
               title: "Error",
               text: "Hubo un error al eliminar el grupo.",
               icon: "error"
-            })
-          })
+            });
+          });
       }
-    })
-  }    
-
-  const handleFileChangeAddStudents = (e, setSelectedNewStudents) => {
+    });
+  };
+  
+  const handleFileChangeAddStudents = (e) => {
     if (!e.target.files || e.target.files.length === 0) {
-      // Si no hay archivos seleccionados, solo actualizar la lista de estudiantes
       return;
     }
   
     const updatedNewStudents = [];
-    setSelectedNewStudents(updatedNewStudents);
-  
     const file = e.target.files[0];
+  
     if (file) {
       Papa.parse(file, {
         complete: (result) => {
           const emailsArray = result.data.map((row) => row.correo || row.email).filter((email) => email);
           const uniqueCsvStudents = emailsArray.filter(email => !updatedNewStudents.includes(email));
-          setSelectedNewStudents([...updatedNewStudents, ...uniqueCsvStudents]);
+          setSelectedNewStudents(uniqueCsvStudents);
           console.log("Estudiantes agregados desde CSV:", uniqueCsvStudents); // Verificar correos añadidos desde CSV
         },
         header: true
@@ -121,16 +112,12 @@ const ProfesorGrupos = () => {
   }
   
   const handleFileChangeCreateGroup = (e) => {
-    // Limpiar estudiantes agregados desde el archivo CSV anterior
     const updatedStudents = [];
-    setSelectedStudents(updatedStudents);
   
     if (!e.target.files || e.target.files.length === 0) {
-      // Si no hay archivos seleccionados, solo actualizar la lista de estudiantes
       return;
     }
   
-    // Llamar a handleFileUpload para procesar el nuevo archivo
     handleFileUpload(e.target.files[0], updatedStudents);
   }
   
@@ -138,22 +125,20 @@ const ProfesorGrupos = () => {
     if (file) {
       Papa.parse(file, {
         complete: (result) => {
-          // Verifica si existe la columna "correo" o "email" y utiliza la que encuentre
           const emailsArray = result.data.map((row) => row.correo || row.email).filter((email) => email);
           const csvStudents = emailsArray.map(email => ({ email, fromCSV: true }));
   
-          // Verificar duplicados antes de agregar
           const uniqueCsvStudents = csvStudents.filter(csvStudent =>
             !updatedStudents.some(selectedStudent => selectedStudent.email === csvStudent.email)
           );
   
-          setSelectedStudents([...updatedStudents, ...uniqueCsvStudents]);
+          setSelectedStudents(uniqueCsvStudents);
+          console.log("Estudiantes agregados desde CSV:", uniqueCsvStudents); // Verificar correos añadidos desde CSV
         },
         header: true
       });
     }
   }
-  
   
   
   const handleCreateGroup = (e) => {
@@ -166,17 +151,19 @@ const ProfesorGrupos = () => {
       });
       return;
     }
+  
     const emailsArray = selectedStudents.map(student => student.email);
     const grupoDTO = {
       nombre: nombre,
       profesorEmail: user.email,
-      correosEstudiantes: emailsArray.length > 0 ? emailsArray : null
+      correosEstudiantes: emailsArray
     };
   
-    // Ajustar la verificación del nombre del grupo
-    axios.get(`http://localhost:8091/api/grupos`)
+    console.log("grupoDTO:", grupoDTO); // Verificar el objeto grupoDTO
+    
+    getGroups()
       .then(res => {
-        const grupoExistente = res.data.find(grupo => grupo.nombre.toLowerCase() === nombre.toLowerCase());
+        const grupoExistente = res.find(grupo => grupo.nombre.toLowerCase() === nombre.toLowerCase());
         if (grupoExistente) {
           Swal.fire({
             title: 'Conflicto',
@@ -184,7 +171,7 @@ const ProfesorGrupos = () => {
             icon: 'error'
           });
         } else {
-          axios.post('http://localhost:8091/api/grupos', grupoDTO)
+          createGrupo(grupoDTO)
             .then(response => {
               Swal.fire({
                 title: '¡Grupo creado exitosamente!',
@@ -192,31 +179,29 @@ const ProfesorGrupos = () => {
                 icon: 'success'
               });
               setModalVisible(false);
-              setGrupos([...grupos, response.data]);
+              setGrupos([...grupos, response]);
               clearForm(); // Limpiar la lista de estudiantes seleccionados y otros campos del formulario
             })
             .catch(error => {
-              console.error('Error creando el grupo:', error);
+              console.error('Error creando el grupo:', error.message || error);
               Swal.fire({
                 title: 'Error',
-                text: 'Hubo un error al crear el grupo.',
+                text: error.message || 'Hubo un error al crear el grupo.',
                 icon: 'error'
               });
             });
         }
       })
       .catch(error => {
-        console.error('Error verificando el nombre del grupo:', error);
+        console.error('Error verificando el nombre del grupo:', error.message || error);
         Swal.fire({
           title: 'Error',
-          text: 'Hubo un error al verificar el nombre del grupo.',
+          text: error.message || 'Hubo un error al verificar el nombre del grupo.',
           icon: 'error'
         });
       });
-  }
-
+  };
   
-
   const getSuggestions = (value) => {
     const inputValue = value.trim().toLowerCase();
     const inputLength = inputValue.length;
@@ -250,95 +235,92 @@ const ProfesorGrupos = () => {
     setEmails('') // Limpiar el campo de búsqueda después de seleccionar un estudiante
   }
   
-
   const clearForm = () => {
-    setNombre('')
-    setEmails('')
-    setSelectedStudents([])
-    document.getElementById('file').value = null // Limpiar el input del archivo CSV
-  }
-
-      const handleAddStudentsToGroup = (e) => {
-        e.preventDefault();
-        console.log("Correo ingresado:", newStudentEmail); // Verificar el correo ingresado
-        console.log("ID del Grupo:", currentGrupoId); // Verificar la ID del grupo
-
-        if (selectedNewStudents.length === 0) {
+    setNombre('');
+    setEmails('');
+    setSelectedStudents([]);
+    document.getElementById('file').value = null; // Limpiar el input del archivo CSV
+  };
+  
+  const handleAddStudentsToGroup = (e) => {
+    e.preventDefault();
+    console.log("Correo ingresado:", newStudentEmail); // Verificar el correo ingresado
+    console.log("ID del Grupo:", currentGrupoId); // Verificar la ID del grupo
+  
+    if (selectedNewStudents.length === 0) {
+      Swal.fire({
+        title: 'Campos incompletos',
+        text: 'Por favor, ingresa al menos un correo de estudiante.',
+        icon: 'warning'
+      });
+      return;
+    }
+  
+    console.log("Enviando solicitud para añadir estudiantes:", selectedNewStudents); // Verificar estudiantes seleccionados
+    addStudentsToGroup(currentGrupoId, selectedNewStudents)
+      .then(response => {
+        console.log("Respuesta del servidor:", response); // Verificar respuesta del servidor
+  
+        // Hacer una solicitud adicional para obtener la información actualizada del grupo
+        getGroupById(currentGrupoId)
+          .then(updatedGrupo => {
+            setGrupos(prevGrupos => prevGrupos.map(grupo => 
+              grupo.id === currentGrupoId ? updatedGrupo : grupo
+            ));
+            setSelectedNewStudents([]);
+            setModalAddStudentVisible(false);
             Swal.fire({
-                title: 'Campos incompletos',
-                text: 'Por favor, ingresa al menos un correo de estudiante.',
-                icon: 'warning'
+              title: '¡Añadidos!',
+              text: 'Los estudiantes han sido añadidos.',
+              icon: 'success'
             });
-            return;
-        }
-
-        console.log("Enviando solicitud para añadir estudiantes:", selectedNewStudents); // Verificar estudiantes seleccionados
-        axios.post(`http://localhost:8091/api/grupos/${currentGrupoId}/estudiantes`, selectedNewStudents)
-        .then(response => {
-            console.log("Respuesta del servidor:", response.data); // Verificar respuesta del servidor
-
-            // Hacer una solicitud adicional para obtener la información actualizada del grupo
-            axios.get(`http://localhost:8091/api/grupos/${currentGrupoId}`)
-            .then(groupResponse => {
-                const updatedGrupo = groupResponse.data;
-                setGrupos(prevGrupos => prevGrupos.map(grupo => 
-                    grupo.id === currentGrupoId ? updatedGrupo : grupo
-                ));
-                setSelectedNewStudents([]);
-                setModalAddStudentVisible(false);
-                Swal.fire({
-                    title: '¡Añadidos!',
-                    text: 'Los estudiantes han sido añadidos.',
-                    icon: 'success'
-                });
-            })
-            .catch(groupError => {
-                console.error('Error al obtener la información del grupo:', groupError);
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Hubo un error al obtener la información del grupo.',
-                    icon: 'error'
-                });
-            });
-        })
-        .catch(error => {
-            console.error('Error añadiendo estudiantes:', error);
+          })
+          .catch(groupError => {
+            console.error('Error al obtener la información del grupo:', groupError);
             Swal.fire({
-                title: 'Error',
-                text: 'Hubo un error al añadir los estudiantes.',
-                icon: 'error'
+              title: 'Error',
+              text: 'Hubo un error al obtener la información del grupo.',
+              icon: 'error'
             });
+          });
+      })
+      .catch(error => {
+        console.error('Error añadiendo estudiantes:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'Hubo un error al añadir los estudiantes.',
+          icon: 'error'
         });
-    };
-
-
+      });
+  };
+  
   const handleDeleteEstudiante = (estudianteEmail, grupoId) => {
-    axios.delete(`http://localhost:8091/api/grupos/${grupoId}/estudiantes/${estudianteEmail}`)
-    .then(response => {
+    deleteStudentFromGroup(grupoId, estudianteEmail)
+      .then(() => {
         setGrupos(grupos.map(grupo => {
-            if (grupo.id === grupoId) {
-                return {
-                    ...grupo,
-                    estudiantes: grupo.estudiantes.filter(est => est.email !== estudianteEmail)
-                };
-            }
-            return grupo;
+          if (grupo.id === grupoId) {
+            return {
+              ...grupo,
+              estudiantes: grupo.estudiantes.filter(est => est.email !== estudianteEmail)
+            };
+          }
+          return grupo;
         }));
         Swal.fire({
-            title: "¡Eliminado!",
-            text: "El estudiante ha sido eliminado.",
-            icon: "success"
+          title: "¡Eliminado!",
+          text: "El estudiante ha sido eliminado.",
+          icon: "success"
         });
-    })
-    .catch(error => {
+      })
+      .catch(error => {
         console.error('Error eliminando estudiante:', error);
         Swal.fire({
-            title: "Error",
-            text: "Hubo un error al eliminar el estudiante.",
-            icon: "error"
+          title: "Error",
+          text: "Hubo un error al eliminar el estudiante.",
+          icon: "error"
         });
-    });
-}
+      });
+  };  
   /////////////////////////NO SIRVEEEEE
 
   
@@ -422,61 +404,59 @@ const ProfesorGrupos = () => {
             </CCol>
             </CRow>
 
-      <CModal visible={modalVisible} onClose={() => { setModalVisible(false); clearForm(); }}>
-                          <CModalHeader onClose={() => setModalVisible(false)}>
-                            <CModalTitle>Crear Nuevo Grupo</CModalTitle>
-                          </CModalHeader>
-                          <CModalBody>
-                    <CForm onSubmit={handleCreateGroup}>
-                      <CFormLabel htmlFor="nombre">Nombre del Grupo</CFormLabel>
-                      <CFormInput
-                        type="text"
-                        id="nombre"
-                        placeholder="Ingrese el nombre del grupo"
-                        value={nombre}
-                        onChange={(e) => setNombre(e.target.value)}
-                      />
-                      <CFormLabel htmlFor="buscarEstudiantes">Buscar estudiantes</CFormLabel>
-                      <Autosuggest
-                        suggestions={suggestions}
-                        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                        onSuggestionsClearRequested={onSuggestionsClearRequested}
-                        getSuggestionValue={getSuggestionValue}
-                        renderSuggestion={renderSuggestion}
-                        inputProps={{
+            <CModal visible={modalVisible} onClose={() => { setModalVisible(false); clearForm(); }}>
+                <CModalHeader onClose={() => setModalVisible(false)}>
+                  <CModalTitle>Crear Nuevo Grupo</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                  <CForm onSubmit={handleCreateGroup}>
+                    <CFormLabel htmlFor="nombre">Nombre del Grupo</CFormLabel>
+                    <CFormInput
+                      type="text"
+                      id="nombre"
+                      placeholder="Ingrese el nombre del grupo"
+                      value={nombre}
+                      onChange={(e) => setNombre(e.target.value)}
+                    />
+                    <CFormLabel htmlFor="buscarEstudiantes">Buscar estudiantes</CFormLabel>
+                    <Autosuggest
+                      suggestions={suggestions}
+                      onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                      onSuggestionsClearRequested={onSuggestionsClearRequested}
+                      getSuggestionValue={getSuggestionValue}
+                      renderSuggestion={renderSuggestion}
+                      inputProps={{
                         placeholder: 'Escribe un correo electrónico',
                         value: emails,
                         onChange: (e, { newValue }) => setEmails(newValue)
-                        }}
-                    onSuggestionSelected={onSuggestionSelected}
-                  />
+                      }}
+                      onSuggestionSelected={onSuggestionSelected}
+                    />
 
-                      <CFormLabel htmlFor="file" className="mt-3">Subir archivo CSV (Columna: correo/email)</CFormLabel>
-                      <CFormInput
-                        type="file"
-                        id="file"
+                    <CFormLabel htmlFor="file" className="mt-3">Subir archivo CSV (Columna: correo/email)</CFormLabel>
+                    <CFormInput
+                      type="file"
+                      id="file"
                       accept=".csv"
                       onChange={handleFileChangeCreateGroup}
-                      />
-          
+                    />
 
-                      <CFormLabel className="mt-3">Estudiantes seleccionados</CFormLabel>
-                        <ul>
-                        {selectedStudents.map(student => (
+                    <CFormLabel className="mt-3">Estudiantes seleccionados</CFormLabel>
+                    <ul>
+                      {selectedStudents.map(student => (
                         <li key={student.email}>
-                        {student.email}
-                      </li>
-                        ))}
-                      </ul>
-                    </CForm>
+                          {student.email}
+                        </li>
+                      ))}
+                    </ul>
+                    <CButton type="submit" color="primary">Crear Grupo</CButton>
+                  </CForm>
+                </CModalBody>
+                <CModalFooter>
+                  <CButton color="secondary" onClick={() => setModalVisible(false)}>Cancelar</CButton>
+                </CModalFooter>
+              </CModal>
 
-                  </CModalBody>
-                  <CModalFooter>
-                    <CButton color="secondary" onClick={() => setModalVisible(false)}>Cancelar</CButton>
-                    <CButton color="primary" onClick={handleCreateGroup}>Crear Grupo</CButton>
-                      </CModalFooter>
-                      
-                    </CModal>
                         <CModal visible={modalAddStudentVisible} onClose={() => setModalAddStudentVisible(false)}>
                             <CModalHeader onClose={() => setModalAddStudentVisible(false)}>
                             <CModalTitle>Agregar Estudiantes</CModalTitle>
