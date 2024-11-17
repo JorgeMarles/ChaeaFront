@@ -24,6 +24,9 @@ const ActualizarProfesor = React.lazy(
 const ProfesorGrupos = React.lazy(
   () => import('./views/profesorGrupos/ProfesorGrupos'),
 )
+const TestAPI = React.lazy(
+  () => import('./views/testAPI/TestAPI.jsx')
+)
 //Estudiante Vista Cuestionarios
 const EstudianteVistaCuestionarios = React.lazy(
   () =>
@@ -295,6 +298,13 @@ const protectedRoutes = [
     element: null,
     roles: [Roles.ADMINISTRADOR],
   },
+  ///PROVISIONAL
+  {
+    path: '/test/',
+    name: 'Test API',
+    element: TestAPI,
+    roles: [Roles.ADMINISTRADOR]
+  }
 ]
 
 export default routes

@@ -98,6 +98,13 @@ const _nav = [
     roles: [Roles.ADMINISTRADOR],
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
   },
+  {
+    component: CNavItem,
+    name: 'TestAPI',
+    to: '/test/',
+    roles: [Roles.ADMINISTRADOR],
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+  },
   ///////////////////////////////////////////////////////////////////////
   {
     component: CNavTitle,
