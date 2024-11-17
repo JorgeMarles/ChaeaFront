@@ -31,6 +31,20 @@ const EstudianteVistaCuestionarios = React.lazy(
       './views/estudianteVistaCuestionarios/EstudianteVistaCuestionarios.js'
     ),
 )
+const ProfesorVistaCuestionarios = React.lazy(
+  () =>
+    import(
+      './views/profesorVistaCuestionarios/ProfesorVistaCuestionarios.js'
+    ),
+)
+
+const CrearCuestionarios = React.lazy(
+  () =>
+    import(
+      './views/profesorVistaCuestionarios/CrearCuestionarios.js'
+    ),
+)
+
 const ResponderCuestionario = React.lazy(
   () =>
     import('./views/estudianteVistaCuestionarios/ResponderCuestionario.jsx'),
@@ -219,6 +233,20 @@ const protectedRoutes = [
     element: EstudianteVistaCuestionarios,
     roles: [Roles.ESTUDIANTE_ACTIVO],
   },
+  //GESTION DE CUESTIONARIOS PARA PROFESOR
+  {
+    path: '/administrar-cuestionarios/',
+    name: 'Administrar Cuestionarios',
+    element: ProfesorVistaCuestionarios,
+    roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
+  },
+  //CREACION CUESTIONARIOS
+  {
+    path: '/crear-cuestionarios/',
+    name: 'Crear Cuestionarios',
+    element: CrearCuestionarios,
+    roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
+  },
   {
     path: '/cuestionario/:id/responder/',
     name: 'Responder cuestionario',
@@ -252,7 +280,7 @@ const protectedRoutes = [
   {
     path: '/grupos/aplicaciones-cuestionarios/',
     name: 'Resultados de Grupos',
-    element: null,
+    element: null ,
     roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
   },
   {
@@ -261,7 +289,6 @@ const protectedRoutes = [
     element: null,
     roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
   },
-
   {
     path: '/cuentas/',
     name: 'Administrar cuentas',

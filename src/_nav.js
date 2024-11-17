@@ -33,6 +33,14 @@ const _nav = [
     icon: <CIcon icon={cilGroup} customClassName="nav-icon" />,
     roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
   },
+  //ADMINISTRAR CUESTIONARIOS
+  {
+    component: CNavItem,
+    name: 'Administrar Cuestionarios',
+    to: '/administrar-cuestionarios/',
+    icon: <CIcon icon={cilGroup} customClassName="nav-icon" />,
+    roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
+  },
   //MI CUENTA
   {
     component: CNavTitle,
@@ -65,7 +73,7 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Resultados cuestionarios',
+    name: 'Resultados ios',
     to: '/grupos/aplicaciones-cuestionarios/',
     roles: [Roles.PROFESOR_ACTIVO, Roles.ADMINISTRADOR],
     icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
