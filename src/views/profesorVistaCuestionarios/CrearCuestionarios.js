@@ -63,38 +63,68 @@ const CrearCuestionario = () => {
       return;
     }
   
-    // Crear objeto de cuestionario
-    const cuestionario = {
-      nombre,
-      siglas,
-      descripcion,
-      autor,
-      version,
-      preguntas
-    };
-    console.log("Cuestionario generado:", JSON.stringify(cuestionario, null, 2));
-    // Lógica para enviar el cuestionario al endpoint irá aquí
-  
-    // Mostrar alerta de éxito
+    // Mostrar alerta de confirmación
     Swal.fire({
-      icon: 'success',
-      title: 'Cuestionario Creado',
-      text: `El cuestionario "${nombre}" ha sido creado con éxito.`
+      title: '¿Estás seguro?',
+      text: "Vas a crear el cuestionario, una vez creado no será editable, ¿estás seguro que terminaste?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, crear'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Crear objeto de cuestionario
+        const cuestionario = {
+          nombre,
+          siglas,
+          descripcion,
+          autor,
+          version,
+          preguntas: preguntas.map((pregunta, index) => ({
+            pregunta: pregunta.titulo,
+            orden: index + 1,
+            opciones: pregunta.opciones.map((opcion, i) => ({
+              orden: i + 1,
+              respuesta: opcion.titulo,
+              valor: opcion.valor,
+              categoriaId: opcion.categoriaId
+            }))
+          })),
+          categorias: categorias.map((categoria) => ({
+            nombre: categoria.nombre,
+            id: categoria.id
+          }))
+        };
+  
+        console.log("Cuestionario generado:", JSON.stringify(cuestionario, null, 2));
+        // Lógica para enviar el cuestionario al endpoint irá aquí
+  
+        // Mostrar alerta de éxito
+        Swal.fire({
+          icon: 'success',
+          title: 'Cuestionario Creado',
+          text: `El cuestionario "${nombre}" ha sido creado con éxito.`
+        });
+  
+        // Reiniciar los campos
+        setNombre('');
+        setSiglas('');
+        setDescripcion('');
+        setAutor('');
+        setVersion('');
+        setPreguntaTitulo('');
+        setPreguntaCategoria('');
+        setOpciones([{ id: 1, titulo: '', valor: 0, categoriaId: null }]);
+        setPreguntas([]);
+        setCategorias([]);
+      }
     });
-  
-    // Reiniciar los campos
-    setNombre('');
-    setSiglas('');
-    setDescripcion('');
-    setAutor('');
-    setVersion('');
-    setPreguntaTitulo('');
-    setPreguntaCategoria('');
-    setOpciones([{ id: 1, titulo: '', valor: 0, categoriaId: null }]);
-    setPreguntas([]);
-    setCategorias([]);
   };
-  
+
+  const handleDeleteCategoria = (id) => {
+    setCategorias(categorias.filter(categoria => categoria.id !== id));
+  };
   
   const handleDeleteOpcion = (index) => {
     const newOpciones = opciones.filter((_, i) => i !== index);
