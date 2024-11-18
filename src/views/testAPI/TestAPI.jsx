@@ -51,11 +51,14 @@ const TestAPI = () => {
             </div>
             <div>
                 <label htmlFor="endpoint">Endpoint: </label>
-                <input
+                <textarea
                     type="text"
                     id="endpoint"
                     value={endpoint}
                     onChange={handleEndpointChange}
+                    style={{
+                        resize: 'both'
+                    }}
                 />
             </div>
             <div>

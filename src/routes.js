@@ -318,7 +318,7 @@ const protectedRoutes = [
     path: '/test/',
     name: 'Test API',
     element: TestAPI,
-    roles: [Roles.ADMINISTRADOR]
+    roles: [Roles.ADMINISTRADOR, Roles.ESTUDIANTE_ACTIVO]
   }
 ]
 
