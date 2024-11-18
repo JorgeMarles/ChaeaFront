@@ -64,7 +64,7 @@ const CrearCuestionario = () => {
 
   const handleOpcionChange = (index, field, value) => {
     const newOpciones = [...opciones]
-    newOpciones[index][field] = value ?? '0'
+    newOpciones[index][field] = value ?? 0
     setOpciones(newOpciones)
   }
 
