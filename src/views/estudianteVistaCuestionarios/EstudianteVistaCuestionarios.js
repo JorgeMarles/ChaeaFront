@@ -86,7 +86,7 @@ const EstudianteVistaCuestionario = () => {
                     <p>Preguntas: {el.cuestionario.numPreguntas}</p>
                     <p>Asignado el: {dateFromMsToString(el.fechaAplicacion)}</p>
                     <div className="text-center mt-3">
-                      <Link to={`/cuestionarios/${el.id}/resolver`}>
+                      <Link to={`/cuestionario/${el.cuestionario.id}/responder`}>
                       <CButton
                         style={{
                           backgroundColor: '#b9d2fa',
