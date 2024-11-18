@@ -3,7 +3,6 @@ import { useOutletContext, useNavigate } from 'react-router-dom';
 import { CCard, CCardBody, CCardHeader, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow, CButton, CCol, CRow, CButtonGroup, CSpinner, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter } from '@coreui/react';
 import { listarCuestionarios, obtenerCuestionario, eliminarCuestionario } from '../../util/services/cuestionarioService';
 import Swal from 'sweetalert2';
-import './modal.css'; 
 
 const ProfesorVistaCuestionarios = () => {
   const user = useOutletContext();

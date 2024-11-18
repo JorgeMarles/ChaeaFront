@@ -12,10 +12,17 @@ const Typography = React.lazy(
 const AdministrarGrupos = React.lazy(
   () => import('./views/administrarGrupos/AdministrarGrupos'),
 )
+
 //ACTUALIZAR CUENTA DE USUARIO
 const ActualizarEstudiante = React.lazy(
   () => import('./views/miCuenta/actualizarEstudiante/ActualizarEstudiante.js'),
 )
+
+//ACTUALIZAR CUENTA DE USUARIO
+const AsignarCuestionarios = React.lazy(
+  () => import('./views/asigCuestionario/AsignarCuestionarios'),
+)
+
 //ACTUALIZAR CUENTA DE PROFESOR
 const ActualizarProfesor = React.lazy(
   () => import('./views/miCuenta/actualizarProfesor/ActualizarProfesor.js'),
@@ -24,6 +31,7 @@ const ActualizarProfesor = React.lazy(
 const ProfesorGrupos = React.lazy(
   () => import('./views/profesorGrupos/ProfesorGrupos'),
 )
+
 const TestAPI = React.lazy(
   () => import('./views/testAPI/TestAPI.jsx')
 )
@@ -248,6 +256,13 @@ const protectedRoutes = [
     path: '/crear-cuestionarios/',
     name: 'Crear Cuestionarios',
     element: CrearCuestionarios,
+    roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
+  },
+  //ASIGNAR CUESTIONARIOS
+  {
+    path: '/asginar-cuestionarios/',
+    name: 'Asignar Cuestionarios',
+    element: AsignarCuestionarios,
     roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
   },
   {
