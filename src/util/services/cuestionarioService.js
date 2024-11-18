@@ -147,3 +147,24 @@ export const getMisCuestionarios = async () => {
     throw error.response.data
   }
 }
+
+export const getCuestionarioResultado = async (id) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/api/cuestionarios/mis-cuestionarios/resuelto/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      },
+    )
+    const responseOut = {
+      ok: response.status === 200,
+      data: response.data,
+      status: response.status,
+    }
+    return responseOut
+  } catch (error) {
+    throw error.response.data
+  }
+}

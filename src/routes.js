@@ -61,6 +61,12 @@ const ResponderCuestionario = React.lazy(
     import('./views/estudianteVistaCuestionarios/ResponderCuestionario.jsx'),
 )
 
+const ResultadoCuestionario = React.lazy(
+  () =>
+    import('./views/estudianteVistaCuestionarios/CuestionarioResuelto.jsx'),
+)
+
+
 const Login = React.lazy(() => import('./views/pages/login/Login.js'))
 ////////////////////////////////////////////////
 
@@ -274,7 +280,7 @@ const protectedRoutes = [
   {
     path: '/cuestionario/:id/resultado/',
     name: 'Resultado de cuestionario',
-    element: null,
+    element: ResultadoCuestionario,
     roles: [Roles.ESTUDIANTE_ACTIVO],
   },
 

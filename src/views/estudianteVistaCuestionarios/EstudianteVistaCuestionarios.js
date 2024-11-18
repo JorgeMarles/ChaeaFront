@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useOutletContext, useSearchParams } from 'react-router-dom'
+import { Link, useOutletContext, useSearchParams } from 'react-router-dom'
 
 import {
   CAlert,
@@ -43,15 +43,13 @@ const EstudianteVistaCuestionario = () => {
   useEffect(() => {
     getMisCuestionarios()
       .then((response) => {
-        if(response.ok){
+        if (response.ok) {
           setPendientes(response.data.pendientes)
           setResueltos(response.data.resueltos)
-          console.log(response.data);
-          
-        }else{
+          console.log(response.data)
+        } else {
           throw response
-        }        
-        
+        }
       })
       .catch((error) => {
         console.error('Error fetching cuestionarios:', error)
@@ -81,13 +79,14 @@ const EstudianteVistaCuestionario = () => {
         <CTabPane visible={activeTab === 0}>
           <CRow className="gy-4" xs={{ cols: 1 }} sm={{ cols: 2 }}>
             {pendientes.map((el, id) => (
-              <CCol key={id+"pendiente"} xs={12} md={6} lg={4}>
+              <CCol key={id + 'pendiente'} xs={12} md={6} lg={4}>
                 <CCard className="mb-4">
                   <CCardBody>
                     <CCardTitle>{el.cuestionario.nombre}</CCardTitle>
                     <p>Preguntas: {el.cuestionario.numPreguntas}</p>
                     <p>Asignado el: {dateFromMsToString(el.fechaAplicacion)}</p>
                     <div className="text-center mt-3">
+                      <Link to={`/cuestionarios/${el.id}/resolver`}>
                       <CButton
                         style={{
                           backgroundColor: '#b9d2fa',
@@ -96,6 +95,7 @@ const EstudianteVistaCuestionario = () => {
                       >
                         Iniciar Cuestionario
                       </CButton>
+                      </Link>
                     </div>
                   </CCardBody>
                 </CCard>
@@ -105,9 +105,9 @@ const EstudianteVistaCuestionario = () => {
         </CTabPane>
 
         <CTabPane visible={activeTab === 1}>
-        <CRow className="gy-4" xs={{ cols: 1 }} sm={{ cols: 2 }}>
+          <CRow className="gy-4" xs={{ cols: 1 }} sm={{ cols: 2 }}>
             {resueltos.map((el, id) => (
-              <CCol key={id+"resuelto"} xs={12} md={6} lg={4}>
+              <CCol key={id + 'resuelto'} xs={12} md={6} lg={4}>
                 <CCard className="mb-4">
                   <CCardBody>
                     <CCardTitle>{el.cuestionario.nombre}</CCardTitle>
@@ -115,14 +115,16 @@ const EstudianteVistaCuestionario = () => {
                     <p>Asignado el: {dateFromMsToString(el.fechaAplicacion)}</p>
                     <p>Resuelto el: {dateFromMsToString(el.fechaResolucion)}</p>
                     <div className="text-center mt-3">
-                      <CButton
-                        style={{
-                          backgroundColor: '#b9d2fa',
-                          borderColor: '#b9d2fa',
-                        }}
-                      >
-                        Ver resultados
-                      </CButton>
+                      <Link to={`/cuestionario/${el.id}/resultado`}>
+                        <CButton
+                          style={{
+                            backgroundColor: '#b9d2fa',
+                            borderColor: '#b9d2fa',
+                          }}
+                        >
+                          Ver resultados
+                        </CButton>
+                      </Link>
                     </div>
                   </CCardBody>
                 </CCard>
