@@ -80,13 +80,6 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: 'Resultados ios',
-    to: '/grupos/aplicaciones-cuestionarios/',
-    roles: [Roles.PROFESOR_ACTIVO, Roles.ADMINISTRADOR],
-    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
     name: 'Mis cuestionarios',
     to: '/cuestionarios/',
     roles: [Roles.ESTUDIANTE_ACTIVO],

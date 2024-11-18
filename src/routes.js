@@ -61,6 +61,11 @@ const ResponderCuestionario = React.lazy(
     import('./views/estudianteVistaCuestionarios/ResponderCuestionario.jsx'),
 )
 
+const AsignarRoles = React.lazy(
+  () =>
+    import('./views/asigRoles/AsignarRoles'),
+)
+
 const ResultadoCuestionario = React.lazy(
   () =>
     import('./views/estudianteVistaCuestionarios/CuestionarioResuelto.jsx'),
@@ -316,7 +321,7 @@ const protectedRoutes = [
   {
     path: '/cuentas/',
     name: 'Administrar cuentas',
-    element: null,
+    element: AsignarRoles,
     roles: [Roles.ADMINISTRADOR],
   },
   ///PROVISIONAL
