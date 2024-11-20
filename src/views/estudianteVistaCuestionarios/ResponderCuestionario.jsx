@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { CCard, CCardBody, CCardHeader, CButton, CSpinner } from '@coreui/react';
+import {
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CButton,
+  CSpinner,
+  CRow,
+  CCol,
+  CFormCheck,
+} from '@coreui/react';
 import Swal from 'sweetalert2';
 import { obtenerCuestionario, responderCuestionario } from '../../util/services/cuestionarioService';
 
@@ -34,67 +43,79 @@ const ResponderCuestionario = () => {
   };
 
   const handleSubmit = async () => {
-    if (respuestasSeleccionadas.some(respuesta => respuesta === null)) {
+    if (respuestasSeleccionadas.some((respuesta) => respuesta === null)) {
       Swal.fire('Advertencia', 'Debes seleccionar una opción para cada pregunta.', 'warning');
       return;
     }
-  
+
     const respuestasDTO = {
       cuestionarioId: parseInt(id), // Convertir id a número
       opcionesSeleccionadasId: respuestasSeleccionadas.filter(Boolean), // Excluir respuestas nulas
     };
-  
-    console.log('RespuestasDTO:', respuestasDTO);
-  
-     try {
-       await responderCuestionario(respuestasDTO);
-       Swal.fire('¡Enviado!', 'Tu cuestionario ha sido enviado.', 'success').then(() => {
-         navigate('/estudiante/cuestionarios');
-       });
-     } catch (error) {
-        console.log(error);
-        
-       Swal.fire('Error', 'Hubo un problema al enviar el cuestionario.', 'error');
-     }
+
+    try {
+      await responderCuestionario(respuestasDTO);
+      Swal.fire('¡Enviado!', 'Tu cuestionario ha sido enviado.', 'success').then(() => {
+        navigate('/estudiante/cuestionarios');
+      });
+    } catch (error) {
+      console.log(error);
+      Swal.fire('Error', 'Hubo un problema al enviar el cuestionario.', 'error');
+    }
   };
-  
+
   return (
-    <CCard>
-      <CCardHeader>
-        Responder Cuestionario
-      </CCardHeader>
-      <CCardBody>
-        {loading ? (
-          <CSpinner color="primary" />
-        ) : cuestionario ? (
-          <>
-            {cuestionario.preguntas.map((pregunta, preguntaIndex) => (
-              <div key={pregunta.id}>
-                <h5>{pregunta.pregunta}</h5>
-                {pregunta.opciones.map((opcion) => (
-                  <div key={opcion.id} style={{ marginBottom: '10px' }}>
-                    <input
-                      type="radio"
-                      name={`pregunta-${preguntaIndex}`}
-                      id={`pregunta-${preguntaIndex}-opcion-${opcion.id}`}
-                      value={opcion.id}
-                      checked={respuestasSeleccionadas[preguntaIndex] === opcion.id}
-                      onChange={() => handleChange(preguntaIndex, opcion.id)}
-                      style={{ marginRight: '10px' }}
-                    />
-                    <label htmlFor={`pregunta-${preguntaIndex}-opcion-${opcion.id}`}>{opcion.respuesta}</label>
-                  </div>
-                ))}
-                <hr />
+    <CRow className="justify-content-center mt-4">
+      <CCol md={10} lg={8}>
+        <CCard>
+          <CCardHeader className="text-center">
+            <h3>{cuestionario.nombre}</h3>
+          </CCardHeader>
+          <CCardBody>
+            {loading ? (
+              <div className="text-center">
+                <CSpinner color="primary" />
+                <p>Cargando cuestionario...</p>
               </div>
-            ))}
-            <CButton color="primary" onClick={handleSubmit}>Enviar Respuestas</CButton>
-          </>
-        ) : (
-          <p>Error al cargar el cuestionario.</p>
-        )}
-      </CCardBody>
-    </CCard>
+            ) : cuestionario ? (
+              <>
+                <div className="mb-4 text-center">
+                  <h4>{cuestionario.titulo}</h4>
+                  <p className="text-muted">{cuestionario.descripcion}</p>
+                </div>
+                {cuestionario.preguntas.map((pregunta, preguntaIndex) => (
+                  <CCard key={pregunta.id} className="mb-3">
+                    <CCardBody>
+                      <h5 className="mb-3">{pregunta.pregunta}</h5>
+                      {pregunta.opciones.map((opcion) => (
+                        <CFormCheck
+                          key={opcion.id}
+                          type="radio"
+                          name={`pregunta-${preguntaIndex}`}
+                          id={`pregunta-${preguntaIndex}-opcion-${opcion.id}`}
+                          value={opcion.id}
+                          label={opcion.respuesta}
+                          checked={respuestasSeleccionadas[preguntaIndex] === opcion.id}
+                          onChange={() => handleChange(preguntaIndex, opcion.id)}
+                          className="mb-2"
+                        />
+                      ))}
+                    </CCardBody>
+                  </CCard>
+                ))}
+                <div className="text-center">
+                  <CButton color="success" size="lg" onClick={handleSubmit}>
+                    Enviar Respuestas
+                  </CButton>
+                </div>
+              </>
+            ) : (
+              <p className="text-center text-danger">Error al cargar el cuestionario.</p>
+            )}
+          </CCardBody>
+        </CCard>
+      </CCol>
+    </CRow>
   );
 };
 
