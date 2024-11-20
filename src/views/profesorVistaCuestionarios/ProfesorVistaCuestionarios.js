@@ -182,7 +182,7 @@ const ProfesorVistaCuestionarios = () => {
                 </div>
               ))}
               <hr />
-              <h5>Categorías:</h5>
+              <h5>Estilos de Aprendizaje:</h5>
               <ul>
                 {selectedCuestionario.categorias.map((categoria, index) => (
                   <li key={index}>{categoria.nombre}</li>

@@ -266,22 +266,22 @@ const CrearCuestionario = () => {
 
           {/* Categorías */}
           <hr />
-          <h5>Categorías</h5>
+          <h5>Estilos de Aprendizaje</h5>
           <CRow className="mb-3">
             <CCol md="6">
               <CFormLabel htmlFor="categoriaNombre">
-                Nombre de la Categoría
+                Nombre del Estilo
               </CFormLabel>
               <CFormInput
                 id="categoriaNombre"
                 value={categoriaNombre}
                 onChange={(e) => setCategoriaNombre(e.target.value)}
-                placeholder="Ingrese el nombre de la categoría"
+                placeholder="Ingrese el nombre del estilo"
               />
             </CCol>
             <CCol md="6" className="d-flex align-items-end">
               <CButton color="primary" onClick={handleAddCategoria}>
-                Agregar Categoría
+                Agregar Estilo
               </CButton>
             </CCol>
           </CRow>
@@ -361,7 +361,7 @@ const CrearCuestionario = () => {
                       )
                     }
                   >
-                    <option value="">Seleccione Categoría</option>
+                    <option value="">Seleccione Estilo</option>
                     {categorias.map((categoria) => (
                       <option key={categoria.id} value={categoria.id}>
                         {categoria.nombre}
@@ -432,7 +432,7 @@ const CrearCuestionario = () => {
                               <CTableRow>
                                 <CTableHeaderCell>Orden</CTableHeaderCell>
                                 <CTableHeaderCell>Opción</CTableHeaderCell>
-                                <CTableHeaderCell>Categoría</CTableHeaderCell>
+                                <CTableHeaderCell>Estilo</CTableHeaderCell>
                                 <CTableHeaderCell>Valor</CTableHeaderCell>
                               </CTableRow>
                             </CTableHead>
@@ -446,7 +446,7 @@ const CrearCuestionario = () => {
                                   <CTableDataCell>
                                     {categorias.find(
                                       (cat) => cat.id === opcion.categoriaId,
-                                    )?.nombre || 'Sin categoría'}
+                                    )?.nombre || 'Sin estilo'}
                                   </CTableDataCell>
                                   <CTableDataCell>
                                     {opcion.valor}
