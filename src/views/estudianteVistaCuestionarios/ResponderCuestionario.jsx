@@ -56,7 +56,7 @@ const ResponderCuestionario = () => {
     try {
       await responderCuestionario(respuestasDTO);
       Swal.fire('¡Enviado!', 'Tu cuestionario ha sido enviado.', 'success').then(() => {
-        navigate('/estudiante/cuestionarios');
+        navigate('/cuestionarios');
       });
     } catch (error) {
       console.log(error);
@@ -69,7 +69,7 @@ const ResponderCuestionario = () => {
       <CCol md={10} lg={8}>
         <CCard>
           <CCardHeader className="text-center">
-            <h3>{loading ? 'Cargando cuestionario' : cuestionario ? cuestionario.nombre : 'null'}</h3>
+          <h3>{loading ? 'Cargando cuestionario' : cuestionario ? cuestionario.nombre : 'null'}</h3>
           </CCardHeader>
           <CCardBody>
             {loading ? (

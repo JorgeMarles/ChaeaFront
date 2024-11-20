@@ -25,11 +25,19 @@ const AsignarCuestionarios = () => {
     fetchData();
   }, []);
 
+  const getNombrePorId = (id, list) => {
+    const item = list.find(el => el.id === parseInt(id));
+    return item ? item.nombre : 'desconocido';
+  };
+
   const handleAsignar = () => {
     if (selectedCuestionario && selectedGrupo) {
+      const nombreCuestionario = getNombrePorId(selectedCuestionario, cuestionarios);
+      const nombreGrupo = getNombrePorId(selectedGrupo, grupos);
+
       Swal.fire({
         title: '¿Estás seguro?',
-        text: `¿Deseas asignar el cuestionario ${selectedCuestionario} al grupo ${selectedGrupo}?`,
+        text: `¿Deseas asignar el cuestionario "${nombreCuestionario}" al grupo "${nombreGrupo}"?`,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -42,7 +50,7 @@ const AsignarCuestionarios = () => {
             await asignarCuestionarioAGrupo(selectedCuestionario, selectedGrupo);
             Swal.fire(
               'Asignado!',
-              'El cuestionario ha sido asignado al grupo.',
+              `El cuestionario "${nombreCuestionario}" ha sido asignado al grupo "${nombreGrupo}".`,
               'success'
             );
           } catch (error) {

@@ -175,7 +175,7 @@ const CrearCuestionario = () => {
         (opcion) =>
           opcion.titulo.trim() !== '' &&
           opcion.categoriaId &&
-          opcion.valor
+          opcion.valor != null && opcion.valor != undefined
       ) // Verificar que cada opción tenga título, categoría y valor
     ) {
       const newPregunta = {
