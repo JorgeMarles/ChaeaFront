@@ -124,9 +124,9 @@ const ProfesorGrupos = () => {
   const handleFileUpload = (file, updatedStudents) => {
     if (file) {
       Papa.parse(file, {
-        complete: (result) => {
-          const emailsArray = result.data.map((row) => row.correo || row.email).filter((email) => email);
-          const csvStudents = emailsArray.map(email => ({ email, fromCSV: true }));
+        complete: (result) => {          
+          const emailsArray = result.data.map((row) => {return {email: row.email ?? row.correo, nombre: row.nombre}}).filter((email) => email.email);
+          const csvStudents = emailsArray.map(email => ({ email: email.email, fromCSV: true, nombre: email.nombre }));
   
           const uniqueCsvStudents = csvStudents.filter(csvStudent =>
             !updatedStudents.some(selectedStudent => selectedStudent.email === csvStudent.email)
@@ -152,11 +152,11 @@ const ProfesorGrupos = () => {
       return;
     }
   
-    const emailsArray = selectedStudents.map(student => student.email);
+    const emailsArray = selectedStudents.map(student => {return {email: student.email, nombre: student.nombre}});
     const grupoDTO = {
       nombre: nombre,
       profesorEmail: user.email,
-      correosEstudiantes: emailsArray
+      estudiantes: emailsArray
     };
   
     console.log("grupoDTO:", grupoDTO); // Verificar el objeto grupoDTO
