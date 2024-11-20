@@ -39,7 +39,7 @@ const AsignarRoles = () => {
   };
 
   const handleElevar = async (email, rol) => {
-    if (rol === 'ADMINISTRADOR') {
+    if (rol.descripcion === 'ADMINISTRADOR') {
       Swal.fire('Advertencia', 'Este profesor ya es administrador.', 'info');
       return;
     }
@@ -48,7 +48,7 @@ const AsignarRoles = () => {
       Swal.fire('¡Elevado!', 'El profesor ha sido elevado a administrador.', 'success');
       // Actualizar la lista de profesores activos si es necesario
       const nuevosActivos = profesoresActivos.map(profesor => 
-        profesor.email === email ? { ...profesor, rol: 'ADMINISTRADOR' } : profesor
+        profesor.email === email ? { ...profesor, rol: {descripcion: 'ADMINISTRADOR'} } : profesor
       );
       setProfesoresActivos(nuevosActivos);
     } catch (error) {
@@ -91,10 +91,18 @@ const AsignarRoles = () => {
                 <CTableRow key={profesor.email}>
                   <CTableDataCell>{profesor.nombre}</CTableDataCell>
                   <CTableDataCell>{profesor.email}</CTableDataCell>
+
                   <CTableDataCell>
-                    <CButton color="warning" size="sm" onClick={() => handleElevar(profesor.email, profesor.rol)} style={{ marginRight: '10px' }}>
-                      Elevar a Admin
-                    </CButton>
+                    {
+                      profesor.rol.descripcion !== 'ADMINISTRADOR' ? 
+                      <CButton color="warning" size="sm" onClick={() => handleElevar(profesor.email, profesor.rol)} style={{ marginRight: '10px' }}>
+                        Elevar a Admin
+                      </CButton>
+                      :
+                      <CButton color="success" disabled size="sm" style={{ marginRight: '10px' }}>
+                        Administrador
+                      </CButton>
+                    }
                   </CTableDataCell>
                 </CTableRow>
               ))}
