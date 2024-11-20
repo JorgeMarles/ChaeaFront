@@ -121,8 +121,10 @@ export const responderCuestionario = async (respuesta) => {
         },
       },
     )
+    console.log(response)
     return response.status === 201
   } catch (error) {
+    console.log(error)
     throw error.response.data
   }
 }

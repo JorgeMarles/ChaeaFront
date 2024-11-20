@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CCard, CCardBody, CCardHeader, CButton, CSpinner } from '@coreui/react';
 import Swal from 'sweetalert2';
-import { obtenerCuestionario } from '../../util/services/cuestionarioService';
+import { obtenerCuestionario, responderCuestionario } from '../../util/services/cuestionarioService';
 
 const ResponderCuestionario = () => {
   const { id } = useParams();
@@ -46,15 +46,16 @@ const ResponderCuestionario = () => {
   
     console.log('RespuestasDTO:', respuestasDTO);
   
-    // Descomentar el siguiente bloque para enviar las respuestas una vez que el endpoint esté listo
-    // try {
-    //   await responderCuestionario(respuestasDTO);
-    //   Swal.fire('¡Enviado!', 'Tu cuestionario ha sido enviado.', 'success').then(() => {
-    //     navigate('/estudiante/cuestionarios');
-    //   });
-    // } catch (error) {
-    //   Swal.fire('Error', 'Hubo un problema al enviar el cuestionario.', 'error');
-    // }
+     try {
+       await responderCuestionario(respuestasDTO);
+       Swal.fire('¡Enviado!', 'Tu cuestionario ha sido enviado.', 'success').then(() => {
+         navigate('/estudiante/cuestionarios');
+       });
+     } catch (error) {
+        console.log(error);
+        
+       Swal.fire('Error', 'Hubo un problema al enviar el cuestionario.', 'error');
+     }
   };
   
   return (
