@@ -69,7 +69,7 @@ const ResponderCuestionario = () => {
       <CCol md={10} lg={8}>
         <CCard>
           <CCardHeader className="text-center">
-            <h3>{cuestionario.nombre}</h3>
+            <h3>{loading ? 'Cargando cuestionario' : cuestionario ? cuestionario.nombre : 'null'}</h3>
           </CCardHeader>
           <CCardBody>
             {loading ? (

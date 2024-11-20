@@ -307,6 +307,18 @@ const protectedRoutes = [
     roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
   },
   {
+    path: '/gruposv2/',
+    name: 'Mis Grupos',
+    element: ProfesorGrupos,
+    roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
+  },
+  {
+    path: '/gruposv2/:id',
+    name: 'Ver grupo',
+    element: ProfesorGrupos,
+    roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
+  },
+  {
     path: '/grupos/aplicaciones-cuestionarios/',
     name: 'Resultados de Grupos',
     element: null ,

@@ -33,6 +33,13 @@ const _nav = [
     icon: <CIcon icon={cilGroup} customClassName="nav-icon" />,
     roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
   },
+  {
+    component: CNavItem,
+    name: 'Grupos V2',
+    to: '/gruposv2/',
+    icon: <CIcon icon={cilGroup} customClassName="nav-icon" />,
+    roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
+  },
   //ADMINISTRAR CUESTIONARIOS
   {
     component: CNavItem,
