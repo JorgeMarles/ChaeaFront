@@ -36,7 +36,6 @@ const ResultadoCuestionario = () => {
     estudiante: {
       nombre: '',
       fecha_nacimiento: 0,
-      
     },
     preguntas: [{ pregunta: '', orden: 0, respuesta: '' }],
     categorias: [{ nombre: '', valorMinimo: 0, valorMaximo: 0, valor: 0 }],
@@ -59,7 +58,7 @@ const ResultadoCuestionario = () => {
   return (
     <>
       <CAlert color="info" className="mb-2 d-flex justify-content-between align-items-center" style={{ backgroundColor: '#d3d3d3', border:'#d3d3d3', color:'black',padding: '0.5rem' ,margin: '0 0.6rem 0 0.6rem'}}>
-        <span>Estudiante {user.nombre}</span>
+        <span className='fw-semibold text-black'>Estudiante {user.nombre}</span>
         <CButton color="secondary" className="ml-auto" onClick={() => navigate('/cuestionarios/')}>
           Volver
         </CButton>

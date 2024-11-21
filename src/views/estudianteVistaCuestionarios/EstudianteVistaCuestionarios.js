@@ -67,7 +67,8 @@ const EstudianteVistaCuestionario = () => {
        color="info" 
        className="mb-4 d-flex align-items-center shadow-sm"
        style={{
-         background: 'linear-gradient(45deg, #93c5fd, #bfdbfe)'
+         backgroundColor: '#d3d3d3',
+         borderColor:  '#d3d3d3'
       }}
     >
       <CIcon icon={cilBook} className="flex-shrink-0 me-2" width={24} height={24} />
