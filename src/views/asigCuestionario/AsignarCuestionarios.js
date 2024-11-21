@@ -111,9 +111,11 @@ const AsignarCuestionarios = () => {
             </select>
           </CCol>
         </CRow>
+        <div className="d-flex justify-content-end">
         <CButton color="primary" onClick={handleAsignar} style={{ marginTop: '10px' }}>
           Asignar Cuestionario
         </CButton>
+      </div>
       </CCardBody>
     </CCard>
   );
