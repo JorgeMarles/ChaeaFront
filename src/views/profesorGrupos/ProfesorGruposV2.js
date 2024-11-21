@@ -395,7 +395,7 @@ const ProfesorGrupos = () => {
                     {grupos.map((grupo) => (
                       <React.Fragment key={grupo.id}>
                         <CTableRow
-                          onClick={() => navigate(`/gruposv2/${grupo.id}`)}
+                          onClick={() => navigate(`/grupos/${grupo.id}`)}
                           style={{ cursor: 'pointer' }}
                         >
                           <CTableDataCell>{grupo.nombre}</CTableDataCell>

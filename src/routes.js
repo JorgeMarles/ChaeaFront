@@ -28,10 +28,11 @@ const ActualizarProfesor = React.lazy(
   () => import('./views/miCuenta/actualizarProfesor/ActualizarProfesor.js'),
 )
 //Profesor grupos
+/*
 const ProfesorGrupos = React.lazy(
   () => import('./views/profesorGrupos/ProfesorGrupos'),
 )
-
+*/
 const ProfesorGrupo = React.lazy(
   () => import('./views/profesorGrupos/ProfesorGrupo'),
 )
@@ -224,11 +225,13 @@ const sinasignar = [
   //
   //admin  TOTAL grupos
   // Profesor Administrar Grupos
+  /*
   {
     path: '/profesorGrupos',
     name: 'Administrar Grupos',
     element: ProfesorGrupos,
   },
+  */
   // DESPLEGABLE DE CUENTAS
   //Actualizar mi cuenta user
   {
@@ -308,20 +311,22 @@ const protectedRoutes = [
       Roles.ADMINISTRADOR,
     ],
   },
+  /*
   {
     path: '/grupos/',
     name: 'Mis Grupos',
     element: ProfesorGrupos,
     roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
   },
+  */
   {
-    path: '/gruposv2/',
+    path: '/grupos/',
     name: 'Mis Grupos',
     element: ProfesorGruposV2,
     roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
   },
   {
-    path: '/gruposv2/:id',
+    path: '/grupos/:id',
     name: 'Ver grupo',
     element: ProfesorGrupo,
     roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],

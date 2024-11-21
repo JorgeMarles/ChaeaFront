@@ -26,6 +26,7 @@ const _nav = [
     name: 'Grupos',
     roles: [Roles.PROFESOR_ACTIVO, Roles.ADMINISTRADOR],
   },
+  /* GRUPOS V1
   {
     component: CNavItem,
     name: 'Grupos',
@@ -33,10 +34,11 @@ const _nav = [
     icon: <CIcon icon={cilGroup} customClassName="nav-icon" />,
     roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
   },
+  */
   {
     component: CNavItem,
-    name: 'Grupos V2',
-    to: '/gruposv2/',
+    name: 'Grupos',
+    to: '/grupos/',
     icon: <CIcon icon={cilGroup} customClassName="nav-icon" />,
     roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
   },
