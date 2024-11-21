@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useOutletContext } from 'react-router-dom'
 import { getCuestionarioResultado } from '../../util/services/cuestionarioService'
 import { dateFromMsToString } from '../../util/dateUtils'
 import {
@@ -15,10 +15,13 @@ import {
   CCol,
   CRow,
   CContainer,
+  CButton,
+  CAlert
 } from '@coreui/react'
 import { CChartBar, CChartRadar } from '@coreui/react-chartjs'
 
 const ResultadoCuestionario = () => {
+  const user = useOutletContext()
   const { id } = useParams()
   const navigate = useNavigate()
   const [resultado, setResultado] = useState({
@@ -33,6 +36,7 @@ const ResultadoCuestionario = () => {
     estudiante: {
       nombre: '',
       fecha_nacimiento: 0,
+      
     },
     preguntas: [{ pregunta: '', orden: 0, respuesta: '' }],
     categorias: [{ nombre: '', valorMinimo: 0, valorMaximo: 0, valor: 0 }],
@@ -53,6 +57,13 @@ const ResultadoCuestionario = () => {
   }, [id, navigate])
 
   return (
+    <>
+      <CAlert color="info" className="mb-2 d-flex justify-content-between align-items-center" style={{ backgroundColor: '#d3d3d3', border:'#d3d3d3', color:'black',padding: '0.5rem' ,margin: '0 0.6rem 0 0.6rem'}}>
+        <span>Estudiante {user.nombre}</span>
+        <CButton color="secondary" className="ml-auto" onClick={() => navigate('/cuestionarios/')}>
+          Volver
+        </CButton>
+      </CAlert>
     <CContainer>
       <CRow>
         <CCol md={12}>
@@ -172,6 +183,7 @@ const ResultadoCuestionario = () => {
         </CCol>
       </CRow>
     </CContainer>
+    </>
   )
 }
 

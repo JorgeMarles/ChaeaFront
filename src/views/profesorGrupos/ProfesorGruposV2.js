@@ -267,7 +267,7 @@ const ProfesorGrupos = () => {
       ? []
       : students.filter(
           (student) =>
-            student.email.toLowerCase().slice(0, inputLength) === inputValue,
+            student.email.toLowerCase().includes(inputValue),
         )
   }
 

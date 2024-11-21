@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import {
   addStudentsToGroup,
   deleteStudentFromGroup,
@@ -43,6 +43,7 @@ const ProfesorGrupo = () => {
   const [selectedStudents, setSelectedStudents] = useState([])
   const [newStudentEmail, setNewStudentEmail] = useState('')
   const [selectedNewStudents, setSelectedNewStudents] = useState([])
+  const navigate = useNavigate();
 
   useEffect(() => {
     getGroupById(id).then((el) => {
@@ -236,6 +237,9 @@ const ProfesorGrupo = () => {
 
   return (
     <>
+      <div className="d-flex justify-content-start">
+      <CButton color="secondary" onClick={() => navigate('/grupos')} >Volver</CButton> 
+      </div>
       <CCard>
         <CCardHeader className="d-flex justify-content-between align-items-center">
           <span>Lista de Estudiantes {grupo.nombre}</span>
