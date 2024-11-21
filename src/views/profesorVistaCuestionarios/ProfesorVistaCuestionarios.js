@@ -152,7 +152,7 @@ const ProfesorVistaCuestionarios = () => {
               <p><strong>Versión:</strong> {selectedCuestionario.version}</p>
               <p><strong>Número de Preguntas:</strong> {selectedCuestionario.preguntas?.length || 0}</p>
               <p><strong>Descripción:</strong> {selectedCuestionario.descripcion}</p>
-              <CButton color="info" size="sm" onClick={handleViewQuestions} style={{ marginTop: '10px',backgroundColor: '#d3d3d3', borderColor:'#d3d3d3'}}>
+              <CButton color="info" size="sm" onClick={handleViewQuestions} style={{ marginTop: '10px',backgroundColor: '#d3d3d3', borderColor:'#d3d3d3', color:'black'}}>
                 Ver Preguntas
               </CButton>
               {/* Si la fecha de creación estuviera disponible en el backend */}
