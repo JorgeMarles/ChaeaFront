@@ -3,6 +3,7 @@ import { useOutletContext, useNavigate } from 'react-router-dom';
 import { CCard, CCardBody, CCardHeader, CTable, CTableBody, CTableDataCell, CTableHead, CTableHeaderCell, CTableRow, CButton, CCol, CRow, CButtonGroup, CSpinner, CModal, CModalHeader, CModalTitle, CModalBody, CModalFooter } from '@coreui/react';
 import { listarCuestionarios, obtenerCuestionario, eliminarCuestionario } from '../../util/services/cuestionarioService';
 import Swal from 'sweetalert2';
+import './ModalVistaPreguntas.css';
 
 const ProfesorVistaCuestionarios = () => {
   const user = useOutletContext();
@@ -121,7 +122,7 @@ const ProfesorVistaCuestionarios = () => {
                           <CTableDataCell>{cuestionario.nombre}</CTableDataCell>
                           <CTableDataCell>{cuestionario.numPreguntas || 0} preguntas</CTableDataCell>
                           <CTableDataCell>
-                            <CButton color="primary" size="sm" onClick={() => handleViewDetails(cuestionario.id)} style={{ marginRight: '10px' }}>
+                            <CButton color="primary" size="sm" onClick={() => handleViewDetails(cuestionario.id)} style={{ marginRight: '10px', backgroundColor: '#d3d3d3', borderColor: '#d3d3d3', color:'black'}}>
                               Ver Detalles
                             </CButton>
                             <CButton color="danger" size="sm" onClick={() => handleDeleteCuestionario(cuestionario.id, cuestionario.nombre, cuestionario.numPreguntas)}>
@@ -151,7 +152,7 @@ const ProfesorVistaCuestionarios = () => {
               <p><strong>Versión:</strong> {selectedCuestionario.version}</p>
               <p><strong>Número de Preguntas:</strong> {selectedCuestionario.preguntas?.length || 0}</p>
               <p><strong>Descripción:</strong> {selectedCuestionario.descripcion}</p>
-              <CButton color="info" size="sm" onClick={handleViewQuestions} style={{ marginTop: '10px' }}>
+              <CButton color="info" size="sm" onClick={handleViewQuestions} style={{ marginTop: '10px',backgroundColor: '#d3d3d3', borderColor:'#d3d3d3'}}>
                 Ver Preguntas
               </CButton>
               {/* Si la fecha de creación estuviera disponible en el backend */}
@@ -164,37 +165,55 @@ const ProfesorVistaCuestionarios = () => {
         </CModalFooter>
       </CModal>
 
-      <CModal visible={questionsModalVisible} onClose={() => setQuestionsModalVisible(false)} size='xl'>
-        <CModalHeader onClose={() => setQuestionsModalVisible(false)}>
-          <CModalTitle>Preguntas del Cuestionario</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          {selectedCuestionario && (
-            <div>
-              {selectedCuestionario.preguntas.map((pregunta, index) => (
-                <div key={index}>
-                  <p><strong>{index + 1}. {pregunta.pregunta}</strong></p> {/* Actualizado */}
-                  <ul>
-                    {pregunta.opciones.map((opcion, opcionIndex) => (
-                      <li key={opcionIndex}>{opcion.respuesta}</li>
+          <CModal 
+            visible={questionsModalVisible} 
+            onClose={() => setQuestionsModalVisible(false)} 
+            size='xl'
+            className="questions-modal"
+            portal={true}
+          >
+          <CModalHeader onClose={() => setQuestionsModalVisible(false)} className="modal-header">
+            <CModalTitle className="modal-title">Preguntas del Cuestionario</CModalTitle>
+          </CModalHeader>
+          <CModalBody className="modal-body">
+            {selectedCuestionario && (
+              <div className="questions-container">
+                {selectedCuestionario.preguntas.map((pregunta, index) => (
+                  <div key={index} className="question-item">
+                    <p className="question-text">
+                      <span className="question-number">{index + 1}.</span> 
+                      {pregunta.pregunta}
+                    </p>
+                    <ul className="options-list">
+                      {pregunta.opciones.map((opcion, opcionIndex) => (
+                        <li key={opcionIndex} className="option-item">
+                          {opcion.respuesta}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+                <div className="learning-styles-section">
+                  <h5 className="section-title">Estilos de Aprendizaje:</h5>
+                  <ul className="categories-list">
+                    {selectedCuestionario.categorias.map((categoria, index) => (
+                      <li key={index} className="category-item">{categoria.nombre}</li>
                     ))}
                   </ul>
                 </div>
-              ))}
-              <hr />
-              <h5>Estilos de Aprendizaje:</h5>
-              <ul>
-                {selectedCuestionario.categorias.map((categoria, index) => (
-                  <li key={index}>{categoria.nombre}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={() => setQuestionsModalVisible(false)}>Cerrar</CButton>
-        </CModalFooter>
-      </CModal>
+              </div>
+            )}
+          </CModalBody>
+          <CModalFooter className="modal-footer">
+            <CButton 
+              color="secondary" 
+              onClick={() => setQuestionsModalVisible(false)}
+              className="close-button"
+            >
+              Cerrar
+            </CButton>
+          </CModalFooter>
+        </CModal>
     </>
   );
 };

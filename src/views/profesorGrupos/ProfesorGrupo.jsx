@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useOutletContext } from 'react-router-dom'
 import {
   addStudentsToGroup,
   deleteStudentFromGroup,
@@ -25,11 +25,14 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
+  CAlert,
 } from '@coreui/react'
 import Autosuggest from 'react-autosuggest'
 import Swal from 'sweetalert2'
 
 const ProfesorGrupo = () => {
+  const user = useOutletContext()
+
   const { id } = useParams()
   const [grupo, setGrupo] = useState({ estudiantes: [] })
   const [modalAddStudentVisible, setModalAddStudentVisible] = useState(false)
@@ -237,12 +240,15 @@ const ProfesorGrupo = () => {
 
   return (
     <>
-      <div className="d-flex justify-content-start">
-      <CButton color="secondary" onClick={() => navigate('/grupos')} >Volver</CButton> 
-      </div>
+    <CAlert color="info" className="mb-2 d-flex justify-content-between align-items-center" style={{ backgroundColor: '#d3d3d3', border:'#d3d3d3', color:'black',padding: '0.5rem' ,margin: '0'}}>
+        <span>Profesor {user.nombre}</span>
+        <CButton color="secondary" className="ml-auto" onClick={() => navigate('/grupos/')}>
+          Volver
+        </CButton>
+      </CAlert>
       <CCard>
         <CCardHeader className="d-flex justify-content-between align-items-center">
-          <span>Lista de Estudiantes {grupo.nombre}</span>
+          <span>Lista de Estudiantes Grupo - {grupo.nombre}</span>
           <CButton
             color="success"
             size="sm"

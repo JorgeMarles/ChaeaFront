@@ -363,7 +363,7 @@ const ProfesorGrupos = () => {
     <>
       <CRow>
         <CCol xs={12}>
-          <CAlert color="info" className="mb-4">
+        <CAlert color="info" className="mb-4 d-flex justify-content-between align-items-center" style={{ backgroundColor: '#d3d3d3', border:'#d3d3d3', color:'black'}}>
             Bienvenid@ Profesor {user.nombre}
           </CAlert>
           <CCard className="mb-4">

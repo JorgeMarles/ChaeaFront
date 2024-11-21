@@ -20,6 +20,7 @@ import {
   CTableHeaderCell,
   CTableDataCell,
   CFormSelect,
+  CFormFloating
 } from '@coreui/react'
 import Swal from 'sweetalert2'
 import { crearCuestionario } from '../../util/services/cuestionarioService'
@@ -39,9 +40,7 @@ const CrearCuestionario = () => {
   const [opciones, setOpciones] = useState([{ id: 1, titulo: '' }])
   const [expandedPreguntaId, setExpandedPreguntaId] = useState(null)
 
-  const handleBack = () => {
-    navigate('/administrar-cuestionarios')
-  }
+  const handleBack = () => { navigate('/administrar-cuestionarios', { replace: true }); };
 
   const handleAddCategoria = () => {
     if (categoriaNombre.trim() !== '') {
@@ -82,10 +81,10 @@ const CrearCuestionario = () => {
         icon: 'error',
         title: 'Campos incompletos',
         text: 'Por favor, asegúrate de que todos los campos estén llenos y que exista al menos una pregunta.',
-      })
-      return
+      });
+      return;
     }
-
+  
     // Mostrar alerta de confirmación
     Swal.fire({
       title: '¿Estás seguro?',
@@ -118,12 +117,12 @@ const CrearCuestionario = () => {
             nombre: categoria.nombre,
             id: categoria.id,
           })),
-        }
-
+        };
+  
         console.log(
           'Cuestionario generado:',
           JSON.stringify(cuestionario, null, 2),
-        )
+        );
         // Lógica para enviar el cuestionario al endpoint irá aquí
         crearCuestionario(cuestionario)
           .then((response) => {
@@ -132,32 +131,33 @@ const CrearCuestionario = () => {
                 icon: 'success',
                 title: 'Cuestionario Creado',
                 text: `El cuestionario "${nombre}" ha sido creado con éxito.`,
-              })
-              setNombre('')
-              setSiglas('')
-              setDescripcion('')
-              setAutor('')
-              setVersion('')
-              setPreguntaTitulo('')
-              setPreguntaCategoria('')
-              setOpciones([{ id: 1, titulo: '', valor: 0, categoriaId: null }])
-              setPreguntas([])
-              setCategorias([])
-            } else throw new Error('error al actualizar la cuenta')
+              });
+              setNombre('');
+              setSiglas('');
+              setDescripcion('');
+              setAutor('');
+              setVersion('');
+              setPreguntaTitulo('');
+              setPreguntaCategoria('');
+              setOpciones([{ id: 1, titulo: '', valor: 0, categoriaId: null }]);
+              setPreguntas([]);
+              setCategorias([]);
+              
+              // Navegar y forzar actualización de la lista de cuestionarios
+              navigate('/administrar-cuestionarios', { replace: true });
+            } else throw new Error('error al actualizar la cuenta');
           })
           .catch((err) => {
             Swal.fire({
               title: 'Error',
               text: err.message,
               icon: 'error',
-            })
-          })
-        // Mostrar alerta de éxito
-
-        // Reiniciar los campos
+            });
+          });
       }
-    })
-  }
+    });
+  };
+  
 
   const handleDeleteCategoria = (id) => {
     setCategorias(categorias.filter((categoria) => categoria.id !== id))
@@ -384,7 +384,7 @@ const CrearCuestionario = () => {
             </CCol>
           </CRow>
 
-          <CButton color="success" onClick={handleAddPregunta}>
+          <CButton color="success" style={{color:"white", marginTop:"0.5rem "}} onClick={handleAddPregunta}>
             Finalizar Pregunta
           </CButton>
 
@@ -463,7 +463,7 @@ const CrearCuestionario = () => {
               ))}
             </CTableBody>
           </CTable>
-          <CButton color="success" onClick={handleCrearCuestionario}>
+          <CButton color="success" style={{color:"white", marginTop:"0.5rem "}} onClick={handleCrearCuestionario}>
             Crear Cuestionario
           </CButton>
         </CForm>
