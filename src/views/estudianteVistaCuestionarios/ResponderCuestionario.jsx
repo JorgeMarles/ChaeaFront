@@ -68,9 +68,14 @@ const ResponderCuestionario = () => {
     <CRow className="justify-content-center mt-4">
       <CCol md={10} lg={8}>
         <CCard>
-          <CCardHeader className="text-center">
-          <h3>{loading ? 'Cargando cuestionario' : cuestionario ? cuestionario.nombre : 'null'}</h3>
-          </CCardHeader>
+        <CCardHeader className="d-flex justify-content-between align-items-center">
+              <div className="mx-auto">
+                <h3>{loading ? 'Cargando cuestionario' : cuestionario ? cuestionario.nombre : 'null'}</h3>
+              </div>
+              <CButton onClick={() => navigate('/cuestionarios')} color="secondary" className="ml-auto">
+                Volver
+              </CButton>
+            </CCardHeader>
           <CCardBody>
             {loading ? (
               <div className="text-center">
