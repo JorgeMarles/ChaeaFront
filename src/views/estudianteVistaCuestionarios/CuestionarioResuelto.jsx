@@ -36,11 +36,25 @@ const ResultadoCuestionario = () => {
     estudiante: {
       nombre: '',
       fechaNacimiento: 0,
+      genero: ''
     },
     preguntas: [{ pregunta: '', orden: 0, respuesta: '' }],
     categorias: [{ nombre: '', valorMinimo: 0, valorMaximo: 0, valor: 0 }],
   })
 
+  const calculateAge = (fechaNacimiento) => {
+    const birthDate = new Date(fechaNacimiento);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+  
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+  
+    return age;
+  };
+  
   useEffect(() => {
     getCuestionarioResultado(id)
       .then((data) => {
@@ -97,6 +111,12 @@ const ResultadoCuestionario = () => {
                   <h6>Estudiante</h6>
                   <p>
                     <strong>Nombre:</strong> {resultado.estudiante.nombre}
+                  </p>
+                  <p> 
+                    <strong>Edad:</strong> {calculateAge(resultado.estudiante.fechaNacimiento)} 
+                  </p>
+                  <p>
+                    <strong>Género:</strong> {resultado.estudiante.genero}
                   </p>
                   <p>
                     <strong>Fecha de Nacimiento:</strong>{' '}
