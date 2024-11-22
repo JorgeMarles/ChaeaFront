@@ -414,7 +414,7 @@ const ProfesorGrupos = () => {
                 .length === 0 ? (
                 <p>No hay grupos disponibles</p>
               ) : (
-                <CTable hover responsive>
+                <CTable hover responsive striped>
                   <CTableHead>
                     <CTableRow>
                       <CTableHeaderCell>Nombre</CTableHeaderCell>
@@ -422,7 +422,7 @@ const ProfesorGrupos = () => {
                       <CTableHeaderCell></CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
-                  <CTableBody>
+                  <CTableBody striped>
                     {grupos
                       .filter((grupo) => grupo.profesor.email === user.email)
                       .map((grupo) => (

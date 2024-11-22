@@ -1,21 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useOutletContext, useSearchParams } from 'react-router-dom'
-
 import {
-  CAlert,
-  CCard,
-  CCardBody,
-  CCardTitle,
-  CCol,
-  CNav,
-  CNavItem,
-  CNavLink,
-  CRow,
-  CTabContent,
-  CTabPane,
-  CButton,
-  CBadge,
-  CCardHeader
+  CAlert,CCard,CCardBody,CCardTitle,CCol,CNav,CNavItem,CNavLink,CRow,CTabContent,CTabPane,CButton,CBadge,CCardHeader
 } from '@coreui/react'
 import { getMisCuestionarios } from '../../util/services/cuestionarioService'
 import { dateFromMsToString } from '../../util/dateUtils'

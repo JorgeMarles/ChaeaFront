@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CButton,
-  CSpinner,
-  CRow,
-  CCol,
-  CFormCheck,
+import { CCard,CCardBody,CCardHeader,CButton,CSpinner,CRow,CCol,CFormCheck,
 } from '@coreui/react';
 import Swal from 'sweetalert2';
 import { obtenerCuestionario, responderCuestionario } from '../../util/services/cuestionarioService';
@@ -20,10 +12,18 @@ const ResponderCuestionario = () => {
   const [respuestasSeleccionadas, setRespuestasSeleccionadas] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const sortByOrder = (a, b) => a.orden - b.orden;
+
   useEffect(() => {
     const fetchCuestionario = async () => {
       try {
         const data = await obtenerCuestionario(id);
+        // Ordenar preguntas y sus opciones
+        data.preguntas.sort(sortByOrder);
+        data.preguntas.forEach((pregunta) => {
+          pregunta.opciones.sort(sortByOrder);
+        });
+  
         setCuestionario(data);
         setRespuestasSeleccionadas(data.preguntas.map(() => null)); // Inicializar con null
         setLoading(false);
@@ -32,10 +32,10 @@ const ResponderCuestionario = () => {
         setLoading(false);
       }
     };
-
+  
     fetchCuestionario();
   }, [id]);
-
+  
   const handleChange = (preguntaIndex, opcionId) => {
     const nuevasRespuestas = [...respuestasSeleccionadas];
     nuevasRespuestas[preguntaIndex] = opcionId;
