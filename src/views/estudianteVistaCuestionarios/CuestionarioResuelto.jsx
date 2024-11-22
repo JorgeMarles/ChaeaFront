@@ -35,7 +35,7 @@ const ResultadoCuestionario = () => {
     },
     estudiante: {
       nombre: '',
-      fecha_nacimiento: 0,
+      fechaNacimiento: 0,
     },
     preguntas: [{ pregunta: '', orden: 0, respuesta: '' }],
     categorias: [{ nombre: '', valorMinimo: 0, valorMaximo: 0, valor: 0 }],
@@ -100,7 +100,7 @@ const ResultadoCuestionario = () => {
                   </p>
                   <p>
                     <strong>Fecha de Nacimiento:</strong>{' '}
-                    {dateFromMsToString(resultado.estudiante.fecha_nacimiento)}
+                    {dateFromMsToString(resultado.estudiante.fechaNacimiento)}
                   </p>
                 </CCol>
               </CRow>

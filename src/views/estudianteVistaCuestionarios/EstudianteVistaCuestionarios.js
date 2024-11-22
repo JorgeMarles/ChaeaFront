@@ -33,6 +33,7 @@ const EstudianteVistaCuestionario = () => {
       estudiante: {},
       fechaAplicacion: null,
       fechaResolucion: null,
+      grupo: { nombre: '', profesorNombre: '' },
     },
   ])
   const [resueltos, setResueltos] = useState([
@@ -42,6 +43,7 @@ const EstudianteVistaCuestionario = () => {
       estudiante: {},
       fechaAplicacion: null,
       fechaResolucion: null,
+      grupo: { nombre: '', profesorNombre: '' },
     },
   ])
 
