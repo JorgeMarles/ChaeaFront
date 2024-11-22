@@ -128,6 +128,7 @@ const EstudianteVistaCuestionario = () => {
                   }}
                 >
                   <div className="h5 m-0" >{el.cuestionario.nombre}</div>
+                  <div className="h9 m-0" >{el.grupo.nombre}</div>
                 </CCardHeader>
                 <CCardBody>
                   <div className="mb-3">
@@ -174,6 +175,7 @@ const EstudianteVistaCuestionario = () => {
                   }}
                 >
                   <div className="h5 m-0">{el.cuestionario.nombre}</div>
+                  <div className="h9 m-0" >{el.grupo.nombre}</div>
                 </CCardHeader>
                 <CCardBody>
                   <div className="mb-3">
