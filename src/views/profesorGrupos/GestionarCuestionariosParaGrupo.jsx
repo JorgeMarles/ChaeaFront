@@ -215,9 +215,27 @@ const ResultadosGrupo = () => {
                             />
                           </CTableDataCell>
                           <CTableDataCell>
-                            <CButton color="warning" onClick={() => navigate(`/resultado/${item.cuestionario.id}`)}>
-                              Ver Resultados
-                            </CButton>
+                          <CButton
+                          color="warning"
+                          onClick={() => {
+                            console.log('Navigating to report with:', {
+                              idCuestionario: item.cuestionario.id,
+                              idGrupo: currentGrupoId,
+                            });
+                            if (item.cuestionario.id && currentGrupoId) {
+                              navigate(`/reporte/${item.cuestionario.id}/grupo/${currentGrupoId}`);
+                            } else {
+                              console.error('Valores inválidos:', item.cuestionario.id, currentGrupoId);
+                              Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'No se pueden generar resultados con datos inválidos.',
+                              });
+                            }
+                          }}
+                        >
+                          Ver Resultados
+                        </CButton>
                           </CTableDataCell>
                         </CTableRow>
                       ))}

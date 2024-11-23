@@ -306,7 +306,13 @@ const protectedRoutes = [
     element: ResultadoCuestionario,
     roles: [Roles.ESTUDIANTE_ACTIVO],
   },
-
+  //REPORTE GRUPO
+  {
+    path: '/reporte/:id1/grupo/:id2',
+    name: 'Resultados de Grupo',
+    element: ReporteGrupo,
+    roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
+  },
   {
     path: '/cuenta/actualizar-cuenta-profesor/',
     name: 'Actualizar mi cuenta',

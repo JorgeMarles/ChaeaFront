@@ -170,6 +170,37 @@ export const getMisCuestionarios = async () => {
   }
 }
 
+export const obtenerReporteGrupo = async (idCuestionario, idGrupo) => {
+  if (!idCuestionario || !idGrupo) {
+    console.error('Error: Los parámetros idCuestionario o idGrupo no están definidos.');
+    throw new Error('Los parámetros idCuestionario e idGrupo son obligatorios.');
+  }
+
+  try {
+    console.log(`Obteniendo reporte para cuestionario ${idCuestionario} y grupo ${idGrupo}`);
+    const response = await axios.get(
+      `${API_URL}/api/cuestionarios/reporte/${idCuestionario}/grupo/${idGrupo}`,
+      {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      }
+    );
+    console.log('Reporte obtenido:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener el reporte:', error);
+    if (error.response) {
+      console.error('Detalles del error:', error.response.data);
+      throw new Error(
+        error.response.data.message || 'Error al obtener el reporte del grupo.'
+      );
+    } else {
+      throw new Error('Error desconocido al comunicarse con el servidor.');
+    }
+  }
+};
+
 export const getCuestionarioResultado = async (id) => {
   try {
     const response = await axios.get(
@@ -189,4 +220,6 @@ export const getCuestionarioResultado = async (id) => {
   } catch (error) {
     throw error.response.data
   }
+  
+  
 }
