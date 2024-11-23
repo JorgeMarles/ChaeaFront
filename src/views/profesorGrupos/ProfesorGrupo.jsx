@@ -250,14 +250,17 @@ const ProfesorGrupo = () => {
           <span>Lista de Estudiantes Grupo - {grupo.nombre}</span>
           <CButton
             color="success"
-            size="sm"
+            size="md"
+            style={{
+              color:"white"
+            }}
             onClick={(e) => {
               e.stopPropagation()
               setModalAddStudentVisible(true)
             }}
           >
             {' '}
-            +{' '}
+            Añadir Estudiantes{' '}
           </CButton>
         </CCardHeader>
         <CCardBody>
@@ -294,13 +297,20 @@ const ProfesorGrupo = () => {
       </CCard>
       <CModal
         visible={modalAddStudentVisible}
-        onClose={() => setModalAddStudentVisible(false)}
+        onClose={() => {
+          setModalAddStudentVisible(false);
+          setNewStudentEmail('');
+          setSelectedNewStudents([]);
+        }}
       >
         <CModalHeader onClose={() => setModalAddStudentVisible(false)}>
           <CModalTitle>Agregar Estudiantes</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <CForm onSubmit={handleAddStudentsToGroup}>
+          <CForm onSubmit={(e) => {
+            e.preventDefault();
+            handleAddStudentsToGroup(e);
+          }}>
             <CFormLabel htmlFor="newStudentEmail">
               Correo del Estudiante
             </CFormLabel>
@@ -311,7 +321,7 @@ const ProfesorGrupo = () => {
               getSuggestionValue={getSuggestionValue}
               renderSuggestion={renderSuggestion}
               inputProps={{
-                id: 'newStudentEmail', // Asegúrate de que esto coincida con el "for" del label
+                id: 'newStudentEmail',
                 placeholder: 'Escribe un correo electrónico',
                 value: newStudentEmail,
                 onChange: (e, { newValue }) => setNewStudentEmail(newValue),
@@ -321,9 +331,9 @@ const ProfesorGrupo = () => {
                   setSelectedNewStudents([
                     ...selectedNewStudents,
                     suggestion.email,
-                  ])
+                  ]);
                 }
-                setNewStudentEmail('')
+                setNewStudentEmail('');
               }}
             />
             <CFormLabel htmlFor="file" className="mt-3">
@@ -333,32 +343,106 @@ const ProfesorGrupo = () => {
               type="file"
               id="file"
               accept=".csv"
-              onChange={(e) =>
-                handleFileChangeAddStudents(
-                  e,
-                  setSelectedNewStudents,
-                  selectedNewStudents,
-                )
-              }
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = (event) => {
+                    try {
+                      const csvData = event.target.result;
+                      const lines = csvData.split('\n');
+                      
+                      // Skip header row and process the rest
+                      const newStudents = lines.slice(1)
+                        .map(line => {
+                          const [email] = line.split(',');
+                          return email.trim();
+                        })
+                        .filter(email => {
+                          // Validate email format and check for duplicates
+                          const isValidEmail = email && /\S+@\S+\.\S+/.test(email);
+                          const isDuplicate = selectedNewStudents.includes(email);
+                          if (!isValidEmail && email !== '') {
+                            console.warn(`Email inválido encontrado: ${email}`);
+                          }
+                          return isValidEmail && !isDuplicate;
+                        });
+
+                      if (newStudents.length > 0) {
+                        setSelectedNewStudents(prevStudents => {
+                          const updatedStudents = [...prevStudents, ...newStudents];
+                          return [...new Set(updatedStudents)]; // Remove any duplicates
+                        });
+                        Swal.fire({
+                          title: '¡Archivo procesado!',
+                          text: `Se han añadido ${newStudents.length} correos válidos.`,
+                          icon: 'success',
+                        });
+                      } else {
+                        Swal.fire({
+                          title: 'Archivo vacío',
+                          text: 'No se encontraron correos válidos en el archivo CSV.',
+                          icon: 'warning',
+                        });
+                      }
+                    } catch (error) {
+                      console.error('Error procesando el archivo CSV:', error);
+                      Swal.fire({
+                        title: 'Error',
+                        text: 'Hubo un error al procesar el archivo CSV.',
+                        icon: 'error',
+                      });
+                    }
+                  };
+                  reader.readAsText(file);
+                }
+              }}
             />
+
+            <CFormLabel className="mt-3">Estudiantes seleccionados</CFormLabel>
+            <div className="border rounded p-3" style={{ maxHeight: '150px', overflowY: 'auto' }}>
+              {selectedNewStudents.length > 0 ? (
+                <ul className="list-unstyled m-0">
+                  {selectedNewStudents.map((email) => (
+                    <li key={email} className="d-flex justify-content-between align-items-center mb-2">
+                      {email}
+                      <CButton
+                        color="danger"
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => {
+                          setSelectedNewStudents(prevStudents =>
+                            prevStudents.filter(e => e !== email)
+                          );
+                        }}
+                      >
+                        ×
+                      </CButton>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-muted m-0">No hay estudiantes seleccionados</p>
+              )}
+            </div>
           </CForm>
-          <ul>
-            {selectedNewStudents.map((email) => (
-              <li key={email}>{email}</li>
-            ))}
-          </ul>
         </CModalBody>
         <CModalFooter>
           <CButton
             color="secondary"
-            onClick={() => setModalAddStudentVisible(false)}
+            onClick={() => {
+              setModalAddStudentVisible(false);
+              setNewStudentEmail('');
+              setSelectedNewStudents([]);
+            }}
           >
             Cancelar
           </CButton>
           <CButton
-            color="primary"
-            type="submit"
-            onClick={handleAddStudentsToGroup}
+            color="success"
+            onClick={(e) => handleAddStudentsToGroup(e)}
+            disabled={selectedNewStudents.length === 0}
+            style={{color:"white"}}
           >
             Agregar Estudiantes
           </CButton>

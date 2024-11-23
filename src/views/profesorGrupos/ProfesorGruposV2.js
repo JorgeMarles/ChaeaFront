@@ -372,9 +372,16 @@ const ProfesorGrupos = () => {
                 role="group"
                 aria-label="Basic mixed styles example"
               >
-                <CButton color="success" onClick={() => setModalVisible(true)}>
+                <CButton 
+                color="success" 
+                onClick={() => setModalVisible(true)}
+                size="md"
+                 style={{
+                color:"white"
+                }}
+                >
                   {' '}
-                  +{' '}
+                  Añadir Grupo{' '}
                 </CButton>
               </CButtonGroup>
             </CCardHeader>
@@ -435,145 +442,127 @@ const ProfesorGrupos = () => {
           </CCard>
         </CCol>
       </CRow>
-
       <CModal
-        visible={modalVisible}
-        onClose={() => {
-          setModalVisible(false)
-          clearForm()
-        }}
-      >
-        <CModalHeader onClose={() => setModalVisible(false)}>
-          <CModalTitle>Crear Nuevo Grupo</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CForm onSubmit={handleCreateGroup}>
-            <CFormLabel htmlFor="nombre">Nombre del Grupo</CFormLabel>
-            <CFormInput
-              type="text"
-              id="nombre"
-              placeholder="Ingrese el nombre del grupo"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-            />
-            <CFormLabel htmlFor="buscarEstudiantes">
-              Buscar estudiantes
-            </CFormLabel>
-            <Autosuggest
-              suggestions={suggestions}
-              onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-              onSuggestionsClearRequested={onSuggestionsClearRequested}
-              getSuggestionValue={getSuggestionValue}
-              renderSuggestion={renderSuggestion}
-              inputProps={{
-                placeholder: 'Escribe un correo electrónico',
-                value: emails,
-                onChange: (e, { newValue }) => setEmails(newValue),
-              }}
-              onSuggestionSelected={onSuggestionSelected}
-            />
+  visible={modalVisible}
+  onClose={() => {
+    setModalVisible(false);
+    clearForm();
+  }}
+>
+  <CModalHeader onClose={() => setModalVisible(false)}>
+    <CModalTitle>Crear Nuevo Grupo</CModalTitle>
+  </CModalHeader>
+  <CModalBody>
+    <CForm onSubmit={handleCreateGroup}>
+      <div className="mb-3">
+        <CFormLabel htmlFor="nombre">Nombre del Grupo</CFormLabel>
+        <CFormInput
+          type="text"
+          id="nombre"
+          placeholder="Ingrese el nombre del grupo"
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+          className="mb-3"
+        />
+      </div>
 
-            <CFormLabel htmlFor="file" className="mt-3">
-              Subir archivo CSV (Columnas: correo, nombre)
-            </CFormLabel>
-            <CFormInput
-              type="file"
-              id="file"
-              accept=".csv"
-              onChange={handleFileChangeCreateGroup}
-            />
+      <div className="mb-3">
+        <CFormLabel htmlFor="buscarEstudiantes">
+          Buscar estudiantes
+        </CFormLabel>
+        <Autosuggest
+          suggestions={suggestions}
+          onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={onSuggestionsClearRequested}
+          getSuggestionValue={getSuggestionValue}
+          renderSuggestion={renderSuggestion}
+          inputProps={{
+            placeholder: 'Escribe un correo electrónico',
+            value: emails,
+            onChange: (e, { newValue }) => setEmails(newValue),
+          }}
+          onSuggestionSelected={onSuggestionSelected}
+        />
+      </div>
 
-            <CFormLabel className="mt-3">Estudiantes seleccionados</CFormLabel>
-            <ul>
+      <div className="mb-3">
+        <CFormLabel htmlFor="file" className="mt-3">
+          Subir archivo CSV (Columnas: correo, nombre)
+        </CFormLabel>
+        <CFormInput
+          type="file"
+          id="file"
+          accept=".csv"
+          onChange={handleFileChangeCreateGroup}
+        />
+      </div>
+
+      <div className="mt-4">
+        <CFormLabel>Estudiantes seleccionados</CFormLabel>
+        <div 
+          className="border rounded p-3" 
+          style={{ 
+            maxHeight: '150px', 
+            overflowY: 'auto',
+            backgroundColor: '#f8f9fa'
+          }}
+        >
+          {selectedStudents.length > 0 ? (
+            <ul className="list-unstyled m-0">
               {selectedStudents.map((student) => (
-                <li key={student.email}>{student.email}</li>
+                <li 
+                  key={student.email} 
+                  className="d-flex justify-content-between align-items-center mb-2 px-2 py-1 bg-white rounded"
+                >
+                  <span className="text-truncate pe-2">{student.email}</span>
+                  <CButton
+                    color="danger"
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => {
+                      const updatedStudents = selectedStudents.filter(
+                        (s) => s.email !== student.email
+                      );
+                      setSelectedStudents(updatedStudents);
+                    }}
+                    className="ms-2"
+                  >
+                    ×
+                  </CButton>
+                </li>
               ))}
             </ul>
-            <CButton type="submit" color="primary">
-              Crear Grupo
-            </CButton>
-          </CForm>
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={() => setModalVisible(false)}>
-            Cancelar
-          </CButton>
-        </CModalFooter>
-      </CModal>
-
-      <CModal
-        visible={modalAddStudentVisible}
-        onClose={() => setModalAddStudentVisible(false)}
-      >
-        <CModalHeader onClose={() => setModalAddStudentVisible(false)}>
-          <CModalTitle>Agregar Estudiantes</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <CForm onSubmit={handleAddStudentsToGroup}>
-            <CFormLabel htmlFor="newStudentEmail">
-              Correo del Estudiante
-            </CFormLabel>
-            <Autosuggest
-              suggestions={suggestions}
-              onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-              onSuggestionsClearRequested={onSuggestionsClearRequested}
-              getSuggestionValue={getSuggestionValue}
-              renderSuggestion={renderSuggestion}
-              inputProps={{
-                id: 'newStudentEmail', // Asegúrate de que esto coincida con el "for" del label
-                placeholder: 'Escribe un correo electrónico',
-                value: newStudentEmail,
-                onChange: (e, { newValue }) => setNewStudentEmail(newValue),
-              }}
-              onSuggestionSelected={(event, { suggestion }) => {
-                if (!selectedNewStudents.includes(suggestion.email)) {
-                  setSelectedNewStudents([
-                    ...selectedNewStudents,
-                    suggestion.email,
-                  ])
-                }
-                setNewStudentEmail('')
-              }}
-            />
-            <CFormLabel htmlFor="file" className="mt-3">
-              Subir archivo CSV (Columna: correo/email)
-            </CFormLabel>
-            <CFormInput
-              type="file"
-              id="file"
-              accept=".csv"
-              onChange={(e) =>
-                handleFileChangeAddStudents(
-                  e,
-                  setSelectedNewStudents,
-                  selectedNewStudents,
-                )
-              }
-            />
-          </CForm>
-          <ul>
-            {selectedNewStudents.map((email) => (
-              <li key={email}>{email}</li>
-            ))}
-          </ul>
-        </CModalBody>
-        <CModalFooter>
-          <CButton
-            color="secondary"
-            onClick={() => setModalAddStudentVisible(false)}
-          >
-            Cancelar
-          </CButton>
-          <CButton
-            color="primary"
-            type="submit"
-            onClick={handleAddStudentsToGroup}
-          >
-            Agregar Estudiantes
-          </CButton>
-        </CModalFooter>
-      </CModal>
-    </>
+          ) : (
+            <p className="text-muted m-0 text-center">No hay estudiantes seleccionados</p>
+          )}
+        </div>
+        {selectedStudents.length > 0 && (
+          <small className="text-muted mt-1 d-block">
+            Total: {selectedStudents.length} estudiante{selectedStudents.length !== 1 ? 's' : ''}
+          </small>
+        )}
+      </div>
+    </CForm>
+  </CModalBody>
+  <CModalFooter className="d-flex justify-content-between">
+    <CButton 
+      color="secondary" 
+      onClick={() => setModalVisible(false)}
+    >
+      Cancelar
+    </CButton>
+    <CButton 
+      type="submit" 
+      color="success" 
+      onClick={handleCreateGroup}
+      style={{color:"white"}}
+      disabled={!nombre.trim() || selectedStudents.length === 0}
+    >
+      Crear Grupo
+    </CButton>
+  </CModalFooter>
+</CModal>
+</>
   )
 }
 

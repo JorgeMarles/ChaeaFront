@@ -90,6 +90,7 @@ export const obtenerCuestionariosPorGrupo = async (idGrupo) => {
 // Asignar Cuestionario a Grupo
 export const asignarCuestionarioAGrupo = async (idCuestionario, idGrupo) => {
   try {
+    console.log(`Llamada al endpoint para asignar cuestionario ${idCuestionario} al grupo ${idGrupo}`);
     const response = await axios.post(
       `${API_URL}/api/cuestionarios/${idCuestionario}/asignargrupo/${idGrupo}`,
       {},
@@ -98,10 +99,12 @@ export const asignarCuestionarioAGrupo = async (idCuestionario, idGrupo) => {
           Authorization: `Bearer ${getToken()}`,
         },
       },
-    )
-    return response.status === 201
+    );
+    console.log('Respuesta del servidor:', response);
+    return response.status === 201;
   } catch (error) {
-    throw error.response.data
+    console.error('Error en asignarCuestionarioAGrupo:', error);
+    throw error.response.data;
   }
 }
 

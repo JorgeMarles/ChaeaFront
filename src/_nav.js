@@ -42,14 +42,6 @@ const _nav = [
     icon: <CIcon icon={cilGroup} customClassName="nav-icon" />,
     roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
   },
-  //ADMINISTRAR CUESTIONARIOS
-  {
-    component: CNavItem,
-    name: 'Administrar Cuestionarios',
-    to: '/administrar-cuestionarios/',
-    icon: <CIcon icon={cilGroup} customClassName="nav-icon" />,
-    roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
-  },
   //MI CUENTA
   {
     component: CNavTitle,
@@ -79,13 +71,7 @@ const _nav = [
   {
     component: CNavTitle,
     name: 'Cuestionarios',
-  },
-  {
-    component: CNavItem,
-    name: 'Asignar Cuestionarios',
-    to: '/asginar-cuestionarios/',
-    roles: [Roles.PROFESOR_ACTIVO, Roles.ADMINISTRADOR],
-    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+    roles: [Roles.ESTUDIANTE_ACTIVO]
   },
   {
     component: CNavItem,
@@ -97,7 +83,7 @@ const _nav = [
   /////CUENTAS ADMINISTRADOR
   {
     component: CNavTitle,
-    name: 'Cuentas',
+    name: 'ADMINISTRADOR',
     roles: [Roles.ADMINISTRADOR],
   },
   {
@@ -106,6 +92,21 @@ const _nav = [
     to: '/cuentas/',
     roles: [Roles.ADMINISTRADOR],
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+  },
+    //ADMINISTRAR CUESTIONARIOS
+    {
+      component: CNavItem,
+      name: 'Administrar Cuestionarios',
+      to: '/administrar-cuestionarios/',
+      icon: <CIcon icon={cilGroup} customClassName="nav-icon" />,
+      roles: [Roles.ADMINISTRADOR],
+    },
+  {
+    component: CNavItem,
+    name: 'Asignar Cuestionarios',
+    to: '/asginar-cuestionarios/',
+    roles: [Roles.PROFESOR_ACTIVO, Roles.ADMINISTRADOR],
+    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,

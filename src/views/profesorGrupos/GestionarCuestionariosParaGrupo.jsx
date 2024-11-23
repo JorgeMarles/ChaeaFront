@@ -20,13 +20,17 @@ import {
   CModalBody,
   CModalFooter,
   CFormSelect,
-  CSpinner
+  CSpinner,
+  CBadge
 } from '@coreui/react';
 import { useParams, useNavigate, useOutletContext } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { getGroupById } from '../../util/services/grupoService';
 import { listarCuestionarios, obtenerCuestionariosPorGrupo, asignarCuestionarioAGrupo, obtenerCuestionario } from '../../util/services/cuestionarioService';
 import './ModalVistaPreguntas.css';
+import { cilInfo, cilList, cilArrowRight } from '@coreui/icons';
+import CIcon from '@coreui/icons-react';
+import './GestionarCSS.css';
 
 // Función para formatear la fecha
 const dateFromMsToString = (timestamp) => {
@@ -170,21 +174,21 @@ const ResultadosGrupo = () => {
                 Volver
               </CButton>
             </CAlert>
-            {grupo.cuestionarios.length > 0 ? (
-              <CCard className="mt-4">
-                <CCardHeader className="d-flex justify-content-between align-items-center">
-                  <span>CUESTIONARIOS ASIGNADOS A {grupo.nombre}</span>
-                  <CButton
-                    color="success"
-                    size="XL"
-                    onClick={() => setModalVisible(true)}
-                    style={{color:"white"}}
-                  >
-                    {' '}
-                    Asignar Nuevo Cuestionario{' '}
-                  </CButton>
-                </CCardHeader>
-                <CCardBody>
+            <CCard className="mt-1">
+              <CCardHeader className="d-flex justify-content-between align-items-center">
+                <span>CUESTIONARIOS ASIGNADOS A {grupo.nombre}</span>
+                <CButton
+                  color="success"
+                  size="XL"
+                  onClick={() => setModalVisible(true)}
+                  style={{color:"white"}}
+                >
+                  {' '}
+                  Asignar Nuevo Cuestionario{' '}
+                </CButton>
+              </CCardHeader>
+              <CCardBody>
+                {grupo.cuestionarios.length > 0 ? (
                   <CTable hover responsive>
                     <CTableHead>
                       <CTableRow>
@@ -219,128 +223,209 @@ const ResultadosGrupo = () => {
                       ))}
                     </CTableBody>
                   </CTable>
-                </CCardBody>
-              </CCard>
-            ) : (
-              <CCardBody className="text-center">
-                <p>No hay cuestionarios asignados a este grupo.</p>
+                ) : (
+                  <div className="text-center">
+                    <p>No hay cuestionarios asignados a este grupo.</p>
+                  </div>
+                )}
               </CCardBody>
-            )}
-          <CModal visible={modalVisible} onClose={() => setModalVisible(false)}>
-            <CModalHeader onClose={() => setModalVisible(false)}>
-              <CModalTitle>Asignar Cuestionario</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-              <CFormSelect
-                id="cuestionario"
-                value={selectedCuestionario ? selectedCuestionario.id : ''}
-                onChange={(e) => {
-                  const selected = cuestionarios.find(q => q.id === parseInt(e.target.value));
-                  setSelectedCuestionario(selected);
-                }}
+            </CCard>
+              {/* Modal de Asignación de Cuestionario */}
+              <CModal 
+                visible={modalVisible} 
+                onClose={() => setModalVisible(false)}
+                alignment="center"
+                className="modal-450" // Width custom class
               >
-                <option value="">Selecciona un cuestionario</option>
-                {cuestionarios.map((cuestionario) => (
-                  <option key={cuestionario.id} value={cuestionario.id}>
-                    {cuestionario.nombre}
-                  </option>
-                ))}
-              </CFormSelect>
-              {selectedCuestionario && (
-                <div className="mt-3">
-                  <p><strong>Número de Preguntas:</strong> {selectedCuestionario.numPreguntas}</p>
-                  <p><strong>Autor:</strong> {selectedCuestionario.autor}</p>
-                  <CButton 
-                    color="info" 
-                    size="sm" 
-                    onClick={() => handleViewDetails(selectedCuestionario.id)} 
-                    style={{ marginTop: '10px', backgroundColor: '#d3d3d3', borderColor:'#d3d3d3', color:'black'}}
+                <CModalHeader onClose={() => setModalVisible(false)} className="bg-light">
+                  <CModalTitle className="h5 mb-0">Asignar Cuestionario</CModalTitle>
+                </CModalHeader>
+                <CModalBody className="py-4">
+                  <CFormSelect
+                    id="cuestionario"
+                    value={selectedCuestionario ? selectedCuestionario.id : ''}
+                    onChange={(e) => {
+                      const selected = cuestionarios.find(q => q.id === parseInt(e.target.value));
+                      setSelectedCuestionario(selected);
+                    }}
+                    className="mb-3"
                   >
-                    Ver Detalles
-                  </CButton>
-                </div>
-              )}
-            </CModalBody>
-            <CModalFooter>
-              <CButton color="secondary" onClick={() => setModalVisible(false)}>
-                Cancelar
-              </CButton>
-              <CButton color="primary" onClick={handleAsignar}>
-                Asignar Cuestionario
-              </CButton>
-            </CModalFooter>
-          </CModal>
-
-          <CModal visible={detailsModalVisible} onClose={() => setDetailsModalVisible(false)}>
-            <CModalHeader onClose={() => setDetailsModalVisible(false)}>
-              <CModalTitle>Detalles del Cuestionario</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-              {loading ? (
-                <CSpinner />
-              ) : (
-                selectedCuestionario && (
-                  <div>
-                    <p><strong>Título:</strong> {selectedCuestionario.nombre}</p>
-                    <p><strong>Autor:</strong> {selectedCuestionario.autor}</p>
-                    <p><strong>Versión:</strong> {selectedCuestionario.version}</p>
-                    <p><strong>Número de Preguntas:</strong> {selectedCuestionario.preguntas?.length || 0}</p>
-                    <p><strong>Descripción:</strong> {selectedCuestionario.descripcion}</p>
-                    <CButton color="info" size="sm" onClick={handleViewQuestions} style={{ marginTop: '10px',backgroundColor: '#d3d3d3', borderColor:'#d3d3d3', color:'black'}}>
-                      Ver Preguntas
-                    </CButton>
-                  </div>
-                )
-              )}
-            </CModalBody>
-            <CModalFooter>
-              <CButton color="secondary" onClick={() => setDetailsModalVisible(false)}>Cerrar</CButton>
-            </CModalFooter>
-          </CModal>
-
-          <CModal visible={questionsModalVisible} onClose={() => setQuestionsModalVisible(false)} size='xl' className="questions-modal" portal={true}>
-            <CModalHeader onClose={() => setQuestionsModalVisible(false)} className="modal-header">
-              <CModalTitle className="modal-title">Preguntas del Cuestionario</CModalTitle>
-            </CModalHeader>
-            <CModalBody className="modal-body">
-              {loading ? (
-                <CSpinner />
-              ) : (
-                selectedCuestionario && selectedCuestionario.preguntas && (
-                  <div className="questions-container">
-                    {selectedCuestionario.preguntas.map((pregunta, index) => (
-                      <div key={index} className="question-item">
-                        <p className="question-text">
-                          <span className="question-number">{index + 1}.</span> 
-                          {pregunta.pregunta}
-                        </p>
-                        <ul className="options-list">
-                          {pregunta.opciones.map((opcion, opcionIndex) => (
-                            <li key={opcionIndex} className="option-item">
-                              {opcion.respuesta}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                    <option value="">Selecciona un cuestionario</option>
+                    {cuestionarios.map((cuestionario) => (
+                      <option key={cuestionario.id} value={cuestionario.id}>
+                        {cuestionario.nombre}
+                      </option>
                     ))}
-                    <div className="learning-styles-section">
-                      <h5 className="section-title">Estilos de Aprendizaje:</h5>
-                      <ul className="categories-list">
-                        {selectedCuestionario.categorias.map((categoria, index) => (
-                          <li key={index} className="category-item">{categoria.nombre}</li>
-                        ))}
-                      </ul>
+                  </CFormSelect>
+                  {selectedCuestionario && (
+                    <div className="p-3 bg-light rounded">
+                      <div className="mb-2">
+                        <span className="fw-bold">Número de Preguntas:</span>
+                        <span className="ms-2">{selectedCuestionario.numPreguntas}</span>
+                      </div>
+                      <div className="mb-3">
+                        <span className="fw-bold">Autor:</span>
+                        <span className="ms-2">{selectedCuestionario.autor}</span>
+                      </div>
+                      <CButton 
+
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => handleViewDetails(selectedCuestionario.id)}
+                        className="w-100"
+                        style={{
+                          backgroundColor: '#e6f3ff',
+                          borderColor: '#d1e9ff',
+                          color: '#0056b3',
+                          }}
+                      >
+                        <CIcon icon={cilInfo} className="me-2" />
+                        Ver Detalles
+                      </CButton>
                     </div>
-                  </div>
-                )
-              )}
-            </CModalBody>
-            <CModalFooter className="modal-footer">
-              <CButton color="secondary" onClick={() => setQuestionsModalVisible(false)} className="close-button">
-                Cerrar
-              </CButton>
-            </CModalFooter>
-          </CModal>
+                  )}
+                </CModalBody>
+                <CModalFooter className="bg-light">
+                  <CButton color="secondary" variant="outline" onClick={() => setModalVisible(false)}>
+                    Cancelar
+                  </CButton>
+                  <CButton color="primary" onClick={handleAsignar}>
+                    Asignar Cuestionario
+                  </CButton>
+                </CModalFooter>
+              </CModal>
+
+              {/* Modal de Detalles */}
+              <CModal 
+                visible={detailsModalVisible} 
+                onClose={() => setDetailsModalVisible(false)}
+                alignment="center"
+                className="modal-500" // Width custom class
+              >
+                <CModalHeader onClose={() => setDetailsModalVisible(false)} className="bg-light">
+                  <CModalTitle className="h5 mb-0">Detalles del Cuestionario</CModalTitle>
+                </CModalHeader>
+                <CModalBody className="py-4">
+                  {loading ? (
+                    <div className="text-center p-4">
+                      <CSpinner color="primary" />
+                    </div>
+                  ) : (
+                    selectedCuestionario && (
+                      <div className="p-2">
+                        <div className="mb-3">
+                          <h6 className="text-primary mb-2">Información General</h6>
+                          <div className="p-3 bg-light rounded">
+                            <div className="mb-2">
+                              <span className="fw-bold">Título:</span>
+                              <span className="ms-2">{selectedCuestionario.nombre}</span>
+                            </div>
+                            <div className="mb-2">
+                              <span className="fw-bold">Autor:</span>
+                              <span className="ms-2">{selectedCuestionario.autor}</span>
+                            </div>
+                            <div className="mb-2">
+                              <span className="fw-bold">Versión:</span>
+                              <span className="ms-2">{selectedCuestionario.version}</span>
+                            </div>
+                            <div className="mb-2">
+                              <span className="fw-bold">Número de Preguntas:</span>
+                              <span className="ms-2">{selectedCuestionario.preguntas?.length || 0}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mb-3">
+                          <h6 className="text-primary mb-2">Descripción</h6>
+                          <div className="p-3 bg-light rounded">
+                            {selectedCuestionario.descripcion}
+                          </div>
+                        </div>
+                        <CButton 
+                          variant="outline"
+                          onClick={handleViewQuestions}
+                          className="w-100"
+                          style={{
+                          backgroundColor: '#e6f3ff',
+                          borderColor: '#d1e9ff',
+                          color: '#0056b3',
+                          }}
+                        >
+                          <CIcon icon={cilList} className="me-2" />
+                          Ver Preguntas
+                        </CButton>
+                      </div>
+                    )
+                  )}
+                </CModalBody>
+                <CModalFooter className="bg-light">
+                  <CButton color="secondary" onClick={() => setDetailsModalVisible(false)}>
+                    Cerrar
+                  </CButton>
+                </CModalFooter>
+              </CModal>
+
+              {/* Modal de Preguntas */}
+              <CModal 
+                visible={questionsModalVisible} 
+                onClose={() => setQuestionsModalVisible(false)} 
+                size="lg" // Changed from xl to lg
+                portal={true}
+                alignment="center"
+              >
+                <CModalHeader onClose={() => setQuestionsModalVisible(false)} className="bg-light">
+                  <CModalTitle className="h5 mb-0">Preguntas del Cuestionario</CModalTitle>
+                </CModalHeader>
+                <CModalBody className="py-4">
+                  {loading ? (
+                    <div className="text-center p-4">
+                      <CSpinner color="primary" />
+                    </div>
+                  ) : (
+                    selectedCuestionario && selectedCuestionario.preguntas && (
+                      <div className="questions-container p-2">
+                        <div className="mb-4">
+                          {selectedCuestionario.preguntas.map((pregunta, index) => (
+                            <div key={index} className="card mb-3 border-0 shadow-sm">
+                              <div className="card-body">
+                                <p className="question-text mb-3">
+                                  <span className="badge bg-primary me-2">{index + 1}</span>
+                                  {pregunta.pregunta}
+                                </p>
+                                <ul className="list-unstyled ms-4">
+                                  {pregunta.opciones.map((opcion, opcionIndex) => (
+                                    <li key={opcionIndex} className="mb-2 text-muted">
+                                      <CIcon icon={cilArrowRight} className="me-2" size="sm" />
+                                      {opcion.respuesta}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        
+                        <div className="card border-0 shadow-sm">
+                          <div className="card-body">
+                            <h6 className="text-primary mb-3">Estilos de Aprendizaje</h6>
+                            <div className="d-flex flex-wrap gap-2">
+                              {selectedCuestionario.categorias.map((categoria, index) => (
+                                <CBadge key={index} color="light" className="text-dark">
+                                  {categoria.nombre}
+                                </CBadge>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  )}
+                </CModalBody>
+                <CModalFooter className="bg-light">
+                  <CButton color="secondary" onClick={() => setQuestionsModalVisible(false)}>
+                    Cerrar
+                  </CButton>
+                </CModalFooter>
+              </CModal>
         </>
       ) : (
         <div className="text-center">
