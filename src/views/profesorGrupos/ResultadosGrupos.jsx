@@ -28,7 +28,8 @@ import { getGroupById } from '../../util/services/grupoService';
 import { listarCuestionarios, obtenerCuestionariosPorGrupo, asignarCuestionarioAGrupo, obtenerCuestionario } from '../../util/services/cuestionarioService';
 import './ModalVistaPreguntas.css';
 
-const formatDate = (timestamp) => {
+// Función para formatear la fecha
+const dateFromMsToString = (timestamp) => {
   const date = new Date(timestamp);
   return date.toLocaleDateString(); // Ajusta el formato según sea necesario
 };
@@ -84,7 +85,7 @@ const ResultadosGrupo = () => {
     if (selectedCuestionario) {
       // Comprobar si el cuestionario ya está asignado al grupo
       const cuestionarioAsignado = grupo.cuestionarios.some((item) => item.cuestionario.id === selectedCuestionario.id);
-  
+
       if (cuestionarioAsignado) {
         Swal.fire(
           'Advertencia',
@@ -93,7 +94,7 @@ const ResultadosGrupo = () => {
         );
         return;
       }
-  
+
       Swal.fire({
         title: '¿Estás seguro?',
         text: `¿Deseas asignar el cuestionario "${selectedCuestionario.nombre}" al grupo "${grupo.nombre}"?`,
@@ -134,7 +135,7 @@ const ResultadosGrupo = () => {
       );
     }
   };
-  
+
   const handleViewDetails = async (id) => {
     setLoading(true);
     try {
@@ -188,7 +189,7 @@ const ResultadosGrupo = () => {
                     <CTableHead>
                       <CTableRow>
                         <CTableHeaderCell>Nombre</CTableHeaderCell>
-                        <CTableHeaderCell>Fecha de Aplicación</CTableHeaderCell>
+                        <CTableHeaderCell>Fecha de Asignación</CTableHeaderCell>
                         <CTableHeaderCell>Disponible</CTableHeaderCell>
                         <CTableHeaderCell>Ver Resultados</CTableHeaderCell>
                       </CTableRow>
@@ -197,7 +198,9 @@ const ResultadosGrupo = () => {
                       {grupo.cuestionarios.map((item, index) => (
                         <CTableRow key={index}>
                           <CTableDataCell>{item.cuestionario.nombre}</CTableDataCell>
-                          <CTableDataCell>{formatDate(item.fechaAplicacion)}</CTableDataCell>
+                          <CTableDataCell>
+                            {dateFromMsToString(item.fechaAplicacion)}
+                          </CTableDataCell>
                           <CTableDataCell>
                             <CFormSwitch
                               className={'mx-1'}
@@ -286,8 +289,6 @@ const ResultadosGrupo = () => {
                     <CButton color="info" size="sm" onClick={handleViewQuestions} style={{ marginTop: '10px',backgroundColor: '#d3d3d3', borderColor:'#d3d3d3', color:'black'}}>
                       Ver Preguntas
                     </CButton>
-                    {/* Si la fecha de creación estuviera disponible en el backend */}
-                    {/* <p><strong>Fecha de Creación:</strong> {selectedCuestionario.fechaCreacion}</p> */}
                   </div>
                 )
               )}
