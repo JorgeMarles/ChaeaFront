@@ -54,7 +54,6 @@ const ProfesorGrupo = () => {
       
       setGrupo(el)
 
-
       getEstudiantes().then(el => setStudents(el))
     })
   }, [])

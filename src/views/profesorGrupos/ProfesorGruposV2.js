@@ -61,7 +61,6 @@ const ProfesorGrupos = () => {
   const [selectedNewStudents, setSelectedNewStudents] = useState([])
   const navigate = useNavigate()
 
-  /////////////////////////NO SIRVEEEEE (desarrollarlos desde grupoService y ponerles el token (guiarse de userService))
   useEffect(() => {
     getGroups()
       .then((data) => setGrupos(data))
@@ -388,6 +387,7 @@ const ProfesorGrupos = () => {
                     <CTableRow>
                       <CTableHeaderCell>Nombre</CTableHeaderCell>
                       <CTableHeaderCell>Número de Estudiantes</CTableHeaderCell>
+                      <CTableHeaderCell>Administrar Cuestionarios</CTableHeaderCell>
                       <CTableHeaderCell></CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
@@ -401,6 +401,16 @@ const ProfesorGrupos = () => {
                           <CTableDataCell>{grupo.nombre}</CTableDataCell>
                           <CTableDataCell>
                             {grupo.numEstudiantes}
+                          </CTableDataCell>
+                          <CTableDataCell className="text-left">
+                          <CButton color="warning"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            navigate(`/resultado/${grupo.id}`);
+                          }}
+                          >
+                          Cuestionarios
+                          </CButton>
                           </CTableDataCell>
                           <CTableDataCell>
                             <CButton

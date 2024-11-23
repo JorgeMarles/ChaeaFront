@@ -41,6 +41,10 @@ const ProfesorGruposV2 = React.lazy(
   () => import('./views/profesorGrupos/ProfesorGruposV2'),
 )
 
+const ResultadoGrupo = React.lazy(
+  () => import('./views/profesorGrupos/ResultadosGrupos'),
+)
+
 const TestAPI = React.lazy(
   () => import('./views/testAPI/TestAPI.jsx')
 )
@@ -329,6 +333,12 @@ const protectedRoutes = [
     path: '/grupos/:id',
     name: 'Ver grupo',
     element: ProfesorGrupo,
+    roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
+  },
+  {
+    path: '/resultado/:id',
+    name: 'Ver Resultados grupo',
+    element: ResultadoGrupo,
     roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
   },
   {

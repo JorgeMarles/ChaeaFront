@@ -46,6 +46,7 @@ export const listarCuestionarios = async () => {
 export const obtenerCuestionario = async (id) => {
   try {
     const response = await axios.get(`${API_URL}/api/cuestionarios/${id}`, {
+      
       headers: {
         Authorization: `Bearer ${getToken()}`,
       },
@@ -69,6 +70,22 @@ export const eliminarCuestionario = async (id) => {
     throw error.response.data
   }
 }
+
+// Obtener Cuestionarios por Grupo
+export const obtenerCuestionariosPorGrupo = async (idGrupo) => {
+  try {
+    const response = await axios.get(`${API_URL}/api/cuestionarios/reporte/grupo/${idGrupo}`, {
+    //api/cuestionarios/reporte/grupo/25
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 
 // Asignar Cuestionario a Grupo
 export const asignarCuestionarioAGrupo = async (idCuestionario, idGrupo) => {
