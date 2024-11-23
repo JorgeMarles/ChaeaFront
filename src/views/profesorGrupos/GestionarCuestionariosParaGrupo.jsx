@@ -199,7 +199,7 @@ const ResultadosGrupo = () => {
                         <CTableRow key={index}>
                           <CTableDataCell>{item.cuestionario.nombre}</CTableDataCell>
                           <CTableDataCell>
-                            {dateFromMsToString(item.fechaAplicacion)}
+                            Asignado el: {dateFromMsToString(item.fechaAplicacion)}
                           </CTableDataCell>
                           <CTableDataCell>
                             <CFormSwitch
