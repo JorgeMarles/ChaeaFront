@@ -47,10 +47,11 @@ const GestionarCuestionariosParaGrupo = React.lazy(
 const ReporteGrupo = React.lazy(
   () => import('./views/profesorGrupos/ReporteGrupo'),
 )
-
-const TestAPI = React.lazy(
-  () => import('./views/testAPI/TestAPI.jsx')
+const ReporteEstudiante = React.lazy(
+  () => import('./views/profesorGrupos/ReporteEstudiante'),
 )
+
+const TestAPI = React.lazy(() => import('./views/testAPI/TestAPI.jsx'))
 //Estudiante Vista Cuestionarios
 const EstudianteVistaCuestionarios = React.lazy(
   () =>
@@ -60,16 +61,11 @@ const EstudianteVistaCuestionarios = React.lazy(
 )
 const ProfesorVistaCuestionarios = React.lazy(
   () =>
-    import(
-      './views/profesorVistaCuestionarios/ProfesorVistaCuestionarios.js'
-    ),
+    import('./views/profesorVistaCuestionarios/ProfesorVistaCuestionarios.js'),
 )
 
 const CrearCuestionarios = React.lazy(
-  () =>
-    import(
-      './views/profesorVistaCuestionarios/CrearCuestionarios.js'
-    ),
+  () => import('./views/profesorVistaCuestionarios/CrearCuestionarios.js'),
 )
 
 const ResponderCuestionario = React.lazy(
@@ -77,16 +73,11 @@ const ResponderCuestionario = React.lazy(
     import('./views/estudianteVistaCuestionarios/ResponderCuestionario.jsx'),
 )
 
-const AsignarRoles = React.lazy(
-  () =>
-    import('./views/asigRoles/AsignarRoles'),
-)
+const AsignarRoles = React.lazy(() => import('./views/asigRoles/AsignarRoles'))
 
 const ResultadoCuestionario = React.lazy(
-  () =>
-    import('./views/estudianteVistaCuestionarios/CuestionarioResuelto.jsx'),
+  () => import('./views/estudianteVistaCuestionarios/CuestionarioResuelto.jsx'),
 )
-
 
 const Login = React.lazy(() => import('./views/pages/login/Login.js'))
 ////////////////////////////////////////////////
@@ -306,6 +297,12 @@ const protectedRoutes = [
     element: ResultadoCuestionario,
     roles: [Roles.ESTUDIANTE_ACTIVO],
   },
+  {
+    path: '/reporte-estudiante/:id',
+    name: 'Resultados de Estudiante',
+    element: ReporteEstudiante,
+    roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
+  },
   //REPORTE GRUPO
   {
     path: '/reporte/:id1/grupo/:id2',
@@ -353,7 +350,7 @@ const protectedRoutes = [
   {
     path: '/grupos/aplicaciones-cuestionarios/',
     name: 'Resultados de Grupos',
-    element: null ,
+    element: null,
     roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
   },
   {
@@ -373,8 +370,8 @@ const protectedRoutes = [
     path: '/test/',
     name: 'Test API',
     element: TestAPI,
-    roles: [Roles.ADMINISTRADOR, Roles.ESTUDIANTE_ACTIVO]
-  }
+    roles: [Roles.ADMINISTRADOR, Roles.ESTUDIANTE_ACTIVO],
+  },
 ]
 
 export default routes

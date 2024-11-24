@@ -46,7 +46,6 @@ export const listarCuestionarios = async () => {
 export const obtenerCuestionario = async (id) => {
   try {
     const response = await axios.get(`${API_URL}/api/cuestionarios/${id}`, {
-      
       headers: {
         Authorization: `Bearer ${getToken()}`,
       },
@@ -74,23 +73,27 @@ export const eliminarCuestionario = async (id) => {
 // Obtener Cuestionarios por Grupo
 export const obtenerCuestionariosPorGrupo = async (idGrupo) => {
   try {
-    const response = await axios.get(`${API_URL}/api/cuestionarios/reporte/grupo/${idGrupo}`, {
-    //api/cuestionarios/reporte/grupo/25
-      headers: {
-        Authorization: `Bearer ${getToken()}`,
+    const response = await axios.get(
+      `${API_URL}/api/cuestionarios/reporte/grupo/${idGrupo}`,
+      {
+        //api/cuestionarios/reporte/grupo/25
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
       },
-    });
-    return response.data;
+    )
+    return response.data
   } catch (error) {
-    throw error.response.data;
+    throw error.response.data
   }
-};
-
+}
 
 // Asignar Cuestionario a Grupo
 export const asignarCuestionarioAGrupo = async (idCuestionario, idGrupo) => {
   try {
-    console.log(`Llamada al endpoint para asignar cuestionario ${idCuestionario} al grupo ${idGrupo}`);
+    console.log(
+      `Llamada al endpoint para asignar cuestionario ${idCuestionario} al grupo ${idGrupo}`,
+    )
     const response = await axios.post(
       `${API_URL}/api/cuestionarios/${idCuestionario}/asignargrupo/${idGrupo}`,
       {},
@@ -99,12 +102,12 @@ export const asignarCuestionarioAGrupo = async (idCuestionario, idGrupo) => {
           Authorization: `Bearer ${getToken()}`,
         },
       },
-    );
-    console.log('Respuesta del servidor:', response);
-    return response.status === 201;
+    )
+    console.log('Respuesta del servidor:', response)
+    return response.status === 201
   } catch (error) {
-    console.error('Error en asignarCuestionarioAGrupo:', error);
-    throw error.response.data;
+    console.error('Error en asignarCuestionarioAGrupo:', error)
+    throw error.response.data
   }
 }
 
@@ -172,34 +175,38 @@ export const getMisCuestionarios = async () => {
 
 export const obtenerReporteGrupo = async (idCuestionario, idGrupo) => {
   if (!idCuestionario || !idGrupo) {
-    console.error('Error: Los parámetros idCuestionario o idGrupo no están definidos.');
-    throw new Error('Los parámetros idCuestionario e idGrupo son obligatorios.');
+    console.error(
+      'Error: Los parámetros idCuestionario o idGrupo no están definidos.',
+    )
+    throw new Error('Los parámetros idCuestionario e idGrupo son obligatorios.')
   }
 
   try {
-    console.log(`Obteniendo reporte para cuestionario ${idCuestionario} y grupo ${idGrupo}`);
+    console.log(
+      `Obteniendo reporte para cuestionario ${idCuestionario} y grupo ${idGrupo}`,
+    )
     const response = await axios.get(
       `${API_URL}/api/cuestionarios/reporte/${idCuestionario}/grupo/${idGrupo}`,
       {
         headers: {
           Authorization: `Bearer ${getToken()}`,
         },
-      }
-    );
-    console.log('Reporte obtenido:', response.data);
-    return response.data;
+      },
+    )
+    console.log('Reporte obtenido:', response.data)
+    return response.data
   } catch (error) {
-    console.error('Error al obtener el reporte:', error);
+    console.error('Error al obtener el reporte:', error)
     if (error.response) {
-      console.error('Detalles del error:', error.response.data);
+      console.error('Detalles del error:', error.response.data)
       throw new Error(
-        error.response.data.message || 'Error al obtener el reporte del grupo.'
-      );
+        error.response.data.message || 'Error al obtener el reporte del grupo.',
+      )
     } else {
-      throw new Error('Error desconocido al comunicarse con el servidor.');
+      throw new Error('Error desconocido al comunicarse con el servidor.')
     }
   }
-};
+}
 
 export const getCuestionarioResultado = async (id) => {
   try {
@@ -220,6 +227,25 @@ export const getCuestionarioResultado = async (id) => {
   } catch (error) {
     throw error.response.data
   }
-  
-  
+}
+
+export const getReporteEstudiante = async (id) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/api/cuestionarios/reporte-estudiante/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      },
+    )
+    const responseOut = {
+      ok: response.status === 200,
+      data: response.data,
+      status: response.status,
+    }
+    return responseOut
+  } catch (error) {
+    throw error.response.data
+  }
 }
