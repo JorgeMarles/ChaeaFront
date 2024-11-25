@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { usePDF } from 'react-to-pdf'
 import {
   CCard,
   CCardBody,
@@ -18,24 +19,28 @@ import {
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { obtenerReporteGrupo } from '../../util/services/cuestionarioService'
 import { CChartBar, CChartPolarArea, CChartRadar } from '@coreui/react-chartjs'
-import Swal from 'sweetalert2' // Asegúrate de importar Swal si lo estás utilizando
-import { Button } from '@coreui/coreui'
+import Swal from 'sweetalert2'
 import CIcon from '@coreui/icons-react'
-import { cilChart, cilEyedropper } from '@coreui/icons'
+import { cilChart, cilCloudDownload } from '@coreui/icons'
 
 const ReporteGrupo = () => {
-  // Extraemos los parámetros de la URL, cambiamos a los nombres correctos
-  const { id1, id2 } = useParams() // Aquí usamos id1 y id2 según la ruta
+  const { id1, id2 } = useParams()
   const navigate = useNavigate()
 
-  // Estado para manejar el reporte, error y carga
   const [reporte, setReporte] = useState(null)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  // Efecto para cargar el reporte cuando los parámetros estén disponibles
+  const { toPDF, targetRef } = usePDF({
+    filename: `reporte-grupo-${reporte?.grupo?.nombre}.pdf`,
+    page: { 
+      margin: 20,
+      format: 'a4',
+    }
+  })
+
   useEffect(() => {
-    console.log('ID Cuestionario:', id1) // Verifica los valores extraídos
+    console.log('ID Cuestionario:', id1)
     console.log('ID Grupo:', id2)
 
     if (!id1 || !id2) {
@@ -45,23 +50,39 @@ const ReporteGrupo = () => {
         title: 'Error',
         text: 'No se encontraron los parámetros requeridos para generar el reporte.',
       })
-      navigate('/') // Redirige al usuario si los parámetros no son válidos
+      navigate('/')
     } else {
-      // Llamar al servicio para obtener el reporte con los parámetros de la URL
       obtenerReporteGrupo(id1, id2)
         .then((data) => {
-          setReporte(data) // Guardamos el reporte en el estado
-          setLoading(false) // Cambiamos el estado de carga a false
+          setReporte(data)
+          setLoading(false)
         })
         .catch((error) => {
-          setError('Hubo un error al obtener el reporte.') // Manejo de errores
+          setError('Hubo un error al obtener el reporte.')
           setLoading(false)
           console.error('Error al obtener reporte:', error)
         })
     }
   }, [id1, id2, navigate])
 
-  // Mostrar mensaje de error si ocurre
+  const handleDownloadPDF = async () => {
+    try {
+      await toPDF()
+      Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: 'El PDF se ha generado correctamente.',
+      })
+    } catch (error) {
+      console.error('Error al generar PDF:', error)
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al generar el PDF.',
+      })
+    }
+  }
+
   if (error) {
     return (
       <CAlert color="danger">
@@ -73,12 +94,10 @@ const ReporteGrupo = () => {
     )
   }
 
-  // Mostrar mensaje de carga mientras se obtiene el reporte
   if (loading) {
     return <CAlert color="info">Cargando reporte...</CAlert>
   }
 
-  // Renderizar el reporte una vez cargado
   if (!reporte) {
     return (
       <CAlert color="warning">
@@ -104,27 +123,38 @@ const ReporteGrupo = () => {
         }}
       >
         <span className="fw-semibold text-black">
-          REPORTE DE RESULTADOS GRUPO{' '}
+          REPORTE DE RESULTADOS GRUPO
         </span>
-        <CButton
-          color="secondary"
-          className="ml-auto"
-          onClick={() => navigate(`/resultado/${id2}/`)}
-        >
-          Volver
-        </CButton>
+        <div className="d-flex gap-2">
+          <CButton
+            color="primary"
+            onClick={handleDownloadPDF}
+            style={{background:"red",borderColor:"black "}}
+          >
+            <CIcon icon={cilCloudDownload} className="me-2" />
+            Descargar PDF
+          </CButton>
+          <CButton
+            color="secondary"
+            onClick={() => navigate(`/resultado/${id2}/`)}
+          >
+            Volver
+          </CButton>
+        </div>
       </CAlert>
-      <CRow className="mt-4">
-        <CCol md={12}>
-          <CCard>
-            <CCardHeader>
-              <h4>Reporte de Grupo: {reporte.grupo.nombre}</h4>
-              <p>
-                <strong>Cuestionario:</strong> {reporte.cuestionario.nombre}
-              </p>
-            </CCardHeader>
-            <CCardBody>
-              <CRow>
+
+      <div ref={targetRef}>
+        <CRow className="mt-4">
+          <CCol md={12}>
+            <CCard>
+              <CCardHeader>
+                <h4>Reporte de Grupo: {reporte?.grupo?.nombre}</h4>
+                <p>
+                  <strong>Cuestionario:</strong> {reporte?.cuestionario?.nombre}
+                </p>
+              </CCardHeader>
+              <CCardBody>
+                <CRow>
                 <CCol md={6}>
                   <h5>Estadísticas Generales</h5>
                   <p>
@@ -133,8 +163,7 @@ const ReporteGrupo = () => {
                   </p>
                   <p>
                     <strong>Total Estudiantes:</strong>{' '}
-                    {reporte.estudiantesResuelto.length +
-                      reporte.estudiantesNoResuelto.length}
+                    {reporte.estudiantesResuelto.length + reporte.estudiantesNoResuelto.length}
                   </p>
                   <p>
                     <strong>Estudiantes que resolvieron:</strong>{' '}
@@ -144,138 +173,152 @@ const ReporteGrupo = () => {
                     <strong>Estudiantes que no resolvieron:</strong>{' '}
                     {reporte.estudiantesNoResuelto.length}
                   </p>
+                  <p>
+                  <strong>Promedios por Categoría:</strong>
+                  </p>
+                  <div className="mt-3">
+                    <CRow>
+                      {reporte.categorias.map((categoria, index) => (
+                        <CCol md={6} key={index}>
+                          <p>
+                            <strong>{categoria.nombre}:</strong> {Number.isNaN(Number(categoria.valor)) ? 0 : Number(categoria.valor).toFixed(2)}
+                          </p>
+                        </CCol>
+                      ))}
+                    </CRow>
+                  </div>
                 </CCol>
-                <CCol md={6}>
-                  <CChartBar
-                    data={{
-                      labels: reporte.categorias.map((c) => c.nombre),
-                      datasets: [
-                        {
-                          label: 'Promedio por Categoría',
-                          backgroundColor: '#36A2EB',
-                          data: reporte.categorias.map((c) => c.valor),
+                  <CCol md={6}>
+                    <CChartBar
+                      data={{
+                        labels: reporte.categorias.map((c) => c.nombre),
+                        datasets: [
+                          {
+                            label: 'Promedio por Categoría',
+                            backgroundColor: '#36A2EB',
+                            data: reporte.categorias.map((c) => c.valor),
+                          },
+                        ],
+                      }}
+                      options={{
+                        responsive: true,
+                        scales: {
+                          y: {
+                            max: Math.max(
+                              ...reporte.categorias.map((c) => c.valorMaximo),
+                            ),
+                            min: Math.min(
+                              ...reporte.categorias.map((c) => c.valorMinimo),
+                            ),
+                          },
                         },
-                      ],
-                    }}
-                    options={{
-                      responsive: true,
-                      scales: {
-                        y: {
-                          max: Math.max(
-                            ...reporte.categorias.map((c) => c.valorMaximo),
-                          ),
-                          min: Math.min(
-                            ...reporte.categorias.map((c) => c.valorMinimo),
-                          ),
-                        },
-                      },
-                    }}
-                  />
-                </CCol>
-              </CRow>
+                      }}
+                    />
+                  </CCol>
+                </CRow>
 
-              <CRow className="mt-4">
-                <CCol md={6}>
-                  <CChartRadar
-                    data={{
-                      labels: reporte.categorias.map((c) => c.nombre),
-                      datasets: [
-                        {
-                          label: 'Promedio por Categoría',
-                          data: reporte.categorias.map((c) => c.valor),
-                          backgroundColor: 'rgba(75,192,192,0.2)',
-                          borderColor: 'rgba(75,192,192,1)',
-                          pointBackgroundColor: 'rgba(75,192,192,1)',
+                <CRow className="mt-4">
+                  <CCol md={6}>
+                    <CChartRadar
+                      data={{
+                        labels: reporte.categorias.map((c) => c.nombre),
+                        datasets: [
+                          {
+                            label: 'Promedio por Categoría',
+                            data: reporte.categorias.map((c) => c.valor),
+                            backgroundColor: 'rgba(75,192,192,0.2)',
+                            borderColor: 'rgba(75,192,192,1)',
+                            pointBackgroundColor: 'rgba(75,192,192,1)',
+                          },
+                        ],
+                      }}
+                      options={{
+                        scales: {
+                          r: {
+                            suggestedMin: Math.max(
+                              ...reporte.categorias.map((c) => c.valorMinimo),
+                            ),
+                            suggestedMax: Math.min(
+                              ...reporte.categorias.map((c) => c.valorMaximo),
+                            ),
+                          },
                         },
-                      ],
-                    }}
-                    options={{
-                      scales: {
-                        r: {
-                          suggestedMin: Math.max(
-                            ...reporte.categorias.map((c) => c.valorMinimo),
-                          ),
-                          suggestedMax: Math.min(
-                            ...reporte.categorias.map((c) => c.valorMaximo),
-                          ),
+                      }}
+                    />
+                  </CCol>
+                  <CCol md={6}>
+                    <CChartPolarArea
+                      data={{
+                        labels: reporte.categorias.map((c) => c.nombre),
+                        datasets: [
+                          {
+                            label: 'Promedio por Categoría',
+                            data: reporte.categorias.map((c) => c.valor),
+                          },
+                        ],
+                      }}
+                      options={{
+                        scales: {
+                          r: {
+                            suggestedMin: Math.max(
+                              ...reporte.categorias.map((c) => c.valorMinimo),
+                            ),
+                            suggestedMax: Math.min(
+                              ...reporte.categorias.map((c) => c.valorMaximo),
+                            ),
+                          },
                         },
-                      },
-                    }}
-                  />
-                </CCol>
-                <CCol md={6}>
-                  <CChartPolarArea
-                    data={{
-                      labels: reporte.categorias.map((c) => c.nombre),
-                      datasets: [
-                        {
-                          label: 'Promedio por Categoría',
-                          data: reporte.categorias.map((c) => c.valor),
-                        },
-                      ],
-                    }}
-                    options={{
-                      scales: {
-                        r: {
-                          suggestedMin: Math.max(
-                            ...reporte.categorias.map((c) => c.valorMinimo),
-                          ),
-                          suggestedMax: Math.min(
-                            ...reporte.categorias.map((c) => c.valorMaximo),
-                          ),
-                        },
-                      },
-                    }}
-                  />
-                </CCol>
-              </CRow>
+                      }}
+                    />
+                  </CCol>
+                </CRow>
 
-              <h5 className="mt-4">Estudiantes</h5>
-              <CTable hover>
-                <CTableHead>
-                  <CTableRow>
-                    <CTableHeaderCell>#</CTableHeaderCell>
-                    <CTableHeaderCell>Nombre</CTableHeaderCell>
-                    <CTableHeaderCell>Estado</CTableHeaderCell>
-                    <CTableHeaderCell>Ver Resultado</CTableHeaderCell>
-                  </CTableRow>
-                </CTableHead>
-                <CTableBody>
-                  {reporte.estudiantesResuelto.map((estudiante, index) => (
-                    <CTableRow key={index}>
-                      <CTableDataCell>{index + 1}</CTableDataCell>
-                      <CTableDataCell>
-                        {estudiante.estudiante.nombre}
-                      </CTableDataCell>
-
-                      <CTableDataCell>Resuelto</CTableDataCell>
-                      <CTableDataCell>
-                        <Link to={`/reporte-estudiante/${estudiante.id}`}>
-                          <CButton color="success" size="sm">
-                            <CIcon icon={cilChart} /> 
-                          </CButton>
-                        </Link>
-                      </CTableDataCell>
+                <h5 className="mt-4">Estudiantes</h5>
+                <CTable hover>
+                  <CTableHead>
+                    <CTableRow>
+                      <CTableHeaderCell>#</CTableHeaderCell>
+                      <CTableHeaderCell>Nombre</CTableHeaderCell>
+                      <CTableHeaderCell>Estado</CTableHeaderCell>
+                      <CTableHeaderCell>Ver Resultado</CTableHeaderCell>
                     </CTableRow>
-                  ))}
-                  {reporte.estudiantesNoResuelto.map((estudiante, index) => (
-                    <CTableRow key={reporte.estudiantesResuelto.length + index}>
-                      <CTableDataCell>
-                        {reporte.estudiantesResuelto.length + index + 1}
-                      </CTableDataCell>
-                      <CTableDataCell>
-                        {estudiante.estudiante.nombre}
-                      </CTableDataCell>
-                      <CTableDataCell>No Resuelto</CTableDataCell>
-                      <CTableDataCell>-</CTableDataCell>
-                    </CTableRow>
-                  ))}
-                </CTableBody>
-              </CTable>
-            </CCardBody>
-          </CCard>
-        </CCol>
-      </CRow>
+                  </CTableHead>
+                  <CTableBody>
+                    {reporte.estudiantesResuelto.map((estudiante, index) => (
+                      <CTableRow key={index}>
+                        <CTableDataCell>{index + 1}</CTableDataCell>
+                        <CTableDataCell>
+                          {estudiante.estudiante.nombre}
+                        </CTableDataCell>
+                        <CTableDataCell>Resuelto</CTableDataCell>
+                        <CTableDataCell>
+                          <Link to={`/reporte-estudiante/${estudiante.id}`}>
+                            <CButton color="success" size="sm">
+                              <CIcon icon={cilChart} /> 
+                            </CButton>
+                          </Link>
+                        </CTableDataCell>
+                      </CTableRow>
+                    ))}
+                    {reporte.estudiantesNoResuelto.map((estudiante, index) => (
+                      <CTableRow key={reporte.estudiantesResuelto.length + index}>
+                        <CTableDataCell>
+                          {reporte.estudiantesResuelto.length + index + 1}
+                        </CTableDataCell>
+                        <CTableDataCell>
+                          {estudiante.estudiante.nombre}
+                        </CTableDataCell>
+                        <CTableDataCell>No Resuelto</CTableDataCell>
+                        <CTableDataCell>-</CTableDataCell>
+                      </CTableRow>
+                    ))}
+                  </CTableBody>
+                </CTable>
+              </CCardBody>
+            </CCard>
+          </CCol>
+        </CRow>
+      </div>
     </CContainer>
   )
 }
