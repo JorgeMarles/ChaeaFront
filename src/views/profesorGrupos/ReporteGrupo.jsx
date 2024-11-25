@@ -123,7 +123,7 @@ const ReporteGrupo = () => {
         }}
       >
         <span className="fw-semibold text-black">
-          REPORTE DE RESULTADOS GRUPO
+          REPORTE DE RESULTADOS GRUPO 
         </span>
         <div className="d-flex gap-2">
           <CButton
