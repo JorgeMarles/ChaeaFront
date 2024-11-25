@@ -30,6 +30,10 @@ const Login = () => {
       // Manejo de token
     }
     console.log("baseUrl",window.location.protocol + "//" + window.location.host + import.meta.env.BASE_URL + "login");
+    console.log(window.location.protocol);
+    console.log(window.location.host);
+    console.log(import.meta.env.BASE_URL);
+    
     console.log("host", HOST)
     setBaseurl(window.location.protocol + "//" + window.location.host + import.meta.env.BASE_URL + "login");
   }, [searchParams, navigate]);
