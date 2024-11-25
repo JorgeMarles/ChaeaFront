@@ -2,6 +2,5 @@
   "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }],
   "buildCommand": "npm run build",
   "outputDirectory": "build",
-  "framework": "vite",
-  "cleanUrls": true
+  "framework": "vite"
 }
