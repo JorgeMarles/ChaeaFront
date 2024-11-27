@@ -21,7 +21,7 @@ import navigation from '../_nav'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../util/auth/AuthProvider'
 import { getRole } from '../util/userUtils'
-import CHAEA_BAR from 'src/assets/images/CHAEA_BAR.PNG';
+import CHAEA_BAR from 'src/assets/images/chaea_bar.png';
 import chaealogo from 'src/assets/images/chaealogo.png';
 const AppSidebar = () => {
   const dispatch = useDispatch()
