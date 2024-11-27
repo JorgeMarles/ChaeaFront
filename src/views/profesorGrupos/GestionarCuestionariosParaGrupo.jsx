@@ -217,7 +217,6 @@ const ResultadosGrupo = () => {
                 <span>CUESTIONARIOS ASIGNADOS A {grupo.nombre}</span>
                 <CButton
                   color="success"
-                  size="XL"
                   onClick={() => setModalVisible(true)}
                   style={{ color: 'white' }}
                 >
@@ -302,7 +301,7 @@ const ResultadosGrupo = () => {
               visible={modalVisible}
               onClose={() => setModalVisible(false)}
               alignment="center"
-              className="modal-450" // Width custom class
+              size='lg'
             >
               <CModalHeader
                 onClose={() => setModalVisible(false)}
@@ -336,7 +335,7 @@ const ResultadosGrupo = () => {
                     <div className="mb-2">
                       <span className="fw-bold">Número de Preguntas:</span>
                       <span className="ms-2">
-                        {selectedCuestionario.numPreguntas}
+                        {selectedCuestionario.numPreguntas ?? selectedCuestionario.preguntas?.length ?? 0 }
                       </span>
                     </div>
                     <div className="mb-3">
@@ -379,7 +378,7 @@ const ResultadosGrupo = () => {
               visible={detailsModalVisible}
               onClose={() => setDetailsModalVisible(false)}
               alignment="center"
-              className="modal-500" // Width custom class
+              size='lg'
             >
               <CModalHeader
                 onClose={() => setDetailsModalVisible(false)}
@@ -467,9 +466,9 @@ const ResultadosGrupo = () => {
             <CModal
               visible={questionsModalVisible}
               onClose={() => setQuestionsModalVisible(false)}
-              size="lg" // Changed from xl to lg
               portal={true}
               alignment="center"
+              size='xl'
             >
               <CModalHeader
                 onClose={() => setQuestionsModalVisible(false)}
