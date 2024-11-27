@@ -316,28 +316,61 @@ const CrearCuestionario = () => {
           <hr />
           <h5>Preguntas</h5>
           <CRow className="mb-3">
-            <CCol md="12">
-              <div className='d-flex justify-content-between'>
-                <CFormLabel htmlFor="preguntaTitulo">
-                  Título de la Pregunta
-                </CFormLabel>
-                <CFormCheck
-                  checked={preguntaSelecMulti}
-                  id="preguntaSM"
-                  onChange={(e) => {
-                    setPreguntaSelecMulti(e.target.checked)
-                  }}
-                  label="Selección Multiple"
-                />
-              </div>
-              <CFormInput
-                id="preguntaTitulo"
-                value={preguntaTitulo}
-                onChange={(e) => setPreguntaTitulo(e.target.value)}
-                placeholder="Ingrese el título de la pregunta"
+          <CCol md="12">
+            <div className="multiple-selection-container mb-3">
+              <CFormCheck
+                checked={preguntaSelecMulti}
+                id="preguntaSM"
+                onChange={(e) => {
+                  setPreguntaSelecMulti(e.target.checked)
+                }}
+                label="Será de Selección Múltiple:"
+                className="multiple-selection-checkbox"
+                labelPosition="right"
               />
-            </CCol>
-          </CRow>
+            </div>
+            <CFormLabel htmlFor="preguntaTitulo">
+              Título de la Pregunta
+            </CFormLabel>
+            <CFormInput
+              id="preguntaTitulo"
+              value={preguntaTitulo}
+              onChange={(e) => setPreguntaTitulo(e.target.value)}
+              placeholder="Ingrese el título de la pregunta"
+              style={{  height:'3.5rem' }}
+            />
+          </CCol>
+        </CRow>
+
+        <style>
+        {`
+        .multiple-selection-container {
+          background-color: #f0f0f0;
+          border: 2px solid #000000;
+          border-radius: 8px;
+          padding: 10px;
+          margin-bottom: 15px;
+        }
+
+        .multiple-selection-checkbox {
+          font-weight: bold;
+          color: black;
+          display: flex;
+          align-items: center;
+        }
+
+        .multiple-selection-checkbox .form-check-input {
+          transform: scale(1.5);
+          margin-right: 10px;
+          order: 2;
+          margin-left: 10px;
+        }
+
+        .multiple-selection-checkbox .form-check-label {
+          order: 1;
+        }
+        `}
+        </style>
 
           <CRow className="mb-3">
             <CCol md="12">
@@ -353,10 +386,12 @@ const CrearCuestionario = () => {
                     }
                     placeholder={`Ingrese la opción ${index + 1}`}
                     className="me-2"
+                    style={{  height:'3.5rem' }}
                   />
                   <CFormInput
                     type="number"
                     value={opcion.valor ?? '0'}
+                    floatingLabel="Valor"
                     onChange={(e) =>
                       handleOpcionChange(
                         index,
@@ -364,9 +399,8 @@ const CrearCuestionario = () => {
                         e.target.value ? parseFloat(e.target.value) : '0',
                       )
                     }
-                    placeholder="Valor"
                     className="me-2"
-                    style={{ width: '80px' }}
+                    style={{ width: '80px', height:'1rem' }}
                   />
                   <select
                     className="form-select me-2"
@@ -378,6 +412,7 @@ const CrearCuestionario = () => {
                         parseInt(e.target.value),
                       )
                     }
+                    style={{  height:'3.5rem' }}
                   >
                     <option value="">Seleccione Estilo</option>
                     {categorias.map((categoria) => (
