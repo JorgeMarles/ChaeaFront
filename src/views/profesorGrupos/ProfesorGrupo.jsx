@@ -264,12 +264,17 @@ const ProfesorGrupo = () => {
           </CButton>
         </CCardHeader>
         <CCardBody>
-          <CTable hover responsive>
+        <div style={{ 
+          maxHeight: '400px', 
+          overflowY: 'auto', 
+          border: '1px solid #d8dbe0' 
+        }}>
+          <CTable hover striped>
             <CTableHead>
               <CTableRow>
                 <CTableHeaderCell>Nombre</CTableHeaderCell>
                 <CTableHeaderCell>Correo</CTableHeaderCell>
-                <CTableHeaderCell>Eliminar</CTableHeaderCell>
+                <CTableHeaderCell className="text-center">Eliminar</CTableHeaderCell>
               </CTableRow>
             </CTableHead>
             <CTableBody>
@@ -277,23 +282,21 @@ const ProfesorGrupo = () => {
                 <CTableRow key={estudiante.email}>
                   <CTableDataCell>{estudiante.nombre}</CTableDataCell>
                   <CTableDataCell>{estudiante.email}</CTableDataCell>
-                  <CTableDataCell>
+                  <CTableDataCell className="text-center">
                     <CButton
                       color="danger"
                       size="sm"
-                      onClick={() =>
-                        handleDeleteEstudiante(estudiante.email, grupo.id)
-                      }
+                      onClick={() => handleDeleteEstudiante(estudiante.email, grupo.id)}
                     >
-                      {' '}
-                      -{' '}
+                      -
                     </CButton>
                   </CTableDataCell>
                 </CTableRow>
               ))}
             </CTableBody>
           </CTable>
-        </CCardBody>
+        </div>
+      </CCardBody>
       </CCard>
       <CModal
         visible={modalAddStudentVisible}

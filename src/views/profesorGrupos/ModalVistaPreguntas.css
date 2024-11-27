@@ -1,14 +1,4 @@
-/* Estilos base para todos los modales */
-.modal-dialog {
-    margin: 2rem auto;
-    max-width: 80% !important; /* Reducir ancho máximo */
-  }
-  
-  /* Estilos específicos para el modal de detalles */
-  .details-modal {
-    max-width: 500px !important; /* Reducir ancho */
-    margin: 2rem auto;
-  }
+
   
   .details-modal .modal-body {
     padding: 2rem;

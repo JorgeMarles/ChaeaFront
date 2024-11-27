@@ -10,18 +10,19 @@ import {
   CSidebarToggler,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-
 import { AppSidebarNav } from './AppSidebarNav'
 
 import { logo } from 'src/assets/brand/logo'
 import { sygnet } from 'src/assets/brand/sygnet'
+
 
 // sidebar nav config
 import navigation from '../_nav'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../util/auth/AuthProvider'
 import { getRole } from '../util/userUtils'
-
+import CHAEA_BAR from 'src/assets/images/chaea_bar.png';
+import chaealogo from 'src/assets/images/chaealogo.png';
 const AppSidebar = () => {
   const dispatch = useDispatch()
   const auth = useAuth()
@@ -57,14 +58,12 @@ const AppSidebar = () => {
       }}
     >
       <CSidebarHeader className="border-bottom">
-        <CSidebarBrand to="/">
-          <CIcon customClassName="sidebar-brand-full" icon={logo} height={32} />
-          <CIcon
-            customClassName="sidebar-brand-narrow"
-            icon={sygnet}
-            height={32}
-          />
-        </CSidebarBrand>
+        
+      <CSidebarBrand to="/"> 
+      <img src={CHAEA_BAR} alt="CHAEA Logo" className="img-fluid" 
+      style={{ height: '8vh', width:'100vw'}} /> 
+      
+      </CSidebarBrand>
         <CCloseButton
           className="d-lg-none"
           dark
