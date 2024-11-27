@@ -110,6 +110,7 @@ const _nav = [
       icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
     },
     */
+   /*
   {
     component: CNavItem,
     name: 'TestAPI',
@@ -117,6 +118,7 @@ const _nav = [
     roles: [Roles.ADMINISTRADOR],
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
   },
+  */
   ///////////////////////////////////////////////////////////////////////
   /*
   {
