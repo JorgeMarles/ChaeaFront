@@ -62,7 +62,7 @@ const Login = () => {
                   </CRow>
                 </CCardBody>
               </CCard>
-              <CCard className="text-white bg-primary py-5">
+              <CCard className="text-white bg-primary py-5 p-4">
                 <CCardBody className="text-center">
                   <div>
                     <h2>Iniciar Sesión como Profesor</h2>
