@@ -21,6 +21,8 @@ import Swal from 'sweetalert2';
 import { decodeJwt } from 'jose';
 import { useLocalStorage } from '../../../util/hooks/useLocalStorage';
 import { useAuth } from '../../../util/auth/AuthProvider';
+import './login.css';
+
 
 const HOST = import.meta.env.VITE_BACKEND_URL;
 
@@ -82,65 +84,66 @@ const Login = () => {
 
   return (
     <div className="bg-body-tertiary min-vh-100 d-flex flex-column">
-      <CHeader>
-        <CContainer fluid>
-          <CHeaderBrand className="d-flex align-items-center justify-content-between w-100">
-            <img 
-              src={logoUfps} 
-              alt="UFPS Logo" 
-              className="img-fluid" 
-              style={{ width: '90px', height: '90px', objectFit: 'contain' }} 
+    <CHeader>
+      <CContainer fluid>
+        <CHeaderBrand className="header-brand d-flex align-items-center justify-content-between w-100">
+          <img 
+            src={logoUfps} 
+            alt="UFPS Logo" 
+            className="img-fluid" 
+            style={{ width: '90px', height: '90px', objectFit: 'contain' }} 
+          />
+          <img 
+            src={ingSistemas} 
+            alt="Ingeniería de Sistemas" 
+            className="img-fluid mx-3" 
+            style={{ width: '90px', height: '90px', objectFit: 'contain' }} 
+          />
+          <h1 className="text-center mx-3 my-0 flex-grow-1">
+            APP Web Perfiles de Aprendizaje
+          </h1>
+          <img 
+            src={chaealogo} 
+            alt="CHAEA Logo" 
+            className="img-fluid" 
+            style={{ width: '160px', height: '160px', objectFit: 'contain' }} 
+          />
+        </CHeaderBrand>
+      </CContainer>
+    </CHeader>
+  
+    <CContainer className="flex-grow-1 d-flex align-items-center">
+      <CRow className="w-100 justify-content-center">
+        <CCol md={10} lg={8}>
+          <CCardGroup className="h-100 card-group">
+            <LoginButton 
+              userType="estudiante" 
+              title="Estudiante" 
+              description="Entra y resuelve los cuestionarios de perfiles de aprendizaje asignados por tu profesor"
             />
-            <img 
-              src={ingSistemas} 
-              alt="Ingeniería de Sistemas" 
-              className="img-fluid mx-3" 
-              style={{ width: '90px', height: '90px', objectFit: 'contain' }} 
+            <LoginButton 
+              userType="profesor" 
+              title="Profesor" 
+              description="Entra y crea grupos, asígnales cuestionarios y analiza sus resultados"
             />
-            <h1 className="text-center mx-3 my-0 flex-grow-1">
-              APP Web Perfiles de Aprendizaje
-            </h1>
-            <img 
-              src={chaealogo} 
-              alt="CHAEA Logo" 
-              className="img-fluid" 
-              style={{ width: '160px', height: '160px', objectFit: 'contain' }} 
-            />
-          </CHeaderBrand>
-        </CContainer>
-      </CHeader>
-
-      <CContainer className="flex-grow-1 d-flex align-items-center">
-        <CRow className="w-100 justify-content-center">
-          <CCol md={10} lg={8}>
-            <CCardGroup className="h-100">
-              <LoginButton 
-                userType="estudiante" 
-                title="Estudiante" 
-                description="Entra y resuelve los cuestionarios de perfiles de aprendizaje asignados por tu profesor"
-              />
-              <LoginButton 
-                userType="profesor" 
-                title="Profesor" 
-                description="Entra y crea grupos, asígnales cuestionarios y analiza sus resultados"
-              />
-            </CCardGroup>
+          </CCardGroup>
+        </CCol>
+      </CRow>
+    </CContainer>
+  
+    <CFooter className="bg-light p-3">
+      <CContainer fluid>
+        <CRow>
+          <CCol className="text-center">
+            <p className="text-muted mb-0">
+              © {new Date().getFullYear()} Aplicativo Web para la Gestión de Cuestionarios
+            </p>
           </CCol>
         </CRow>
       </CContainer>
-
-      <CFooter className="bg-light p-3">
-        <CContainer fluid>
-          <CRow>
-            <CCol className="text-center">
-              <p className="text-muted mb-0">
-                © {new Date().getFullYear()} Aplicativo Web para la Gestión de Cuestionarios
-              </p>
-            </CCol>
-          </CRow>
-        </CContainer>
-      </CFooter>
-    </div>
+    </CFooter>
+  </div>
+  
   );
 };
 
