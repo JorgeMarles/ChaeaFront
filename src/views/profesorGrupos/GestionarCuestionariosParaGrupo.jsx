@@ -500,7 +500,7 @@ const ResultadosGrupo = () => {
                                   <span className="badge bg-primary me-2">
                                     {index + 1}
                                   </span>
-                                  {pregunta.pregunta}
+                                  {pregunta.pregunta} {pregunta.opcionMultiple ? "(Selección Múltiple)" : ""}
                                 </p>
                                 <ul className="list-unstyled ms-4">
                                   {pregunta.opciones.map(

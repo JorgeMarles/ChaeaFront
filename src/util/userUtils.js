@@ -12,6 +12,7 @@ export const Roles = Object.freeze({
 export function getRoleKey(value) { return Object.keys(Roles).find(key => Roles[key] === value); }
 
 export const getRole = (user) => {
+    console.log(user);
     
     if(!user || !user.estado || !user.tipoUsuario){
         throw "Error: usuario inválido"
