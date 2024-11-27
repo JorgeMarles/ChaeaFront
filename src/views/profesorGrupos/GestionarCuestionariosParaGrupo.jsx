@@ -36,7 +36,6 @@ import {
 import './ModalVistaPreguntas.css'
 import { cilInfo, cilList, cilArrowRight } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-import './GestionarCSS.css'
 
 // Función para formatear la fecha
 const dateFromMsToString = (timestamp) => {
