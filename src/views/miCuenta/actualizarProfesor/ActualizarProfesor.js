@@ -46,24 +46,29 @@ const ActualizarCuentaProfesor = () => {
     const userUpd = {...user, ...formData};
     // Simulación de llamada al backend
     updateUserInfo(userUpd)
-      .then(response => {        
-        if (response.ok) {
-          Swal.fire({
-            title: '¡Cuenta actualizada!',
-            text: 'Los datos de la cuenta han sido actualizados correctamente.',
-            icon: 'success'
-          });
-        } else {
-          throw new Error('Error al actualizar la cuenta: ');
-        }
-      })
-      .catch(error => {
+    .then(response => {        
+      if (response.ok) {
         Swal.fire({
-          title: 'Error',
-          text: error,
-          icon: 'error'
-        });
+          title: '¡Cuenta actualizada!',
+          text: 'Los datos de la cuenta han sido actualizados correctamente.',
+          icon: 'success'
+        }).then(() => {
+          // Agregar un retraso de 5 segundos antes de recargar la página
+          setTimeout(() => {
+            navigate(0)
+          }, 1000)
+        })
+      } else {
+        throw new Error('Error al actualizar la cuenta: ');
+      }
+    })
+    .catch(error => {
+      Swal.fire({
+        title: 'Error',
+        text: error,
+        icon: 'error'
       });
+    });
   };
 
   // useEffect para manejar efectos secundarios si es necesario
