@@ -24,6 +24,7 @@ function RequireAuth({ roles }) {
         navigate('/login')
       } else {
         const rol = getRole(nuser)
+        
         console.log(
           'User ',
           nuser,

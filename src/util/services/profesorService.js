@@ -74,6 +74,20 @@ export const elevarCuentaProfesor = async (email) => {
   }
 };
 
+// Degradar Cuenta de Administrador a Profesor
+export const bajarCuentaProfesor = async (email) => {
+  try {
+    const response = await axios.put(`${API_URL}/api/profesores/demote/${email}`, null, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 // Rechazar Solicitud de Cuenta de Profesor
 export const rechazarSolicitudCuentaProfesor = async (email) => {
   try {

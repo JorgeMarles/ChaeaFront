@@ -20,7 +20,6 @@ const App = () => {
   const storedTheme = useSelector((state) => state.theme)
 
   useEffect(() => {
-    // Forzar siempre el modo claro
     setColorMode('light')
   }, [setColorMode])
 

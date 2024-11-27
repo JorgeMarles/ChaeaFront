@@ -53,6 +53,11 @@ const ActualizarEstudiante = () => {
             title: '¡Cuenta actualizada!',
             text: 'Los datos de la cuenta han sido actualizados correctamente.',
             icon: 'success'
+          }).then(() => {
+            // Agregar un retraso de 5 segundos antes de recargar la página
+            setTimeout(() => {
+              navigate(0)
+            }, 1000)
           });
         } else {
           throw new Error('Error al actualizar la cuenta');

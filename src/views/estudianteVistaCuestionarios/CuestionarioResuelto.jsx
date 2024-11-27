@@ -43,7 +43,7 @@ const ResultadoCuestionario = () => {
       fechaNacimiento: 0,
       genero: ''
     },
-    preguntas: [{ pregunta: '', orden: 0, respuesta: '' }],
+    preguntas: [{ pregunta: '', orden: 0, respuestas: [''] }],
     categorias: [{ nombre: '', valorMinimo: 0, valorMaximo: 0, valor: 0 }],
   });
 
@@ -252,7 +252,7 @@ const ResultadoCuestionario = () => {
                             <CTableDataCell>{pregunta.orden}</CTableDataCell>
                             <CTableDataCell>{pregunta.pregunta}</CTableDataCell>
                             <CTableDataCell>
-                              Respondiste: {pregunta.respuesta}
+                              Respondiste: {pregunta.respuestas.length === 0 ? "Ninguna" : pregunta.respuestas.join(", ")}
                             </CTableDataCell>
                           </CTableRow>
                         ))}

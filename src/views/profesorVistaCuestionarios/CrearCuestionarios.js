@@ -20,7 +20,8 @@ import {
   CTableHeaderCell,
   CTableDataCell,
   CFormSelect,
-  CFormFloating
+  CFormFloating,
+  CFormCheck,
 } from '@coreui/react'
 import Swal from 'sweetalert2'
 import { crearCuestionario } from '../../util/services/cuestionarioService'
@@ -35,12 +36,15 @@ const CrearCuestionario = () => {
   const [categoriaNombre, setCategoriaNombre] = useState('')
   const [categorias, setCategorias] = useState([])
   const [preguntaTitulo, setPreguntaTitulo] = useState('')
+  const [preguntaSelecMulti, setPreguntaSelecMulti] = useState(false)
   const [preguntaCategoria, setPreguntaCategoria] = useState('')
   const [preguntas, setPreguntas] = useState([])
   const [opciones, setOpciones] = useState([{ id: 1, titulo: '' }])
   const [expandedPreguntaId, setExpandedPreguntaId] = useState(null)
 
-  const handleBack = () => { navigate('/administrar-cuestionarios', { replace: true }); };
+  const handleBack = () => {
+    navigate('/administrar-cuestionarios', { replace: true })
+  }
 
   const handleAddCategoria = () => {
     if (categoriaNombre.trim() !== '') {
@@ -81,10 +85,10 @@ const CrearCuestionario = () => {
         icon: 'error',
         title: 'Campos incompletos',
         text: 'Por favor, asegúrate de que todos los campos estén llenos y que exista al menos una pregunta.',
-      });
-      return;
+      })
+      return
     }
-  
+
     // Mostrar alerta de confirmación
     Swal.fire({
       title: '¿Estás seguro?',
@@ -106,6 +110,7 @@ const CrearCuestionario = () => {
           preguntas: preguntas.map((pregunta, index) => ({
             pregunta: pregunta.titulo,
             orden: index + 1,
+            opcionMultiple: pregunta.seleccionMultiple,
             opciones: pregunta.opciones.map((opcion, i) => ({
               orden: i + 1,
               respuesta: opcion.titulo,
@@ -117,12 +122,12 @@ const CrearCuestionario = () => {
             nombre: categoria.nombre,
             id: categoria.id,
           })),
-        };
-  
+        }
+
         console.log(
           'Cuestionario generado:',
           JSON.stringify(cuestionario, null, 2),
-        );
+        )
         // Lógica para enviar el cuestionario al endpoint irá aquí
         crearCuestionario(cuestionario)
           .then((response) => {
@@ -131,33 +136,33 @@ const CrearCuestionario = () => {
                 icon: 'success',
                 title: 'Cuestionario Creado',
                 text: `El cuestionario "${nombre}" ha sido creado con éxito.`,
-              });
-              setNombre('');
-              setSiglas('');
-              setDescripcion('');
-              setAutor('');
-              setVersion('');
-              setPreguntaTitulo('');
-              setPreguntaCategoria('');
-              setOpciones([{ id: 1, titulo: '', valor: 0, categoriaId: null }]);
-              setPreguntas([]);
-              setCategorias([]);
-              
+              })
+              setNombre('')
+              setSiglas('')
+              setDescripcion('')
+              setAutor('')
+              setVersion('')
+              setPreguntaTitulo('')
+              setPreguntaCategoria('')
+              setPreguntaSelecMulti(false)
+              setOpciones([{ id: 1, titulo: '', valor: 1, categoriaId: null }])
+              setPreguntas([])
+              setCategorias([])
+
               // Navegar y forzar actualización de la lista de cuestionarios
-              navigate('/administrar-cuestionarios', { replace: true });
-            } else throw new Error('error al actualizar la cuenta');
+              navigate('/administrar-cuestionarios', { replace: true })
+            } else throw new Error('error al actualizar la cuenta')
           })
           .catch((err) => {
             Swal.fire({
               title: 'Error',
               text: err.message,
               icon: 'error',
-            });
-          });
+            })
+          })
       }
-    });
-  };
-  
+    })
+  }
 
   const handleDeleteCategoria = (id) => {
     setCategorias(categorias.filter((categoria) => categoria.id !== id))
@@ -175,17 +180,20 @@ const CrearCuestionario = () => {
         (opcion) =>
           opcion.titulo.trim() !== '' &&
           opcion.categoriaId &&
-          opcion.valor != null && opcion.valor != undefined
+          opcion.valor != null &&
+          opcion.valor != undefined,
       ) // Verificar que cada opción tenga título, categoría y valor
     ) {
       const newPregunta = {
         id: preguntas.length + 1,
         titulo: preguntaTitulo,
+        seleccionMultiple: preguntaSelecMulti,
         opciones: opciones.filter((opcion) => opcion.titulo.trim() !== ''), // Filtrar solo las opciones con título
       }
       setPreguntas([...preguntas, newPregunta])
       // Reiniciar campos
       setPreguntaTitulo('')
+      setPreguntaSelecMulti(false)
       setOpciones([{ id: 1, titulo: '', valor: 0, categoriaId: null }])
     } else {
       // Mostrar una alerta utilizando SweetAlert
@@ -309,9 +317,19 @@ const CrearCuestionario = () => {
           <h5>Preguntas</h5>
           <CRow className="mb-3">
             <CCol md="12">
-              <CFormLabel htmlFor="preguntaTitulo">
-                Título de la Pregunta
-              </CFormLabel>
+              <div className='d-flex justify-content-between'>
+                <CFormLabel htmlFor="preguntaTitulo">
+                  Título de la Pregunta
+                </CFormLabel>
+                <CFormCheck
+                  checked={preguntaSelecMulti}
+                  id="preguntaSM"
+                  onChange={(e) => {
+                    setPreguntaSelecMulti(e.target.checked)
+                  }}
+                  label="Selección Multiple"
+                />
+              </div>
               <CFormInput
                 id="preguntaTitulo"
                 value={preguntaTitulo}
@@ -322,7 +340,7 @@ const CrearCuestionario = () => {
           </CRow>
 
           <CRow className="mb-3">
-            <CCol md="6">
+            <CCol md="12">
               {opciones.map((opcion, index) => (
                 <div key={opcion.id} className="d-flex align-items-center mb-2">
                   <CFormLabel className="me-2" style={{ minWidth: '100px' }}>
@@ -384,7 +402,11 @@ const CrearCuestionario = () => {
             </CCol>
           </CRow>
 
-          <CButton color="success" style={{color:"white", marginTop:"0.5rem "}} onClick={handleAddPregunta}>
+          <CButton
+            color="success"
+            style={{ color: 'white', marginTop: '0.5rem ' }}
+            onClick={handleAddPregunta}
+          >
             Finalizar Pregunta
           </CButton>
 
@@ -394,6 +416,7 @@ const CrearCuestionario = () => {
               <CTableRow>
                 <CTableHeaderCell>Orden</CTableHeaderCell>
                 <CTableHeaderCell>Título de la Pregunta</CTableHeaderCell>
+                <CTableHeaderCell>Selección Múltiple</CTableHeaderCell>
                 <CTableHeaderCell>Opciones</CTableHeaderCell>
                 <CTableHeaderCell className="text-end">
                   Acciones
@@ -409,6 +432,7 @@ const CrearCuestionario = () => {
                   >
                     <CTableDataCell>{pregunta.id}</CTableDataCell>
                     <CTableDataCell>{pregunta.titulo}</CTableDataCell>
+                    <CTableDataCell>{pregunta.seleccionMultiple ? 'Sí' : 'No'}</CTableDataCell>
                     <CTableDataCell>{pregunta.opciones.length}</CTableDataCell>
                     <CTableDataCell className="text-end">
                       <CButton
@@ -463,7 +487,11 @@ const CrearCuestionario = () => {
               ))}
             </CTableBody>
           </CTable>
-          <CButton color="success" style={{color:"white", marginTop:"0.5rem "}} onClick={handleCrearCuestionario}>
+          <CButton
+            color="success"
+            style={{ color: 'white', marginTop: '0.5rem ' }}
+            onClick={handleCrearCuestionario}
+          >
             Crear Cuestionario
           </CButton>
         </CForm>

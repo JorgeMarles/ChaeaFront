@@ -33,10 +33,7 @@ const ProfesorVistaCuestionarios = () => {
 
   const handleCreateCuestionario = () => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      navigate('/crear-cuestionarios/');
-    }, 1000);
+    navigate('/crear-cuestionarios/');
   };
 
   const handleViewDetails = async (id) => {
@@ -182,7 +179,7 @@ const ProfesorVistaCuestionarios = () => {
                   <div key={index} className="question-item">
                     <p className="question-text">
                       <span className="question-number">{index + 1}.</span> 
-                      {pregunta.pregunta}
+                      {pregunta.pregunta} {pregunta.opcionMultiple ? "(Selección Múltiple)" : ""}
                     </p>
                     <ul className="options-list">
                       {pregunta.opciones.map((opcion, opcionIndex) => (
