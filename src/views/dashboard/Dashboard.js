@@ -24,6 +24,7 @@ const Dashboard = () => {
             navigate('/cuenta/actualizar-cuenta-profesor');
             break;
           case Roles.PROFESOR_ACTIVO:
+          case Roles.ADMINISTRADOR:
             navigate('/grupos');
             break;
           case Roles.ESTUDIANTE_ACTIVO:
