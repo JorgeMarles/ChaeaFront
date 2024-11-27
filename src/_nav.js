@@ -35,6 +35,19 @@ const _nav = [
     roles: [Roles.ADMINISTRADOR, Roles.PROFESOR_ACTIVO],
   },
   */
+   /////////CUESTIONARIOS
+   {
+    component: CNavTitle,
+    name: 'Cuestionarios',
+    roles: [Roles.ESTUDIANTE_ACTIVO]
+  },
+  {
+    component: CNavItem,
+    name: 'Mis cuestionarios',
+    to: '/cuestionarios/',
+    roles: [Roles.ESTUDIANTE_ACTIVO],
+    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+  },
   {
     component: CNavItem,
     name: 'Grupos',
@@ -67,19 +80,6 @@ const _nav = [
       Roles.ADMINISTRADOR,
     ],
   },
-  /////////CUESTIONARIOS
-  {
-    component: CNavTitle,
-    name: 'Cuestionarios',
-    roles: [Roles.ESTUDIANTE_ACTIVO]
-  },
-  {
-    component: CNavItem,
-    name: 'Mis cuestionarios',
-    to: '/cuestionarios/',
-    roles: [Roles.ESTUDIANTE_ACTIVO],
-    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-  },
   /////CUENTAS ADMINISTRADOR
   {
     component: CNavTitle,
@@ -101,21 +101,24 @@ const _nav = [
       icon: <CIcon icon={cilGroup} customClassName="nav-icon" />,
       roles: [Roles.ADMINISTRADOR],
     },
-  {
-    component: CNavItem,
-    name: 'Asignar Cuestionarios',
-    to: '/asginar-cuestionarios/',
-    roles: [Roles.PROFESOR_ACTIVO, Roles.ADMINISTRADOR],
-    icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
-  },
+    /*
+    {
+      component: CNavItem,
+      name: 'Asignar Cuestionarios',
+      to: '/asginar-cuestionarios/',
+      roles: [Roles.PROFESOR_ACTIVO, Roles.ADMINISTRADOR],
+      icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
+    },
+    */
   {
     component: CNavItem,
     name: 'TestAPI',
     to: '/test/',
-    roles: [Roles.ADMINISTRADOR, Roles.ESTUDIANTE_ACTIVO],
+    roles: [Roles.ADMINISTRADOR],
     icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
   },
   ///////////////////////////////////////////////////////////////////////
+  /*
   {
     component: CNavTitle,
     name: 'Theme',
@@ -405,6 +408,7 @@ const _nav = [
     href: 'https://coreui.io/react/docs/templates/installation/',
     icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
   },
+  */
 ]
 
 export default _nav
