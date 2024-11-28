@@ -25,6 +25,7 @@ import {
 } from '@coreui/react'
 import Swal from 'sweetalert2'
 import { crearCuestionario } from '../../util/services/cuestionarioService'
+import './CrearCuestionario.css';
 
 const CrearCuestionario = () => {
   const navigate = useNavigate()
@@ -317,18 +318,6 @@ const CrearCuestionario = () => {
           <h5>Preguntas</h5>
           <CRow className="mb-3">
           <CCol md="12">
-            <div className="multiple-selection-container mb-3">
-              <CFormCheck
-                checked={preguntaSelecMulti}
-                id="preguntaSM"
-                onChange={(e) => {
-                  setPreguntaSelecMulti(e.target.checked)
-                }}
-                label="Será de Selección Múltiple:"
-                className="multiple-selection-checkbox"
-                labelPosition="right"
-              />
-            </div>
             <CFormLabel htmlFor="preguntaTitulo">
               Título de la Pregunta
             </CFormLabel>
@@ -341,37 +330,6 @@ const CrearCuestionario = () => {
             />
           </CCol>
         </CRow>
-
-        <style>
-        {`
-        .multiple-selection-container {
-          background-color: #f0f0f0;
-          border: 2px solid #000000;
-          border-radius: 8px;
-          padding: 10px;
-          margin-bottom: 15px;
-        }
-
-        .multiple-selection-checkbox {
-          font-weight: bold;
-          color: black;
-          display: flex;
-          align-items: center;
-        }
-
-        .multiple-selection-checkbox .form-check-input {
-          transform: scale(1.5);
-          margin-right: 10px;
-          order: 2;
-          margin-left: 10px;
-        }
-
-        .multiple-selection-checkbox .form-check-label {
-          order: 1;
-        }
-        `}
-        </style>
-
           <CRow className="mb-3">
             <CCol md="12">
               {opciones.map((opcion, index) => (
@@ -436,7 +394,18 @@ const CrearCuestionario = () => {
               </CButton>
             </CCol>
           </CRow>
-
+          <div className="multiple-selection-container mb-3">
+              <CFormCheck
+                checked={preguntaSelecMulti}
+                id="preguntaSM"
+                onChange={(e) => {
+                  setPreguntaSelecMulti(e.target.checked)
+                }}
+                label="La pregunta será de selección Múltiple:"
+                className="multiple-selection-checkbox"
+                labelPosition="right"
+              />
+            </div>
           <CButton
             color="success"
             style={{ color: 'white', marginTop: '0.5rem ' }}
