@@ -249,7 +249,7 @@ export const toggleReporteGrupo = async (idCuestionario, idGrupo) => {
   }
 
   try {
-    const response = await axios.patch(
+    await axios.patch(
       `${API_URL}/api/cuestionarios/reporte/${idCuestionario}/grupo/${idGrupo}`,
       {},
       {

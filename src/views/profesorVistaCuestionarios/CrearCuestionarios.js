@@ -19,8 +19,6 @@ import {
   CTableRow,
   CTableHeaderCell,
   CTableDataCell,
-  CFormSelect,
-  CFormFloating,
   CFormCheck,
 } from '@coreui/react'
 import Swal from 'sweetalert2'

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import Swal from 'sweetalert2'
 import Autosuggest from 'react-autosuggest'
 import Papa from 'papaparse'
@@ -36,7 +35,6 @@ import {
   deleteGrupo,
   createGrupo,
   addStudentsToGroup,
-  deleteStudentFromGroup,
   getGroupById,
 } from '../../util/services/grupoService'
 
@@ -46,18 +44,11 @@ const ProfesorGrupos = () => {
   const [modalVisible, setModalVisible] = useState(false)
   const [grupos, setGrupos] = useState([])
   const [expandedGrupoId, setExpandedGrupoId] = useState(null)
-  const [profesores, setProfesores] = useState([])
-  const [selectedProfesor, setSelectedProfesor] = useState(null)
   const [emails, setEmails] = useState('')
-  const [selectedGrupo, setSelectedGrupo] = useState(null)
   const [students, setStudents] = useState([])
   const [suggestions, setSuggestions] = useState([])
   const [selectedStudents, setSelectedStudents] = useState([])
-  const [profesor, setProfesor] = useState(null)
-  const [profesorSuggestions, setProfesorSuggestions] = useState([])
-  const [modalAddStudentVisible, setModalAddStudentVisible] = useState(false)
   const [currentGrupoId, setCurrentGrupoId] = useState(null)
-  const [newStudentEmail, setNewStudentEmail] = useState('')
   const [selectedNewStudents, setSelectedNewStudents] = useState([])
   const navigate = useNavigate()
 
@@ -84,10 +75,6 @@ const ProfesorGrupos = () => {
         console.error('Error fetching estudiantes:', error)
       })
   }, [])
-
-  const toggleExpand = (grupoId) => {
-    setExpandedGrupoId(expandedGrupoId === grupoId ? null : grupoId)
-  }
 
   const handleDelete = (grupo) => {
     Swal.fire({
@@ -122,29 +109,6 @@ const ProfesorGrupos = () => {
     })
   }
 
-  const handleFileChangeAddStudents = (e) => {
-    if (!e.target.files || e.target.files.length === 0) {
-      return
-    }
-
-    const updatedNewStudents = []
-    const file = e.target.files[0]
-
-    if (file) {
-      Papa.parse(file, {
-        complete: (result) => {
-          const emailsArray = result.data
-            .map((row) => row.correo || row.email)
-            .filter((email) => email)
-          const uniqueCsvStudents = emailsArray.filter(
-            (email) => !updatedNewStudents.includes(email),
-          )
-          setSelectedNewStudents(uniqueCsvStudents)
-        },
-        header: true,
-      })
-    }
-  }
 
   const handleFileChangeCreateGroup = (e) => {
     const updatedStudents = []
@@ -294,58 +258,7 @@ const ProfesorGrupos = () => {
     document.getElementById('file').value = null // Limpiar el input del archivo CSV
   }
 
-  const handleAddStudentsToGroup = (e) => {
-    e.preventDefault()
-
-    if (selectedNewStudents.length === 0) {
-      Swal.fire({
-        title: 'Campos incompletos',
-        text: 'Por favor, ingresa al menos un correo de estudiante.',
-        icon: 'warning',
-      })
-      return
-    }
-
-    addStudentsToGroup(currentGrupoId, selectedNewStudents)
-      .then((response) => {
-
-        // Hacer una solicitud adicional para obtener la información actualizada del grupo
-        getGroupById(currentGrupoId)
-          .then((updatedGrupo) => {
-            setGrupos((prevGrupos) =>
-              prevGrupos.map((grupo) =>
-                grupo.id === currentGrupoId ? updatedGrupo : grupo,
-              ),
-            )
-            setSelectedNewStudents([])
-            setModalAddStudentVisible(false)
-            Swal.fire({
-              title: '¡Añadidos!',
-              text: 'Los estudiantes han sido añadidos.',
-              icon: 'success',
-            })
-          })
-          .catch((groupError) => {
-            console.error(
-              'Error al obtener la información del grupo:',
-              groupError,
-            )
-            Swal.fire({
-              title: 'Error',
-              text: 'Hubo un error al obtener la información del grupo.',
-              icon: 'error',
-            })
-          })
-      })
-      .catch((error) => {
-        console.error('Error añadiendo estudiantes:', error)
-        Swal.fire({
-          title: 'Error',
-          text: 'Hubo un error al añadir los estudiantes.',
-          icon: 'error',
-        })
-      })
-  }
+  
 
   return (
     <>

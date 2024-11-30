@@ -15,12 +15,6 @@ const ActualizarCuentaProfesor = () => {
     carrera: user.carrera,
   });
 
-  const clearForm = () => {
-    setFormData({
-      codigo: '',
-      carrera: '',
-    });
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,11 +63,6 @@ const ActualizarCuentaProfesor = () => {
       });
     });
   };
-
-  // useEffect para manejar efectos secundarios si es necesario
-  useEffect(() => {
-    // cargar datos iniciales si es necesario
-  }, []);
 
   return (
     <>

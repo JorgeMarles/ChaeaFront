@@ -17,13 +17,6 @@ const ActualizarEstudiante = () => {
     genero: user.genero,
   });
 
-  const clearForm = () => {
-    setFormData({
-      codigo: '',
-      fechaNacimiento: '',
-      genero: '',
-    });
-  };
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,15 +62,6 @@ const ActualizarEstudiante = () => {
           icon: 'error'
         });
       });
-  };
-
-  // Simulación de llamada al backend (debes reemplazar esto con tu lógica real)
-  const fakeBackendCall = async (data) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ ok: true });
-      }, 1000);
-    });
   };
 
   // useEffect para manejar efectos secundarios si es necesario

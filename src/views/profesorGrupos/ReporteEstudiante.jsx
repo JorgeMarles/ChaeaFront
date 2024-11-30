@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams, useOutletContext } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { usePDF } from 'react-to-pdf'
-import { getCuestionarioResultado, getReporteEstudiante } from '../../util/services/cuestionarioService'
+import { getReporteEstudiante } from '../../util/services/cuestionarioService'
 import { dateFromMsToString } from '../../util/dateUtils'
 import {
   CCard,
@@ -27,7 +27,6 @@ import Swal from 'sweetalert2'
 
 
 const ReporteEstudiante = () => {
-  const user = useOutletContext()
   const { id } = useParams()
   const navigate = useNavigate()
   const [resultado, setResultado] = useState({

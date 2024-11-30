@@ -7,9 +7,7 @@ const AdministrarGrupos = React.lazy(
   () => import('./views/administrarGrupos/AdministrarGrupos'),
 )
 
-const Dashboard = React.lazy(
-  () => import('./views/dashboard/Dashboard.js')
-)
+const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard.js'))
 
 //ACTUALIZAR CUENTA DE USUARIO
 const ActualizarEstudiante = React.lazy(
@@ -71,9 +69,13 @@ const ResultadoCuestionario = React.lazy(
   () => import('./views/estudianteVistaCuestionarios/CuestionarioResuelto.jsx'),
 )
 
-
 const protectedRoutes = [
-  { path: '/dashboard', name: 'Dashboard', element: Dashboard, roles: Object.values(Roles) },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    element: Dashboard,
+    roles: Object.values(Roles),
+  },
 
   {
     path: '/cuenta/actualizar-cuenta-estudiante/',
@@ -179,7 +181,7 @@ const protectedRoutes = [
     name: 'Administrar cuentas',
     element: AsignarRoles,
     roles: [Roles.ADMINISTRADOR],
-  }
+  },
 ]
 
 export { protectedRoutes }

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import {  useNavigate, useSearchParams } from 'react-router-dom';
 import { 
-  CButton, 
   CCard, 
   CCardBody, 
   CCardGroup, 
@@ -11,7 +10,6 @@ import {
   CHeader, 
   CHeaderBrand,
   CFooter,
-  CHeaderNav
 } from '@coreui/react';
 import googleIcon from 'src/assets/images/google.png';
 import logoUfps from 'src/assets/images/logo_ufps.png';
@@ -31,7 +29,6 @@ const Login = () => {
   const auth = useAuth();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [, setToken] = useLocalStorage("authToken");
 
   useEffect(() => {
     const token = searchParams.get("token");
