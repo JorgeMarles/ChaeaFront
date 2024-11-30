@@ -1,73 +1,82 @@
-import React, { useState, useEffect } from 'react';
-import { CForm, CCol, CFormInput, CFormSelect, CButton, CFormFloating, CCard, CCardHeader, CCardBody } from '@coreui/react';
-import Swal from 'sweetalert2';
-import './botonActualizar.css';
-import { useNavigate, useOutletContext } from 'react-router-dom';
-import { dateFromMsToString } from '../../../util/dateUtils';
-import { updateUserInfo } from '../../../util/services/userService';
+import React, { useState, useEffect } from 'react'
+import {
+  CForm,
+  CCol,
+  CFormInput,
+  CFormSelect,
+  CButton,
+  CFormFloating,
+  CCard,
+  CCardHeader,
+  CCardBody,
+} from '@coreui/react'
+import Swal from 'sweetalert2'
+import './botonActualizar.css'
+import { useNavigate, useOutletContext } from 'react-router-dom'
+import { dateFromMsToString } from '../../../util/dateUtils'
+import { updateUserInfo } from '../../../util/services/userService'
 
 const ActualizarEstudiante = () => {
   // Estado y funciones de manejadores
-  const user = useOutletContext();
-  const navigate = useNavigate();
-  
+  const user = useOutletContext()
+  const navigate = useNavigate()
+
   const [formData, setFormData] = useState({
     codigo: user.codigo,
     fechaNacimiento: dateFromMsToString(user.fechaNacimiento),
     genero: user.genero,
-  });
+  })
 
-  
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevData => ({ ...prevData, [name]: value }));
-  };
+    const { name, value } = e.target
+    setFormData((prevData) => ({ ...prevData, [name]: value }))
+  }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     // Validar campos vacíos
     if (!formData.codigo || !formData.fechaNacimiento || !formData.genero) {
       Swal.fire({
         title: 'Campos incompletos',
         text: 'Por favor, completa todos los campos.',
-        icon: 'warning'
-      });
-      return;
+        icon: 'warning',
+      })
+      return
     }
 
-    const userUpd = {...user, ...formData};
+    const userUpd = { ...user, ...formData }
     // Simulación de llamada al backend
     updateUserInfo(userUpd)
-      .then(response => {        
+      .then((response) => {
         if (response.ok) {
           Swal.fire({
             title: '¡Cuenta actualizada!',
             text: 'Los datos de la cuenta han sido actualizados correctamente.',
-            icon: 'success'
+            icon: 'success',
           }).then(() => {
             // Agregar un retraso de 5 segundos antes de recargar la página
             setTimeout(() => {
               navigate(0)
             }, 1000)
-          });
+          })
         } else {
-          throw new Error('Error al actualizar la cuenta');
+          throw new Error('Error al actualizar la cuenta')
         }
       })
-      .catch(error => {
+      .catch((error) => {
         Swal.fire({
           title: 'Error',
           text: error.message,
-          icon: 'error'
-        });
-      });
-  };
+          icon: 'error',
+        })
+      })
+  }
 
   // useEffect para manejar efectos secundarios si es necesario
   useEffect(() => {
     // cargar datos iniciales si es necesario
-  }, []);
+  }, [])
 
   return (
     <CCard className="mb-4 shadow-sm">
@@ -122,26 +131,29 @@ const ActualizarEstudiante = () => {
             </CFormFloating>
           </CCol>
 
-          <CCol xs={12} className="d-grid gap-2 d-md-flex justify-content-md-end">
-          <CButton 
-            color="primary" 
-            type="submit" 
-            className="px-4"
-            style={{
-              '--cui-btn-color': '#000000',  // Changed to black
-              '--cui-btn-bg': '#ffc107',
-              '--cui-btn-border-color': '#ffc107',
-              '--cui-btn-hover-bg': '#ffca2c',
-              '--cui-btn-hover-border-color': '#ffc720',
-            }}
+          <CCol
+            xs={12}
+            className="d-grid gap-2 d-md-flex justify-content-md-end"
           >
-            Actualizar cuenta
-          </CButton>
+            <CButton
+              color="primary"
+              type="submit"
+              className="px-4"
+              style={{
+                '--cui-btn-color': '#000000', // Changed to black
+                '--cui-btn-bg': '#ffc107',
+                '--cui-btn-border-color': '#ffc107',
+                '--cui-btn-hover-bg': '#ffca2c',
+                '--cui-btn-hover-border-color': '#ffc720',
+              }}
+            >
+              Actualizar cuenta
+            </CButton>
           </CCol>
         </CForm>
       </CCardBody>
     </CCard>
-  );
-};
+  )
+}
 
-export default ActualizarEstudiante;
+export default ActualizarEstudiante

@@ -122,7 +122,6 @@ const CrearCuestionario = () => {
           })),
         }
 
-
         // Lógica para enviar el cuestionario al endpoint irá aquí
         crearCuestionario(cuestionario)
           .then((response) => {
@@ -311,34 +310,34 @@ const CrearCuestionario = () => {
           <hr />
           <h5>Preguntas</h5>
           <CRow className="mb-3">
-          <CCol md="12">
-            <div className="multiple-selection-container mb-3">
-              <CFormCheck
-                checked={preguntaSelecMulti}
-                id="preguntaSM"
-                onChange={(e) => {
-                  setPreguntaSelecMulti(e.target.checked)
-                }}
-                label="Será de Selección Múltiple:"
-                className="multiple-selection-checkbox"
-                labelPosition="right"
+            <CCol md="12">
+              <div className="multiple-selection-container mb-3">
+                <CFormCheck
+                  checked={preguntaSelecMulti}
+                  id="preguntaSM"
+                  onChange={(e) => {
+                    setPreguntaSelecMulti(e.target.checked)
+                  }}
+                  label="Será de Selección Múltiple:"
+                  className="multiple-selection-checkbox"
+                  labelPosition="right"
+                />
+              </div>
+              <CFormLabel htmlFor="preguntaTitulo">
+                Título de la Pregunta
+              </CFormLabel>
+              <CFormInput
+                id="preguntaTitulo"
+                value={preguntaTitulo}
+                onChange={(e) => setPreguntaTitulo(e.target.value)}
+                placeholder="Ingrese el título de la pregunta"
+                style={{ height: '3.5rem' }}
               />
-            </div>
-            <CFormLabel htmlFor="preguntaTitulo">
-              Título de la Pregunta
-            </CFormLabel>
-            <CFormInput
-              id="preguntaTitulo"
-              value={preguntaTitulo}
-              onChange={(e) => setPreguntaTitulo(e.target.value)}
-              placeholder="Ingrese el título de la pregunta"
-              style={{  height:'3.5rem' }}
-            />
-          </CCol>
-        </CRow>
+            </CCol>
+          </CRow>
 
-        <style>
-        {`
+          <style>
+            {`
         .multiple-selection-container {
           background-color: #f0f0f0;
           border: 2px solid #000000;
@@ -365,7 +364,7 @@ const CrearCuestionario = () => {
           order: 1;
         }
         `}
-        </style>
+          </style>
 
           <CRow className="mb-3">
             <CCol md="12">
@@ -381,7 +380,7 @@ const CrearCuestionario = () => {
                     }
                     placeholder={`Ingrese la opción ${index + 1}`}
                     className="me-2"
-                    style={{  height:'3.5rem' }}
+                    style={{ height: '3.5rem' }}
                   />
                   <CFormInput
                     type="number"
@@ -395,7 +394,7 @@ const CrearCuestionario = () => {
                       )
                     }
                     className="me-2"
-                    style={{ width: '80px', height:'1rem' }}
+                    style={{ width: '80px', height: '1rem' }}
                   />
                   <select
                     className="form-select me-2"
@@ -407,7 +406,7 @@ const CrearCuestionario = () => {
                         parseInt(e.target.value),
                       )
                     }
-                    style={{  height:'3.5rem' }}
+                    style={{ height: '3.5rem' }}
                   >
                     <option value="">Seleccione Estilo</option>
                     {categorias.map((categoria) => (
@@ -462,7 +461,9 @@ const CrearCuestionario = () => {
                   >
                     <CTableDataCell>{pregunta.id}</CTableDataCell>
                     <CTableDataCell>{pregunta.titulo}</CTableDataCell>
-                    <CTableDataCell>{pregunta.seleccionMultiple ? 'Sí' : 'No'}</CTableDataCell>
+                    <CTableDataCell>
+                      {pregunta.seleccionMultiple ? 'Sí' : 'No'}
+                    </CTableDataCell>
                     <CTableDataCell>{pregunta.opciones.length}</CTableDataCell>
                     <CTableDataCell className="text-end">
                       <CButton

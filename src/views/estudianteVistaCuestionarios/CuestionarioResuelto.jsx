@@ -17,7 +17,7 @@ import {
   CRow,
   CContainer,
   CButton,
-  CAlert
+  CAlert,
 } from '@coreui/react'
 import { CChartBar, CChartRadar } from '@coreui/react-chartjs'
 import CIcon from '@coreui/icons-react'
@@ -25,9 +25,9 @@ import { cilCloudDownload } from '@coreui/icons'
 import Swal from 'sweetalert2'
 
 const ResultadoCuestionario = () => {
-  const user = useOutletContext();
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const user = useOutletContext()
+  const { id } = useParams()
+  const navigate = useNavigate()
 
   const [resultado, setResultado] = useState({
     cuestionario: {
@@ -41,19 +41,19 @@ const ResultadoCuestionario = () => {
     estudiante: {
       nombre: '',
       fechaNacimiento: 0,
-      genero: ''
+      genero: '',
     },
     preguntas: [{ pregunta: '', orden: 0, respuestas: [''] }],
     categorias: [{ nombre: '', valorMinimo: 0, valorMaximo: 0, valor: 0 }],
-  });
+  })
 
   const { toPDF, targetRef } = usePDF({
     filename: `reporte-estudiante-${resultado.estudiante.nombre}.pdf`,
-    page: { 
+    page: {
       margin: 20,
       format: 'a4',
-    }
-  });
+    },
+  })
 
   const handleDownloadPDF = async () => {
     try {
@@ -71,49 +71,66 @@ const ResultadoCuestionario = () => {
         text: 'Hubo un problema al generar el PDF.',
       })
     }
-  };
+  }
 
   const calculateAge = (fechaNacimiento) => {
-    const birthDate = new Date(fechaNacimiento);
-    const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDifference = today.getMonth() - birthDate.getMonth();
-  
-    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
+    const birthDate = new Date(fechaNacimiento)
+    const today = new Date()
+    let age = today.getFullYear() - birthDate.getFullYear()
+    const monthDifference = today.getMonth() - birthDate.getMonth()
+
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--
     }
-  
-    return age;
-  };
-  
+
+    return age
+  }
+
   useEffect(() => {
     getCuestionarioResultado(id)
       .then((data) => {
         if (data.ok) {
-          setResultado(data.data);
+          setResultado(data.data)
         } else {
-          throw new Error('Error al obtener cuestionario');
+          throw new Error('Error al obtener cuestionario')
         }
       })
       .catch(() => {
-        navigate('/cuestionarios');
-      });
-  }, [id, navigate]);
+        navigate('/cuestionarios')
+      })
+  }, [id, navigate])
 
   return (
     <>
-      <CAlert color="info" className="mb-2 d-flex justify-content-between align-items-center" style={{ backgroundColor: '#d3d3d3', border:'#d3d3d3', color:'black',padding: '0.5rem' ,margin: '0 0.6rem 0 0.6rem'}}>
-        <span className='fw-semibold text-black'>Estudiante {user.nombre}</span>
+      <CAlert
+        color="info"
+        className="mb-2 d-flex justify-content-between align-items-center"
+        style={{
+          backgroundColor: '#d3d3d3',
+          border: '#d3d3d3',
+          color: 'black',
+          padding: '0.5rem',
+          margin: '0 0.6rem 0 0.6rem',
+        }}
+      >
+        <span className="fw-semibold text-black">Estudiante {user.nombre}</span>
         <div className="d-flex gap-2">
           <CButton
             color="primary"
             onClick={handleDownloadPDF}
-            style={{background:"red", borderColor:"black"}}
+            style={{ background: 'red', borderColor: 'black' }}
           >
             <CIcon icon={cilCloudDownload} className="me-2" />
             Descargar PDF
           </CButton>
-          <CButton color="secondary" className="ml-auto" onClick={() => navigate('/cuestionarios/')}>
+          <CButton
+            color="secondary"
+            className="ml-auto"
+            onClick={() => navigate('/cuestionarios/')}
+          >
             Volver
           </CButton>
         </div>
@@ -145,7 +162,8 @@ const ResultadoCuestionario = () => {
                         <strong>Autor:</strong> {resultado.cuestionario.autor}
                       </p>
                       <p>
-                        <strong>Versión:</strong> {resultado.cuestionario.version}
+                        <strong>Versión:</strong>{' '}
+                        {resultado.cuestionario.version}
                       </p>
                     </CCol>
                     {/* Información del Estudiante */}
@@ -154,15 +172,18 @@ const ResultadoCuestionario = () => {
                       <p>
                         <strong>Nombre:</strong> {resultado.estudiante.nombre}
                       </p>
-                      <p> 
-                        <strong>Edad:</strong> {calculateAge(resultado.estudiante.fechaNacimiento)} 
+                      <p>
+                        <strong>Edad:</strong>{' '}
+                        {calculateAge(resultado.estudiante.fechaNacimiento)}
                       </p>
                       <p>
                         <strong>Género:</strong> {resultado.estudiante.genero}
                       </p>
                       <p>
                         <strong>Fecha de Nacimiento:</strong>{' '}
-                        {dateFromMsToString(resultado.estudiante.fechaNacimiento)}
+                        {dateFromMsToString(
+                          resultado.estudiante.fechaNacimiento,
+                        )}
                       </p>
                     </CCol>
                     {/* Promedios por Categoría */}
@@ -173,7 +194,10 @@ const ResultadoCuestionario = () => {
                           {resultado.categorias.map((categoria, index) => (
                             <CCol md={3} key={index}>
                               <p>
-                                <strong>{categoria.nombre}:</strong> {Number.isNaN(Number(categoria.valor)) ? 0 : Number(categoria.valor).toFixed(2)}
+                                <strong>{categoria.nombre}:</strong>{' '}
+                                {Number.isNaN(Number(categoria.valor))
+                                  ? 0
+                                  : Number(categoria.valor).toFixed(2)}
                               </p>
                             </CCol>
                           ))}
@@ -199,8 +223,16 @@ const ResultadoCuestionario = () => {
                           responsive: true,
                           scales: {
                             y: {
-                              max: Math.max(...resultado.categorias.map((c) => c.valorMaximo)),
-                              min: Math.min(...resultado.categorias.map((c) => c.valorMinimo)),
+                              max: Math.max(
+                                ...resultado.categorias.map(
+                                  (c) => c.valorMaximo,
+                                ),
+                              ),
+                              min: Math.min(
+                                ...resultado.categorias.map(
+                                  (c) => c.valorMinimo,
+                                ),
+                              ),
                             },
                           },
                         }}
@@ -226,10 +258,18 @@ const ResultadoCuestionario = () => {
                         options={{
                           scales: {
                             r: {
-                              suggestedMin: Math.min(...resultado.categorias.map(e => e.valorMinimo)),
-                              suggestedMax: Math.max(...resultado.categorias.map(e => e.valorMaximo)),
-                            }
-                          }
+                              suggestedMin: Math.min(
+                                ...resultado.categorias.map(
+                                  (e) => e.valorMinimo,
+                                ),
+                              ),
+                              suggestedMax: Math.max(
+                                ...resultado.categorias.map(
+                                  (e) => e.valorMaximo,
+                                ),
+                              ),
+                            },
+                          },
                         }}
                       />
                     </CCol>
@@ -252,7 +292,10 @@ const ResultadoCuestionario = () => {
                             <CTableDataCell>{pregunta.orden}</CTableDataCell>
                             <CTableDataCell>{pregunta.pregunta}</CTableDataCell>
                             <CTableDataCell>
-                              Respondiste: {pregunta.respuestas.length === 0 ? "Ninguna" : pregunta.respuestas.join(", ")}
+                              Respondiste:{' '}
+                              {pregunta.respuestas.length === 0
+                                ? 'Ninguna'
+                                : pregunta.respuestas.join(', ')}
                             </CTableDataCell>
                           </CTableRow>
                         ))}
@@ -265,7 +308,7 @@ const ResultadoCuestionario = () => {
         </div>
       </CContainer>
     </>
-  );
-};
+  )
+}
 
-export default ResultadoCuestionario;
+export default ResultadoCuestionario

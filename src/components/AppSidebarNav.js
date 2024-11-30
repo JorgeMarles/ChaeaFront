@@ -9,22 +9,24 @@ import { CBadge, CNavLink, CSidebarNav } from '@coreui/react'
 
 export const AppSidebarNav = ({ items, rol }) => {
   const navLink = (name, icon, badge, indent = false) => {
-    return rol && (
-      <>
-        {icon
-          ? icon
-          : indent && (
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>
-            )}
-        {name && name}
-        {badge && (
-          <CBadge color={badge.color} className="ms-auto">
-            {badge.text}
-          </CBadge>
-        )}
-      </>
+    return (
+      rol && (
+        <>
+          {icon
+            ? icon
+            : indent && (
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>
+              )}
+          {name && name}
+          {badge && (
+            <CBadge color={badge.color} className="ms-auto">
+              {badge.text}
+            </CBadge>
+          )}
+        </>
+      )
     )
   }
 
@@ -49,7 +51,13 @@ export const AppSidebarNav = ({ items, rol }) => {
     const Component = component
 
     return (
-      <Component compact as="div" key={index} toggler={navLink(name, icon)} {...rest}>
+      <Component
+        compact
+        as="div"
+        key={index}
+        toggler={navLink(name, icon)}
+        {...rest}
+      >
         {item.items?.map((item, index) =>
           item.items ? navGroup(item, index) : navItem(item, index, true),
         )}
@@ -61,10 +69,10 @@ export const AppSidebarNav = ({ items, rol }) => {
     <CSidebarNav as={SimpleBar}>
       {items &&
         items.map((item, index) => {
-          if(!item.roles || item.roles.includes(rol)){
-            if(item.items){
-              return navGroup(item, index);
-            }else{
+          if (!item.roles || item.roles.includes(rol)) {
+            if (item.items) {
+              return navGroup(item, index)
+            } else {
               return navItem(item, index)
             }
           }

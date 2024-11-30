@@ -23,7 +23,7 @@ const AppSidebar = () => {
   const [rol, setRol] = useState([])
   const navigate = useNavigate()
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const nuser = await auth.getUser()
       if (!nuser) {
         // Redirect them to the /login page, but save the current location they were

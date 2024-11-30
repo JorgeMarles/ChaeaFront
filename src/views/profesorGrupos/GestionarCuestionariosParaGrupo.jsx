@@ -58,7 +58,6 @@ const ResultadosGrupo = () => {
 
   const fetchDatos = async () => {
     try {
-
       const grupoData = await getGroupById(currentGrupoId)
 
       const cuestionariosData =
@@ -82,12 +81,11 @@ const ResultadosGrupo = () => {
 
   const handleToggleBloqueo = async (idx) => {
     try {
-      
-      const cuestionarioId = grupo.cuestionarios[idx].cuestionario.id;
-      await toggleReporteGrupo(cuestionarioId, currentGrupoId);
-      const cuestionarios = grupo.cuestionarios;
-      cuestionarios[idx].bloqueado = !cuestionarios[idx].bloqueado;
-      setGrupo({...grupo, cuestionarios: cuestionarios})
+      const cuestionarioId = grupo.cuestionarios[idx].cuestionario.id
+      await toggleReporteGrupo(cuestionarioId, currentGrupoId)
+      const cuestionarios = grupo.cuestionarios
+      cuestionarios[idx].bloqueado = !cuestionarios[idx].bloqueado
+      setGrupo({ ...grupo, cuestionarios: cuestionarios })
     } catch (error) {
       console.error('Error fetching datos:', error)
       if (error.response) {
@@ -239,16 +237,13 @@ const ResultadosGrupo = () => {
                               variant={'3d'}
                               color={'danger'}
                               checked={item.bloqueado}
-                              onChange={() =>
-                                handleToggleBloqueo(index)
-                              }
+                              onChange={() => handleToggleBloqueo(index)}
                             />
                           </CTableDataCell>
                           <CTableDataCell>
                             <CButton
                               color="warning"
                               onClick={() => {
-
                                 if (item.cuestionario.id && currentGrupoId) {
                                   navigate(
                                     `/reporte/${item.cuestionario.id}/grupo/${currentGrupoId}`,
@@ -286,7 +281,7 @@ const ResultadosGrupo = () => {
               visible={modalVisible}
               onClose={() => setModalVisible(false)}
               alignment="center"
-              size='lg'
+              size="lg"
             >
               <CModalHeader
                 onClose={() => setModalVisible(false)}
@@ -320,7 +315,9 @@ const ResultadosGrupo = () => {
                     <div className="mb-2">
                       <span className="fw-bold">Número de Preguntas:</span>
                       <span className="ms-2">
-                        {selectedCuestionario.numPreguntas ?? selectedCuestionario.preguntas?.length ?? 0 }
+                        {selectedCuestionario.numPreguntas ??
+                          selectedCuestionario.preguntas?.length ??
+                          0}
                       </span>
                     </div>
                     <div className="mb-3">
@@ -363,7 +360,7 @@ const ResultadosGrupo = () => {
               visible={detailsModalVisible}
               onClose={() => setDetailsModalVisible(false)}
               alignment="center"
-              size='lg'
+              size="lg"
             >
               <CModalHeader
                 onClose={() => setDetailsModalVisible(false)}
@@ -453,7 +450,7 @@ const ResultadosGrupo = () => {
               onClose={() => setQuestionsModalVisible(false)}
               portal={true}
               alignment="center"
-              size='xl'
+              size="xl"
             >
               <CModalHeader
                 onClose={() => setQuestionsModalVisible(false)}
@@ -484,7 +481,10 @@ const ResultadosGrupo = () => {
                                   <span className="badge bg-primary me-2">
                                     {index + 1}
                                   </span>
-                                  {pregunta.pregunta} {pregunta.opcionMultiple ? "(Selección Múltiple)" : ""}
+                                  {pregunta.pregunta}{' '}
+                                  {pregunta.opcionMultiple
+                                    ? '(Selección Múltiple)'
+                                    : ''}
                                 </p>
                                 <ul className="list-unstyled ms-4">
                                   {pregunta.opciones.map(

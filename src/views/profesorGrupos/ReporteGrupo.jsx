@@ -33,14 +33,13 @@ const ReporteGrupo = () => {
 
   const { toPDF, targetRef } = usePDF({
     filename: `reporte-grupo-${reporte?.grupo?.nombre}.pdf`,
-    page: { 
+    page: {
       margin: 20,
       format: 'a4',
-    }
+    },
   })
 
   useEffect(() => {
-
     if (!id1 || !id2) {
       console.error('Parámetros faltantes.')
       Swal.fire({
@@ -121,13 +120,13 @@ const ReporteGrupo = () => {
         }}
       >
         <span className="fw-semibold text-black">
-          REPORTE DE RESULTADOS GRUPO 
+          REPORTE DE RESULTADOS GRUPO
         </span>
         <div className="d-flex gap-2">
           <CButton
             color="primary"
             onClick={handleDownloadPDF}
-            style={{background:"red",borderColor:"black "}}
+            style={{ background: 'red', borderColor: 'black ' }}
           >
             <CIcon icon={cilCloudDownload} className="me-2" />
             Descargar PDF
@@ -153,39 +152,43 @@ const ReporteGrupo = () => {
               </CCardHeader>
               <CCardBody>
                 <CRow>
-                <CCol md={6}>
-                  <h5>Estadísticas Generales</h5>
-                  <p>
-                    <strong>Fecha de Aplicación:</strong>{' '}
-                    {new Date(reporte.fechaAplicacion).toLocaleDateString()}
-                  </p>
-                  <p>
-                    <strong>Total Estudiantes:</strong>{' '}
-                    {reporte.estudiantesResuelto.length + reporte.estudiantesNoResuelto.length}
-                  </p>
-                  <p>
-                    <strong>Estudiantes que resolvieron:</strong>{' '}
-                    {reporte.estudiantesResuelto.length}
-                  </p>
-                  <p>
-                    <strong>Estudiantes que no resolvieron:</strong>{' '}
-                    {reporte.estudiantesNoResuelto.length}
-                  </p>
-                  <p>
-                  <strong>Promedios por Categoría:</strong>
-                  </p>
-                  <div className="mt-3">
-                    <CRow>
-                      {reporte.categorias.map((categoria, index) => (
-                        <CCol md={6} key={index}>
-                          <p>
-                            <strong>{categoria.nombre}:</strong> {Number.isNaN(Number(categoria.valor)) ? 0 : Number(categoria.valor).toFixed(2)}
-                          </p>
-                        </CCol>
-                      ))}
-                    </CRow>
-                  </div>
-                </CCol>
+                  <CCol md={6}>
+                    <h5>Estadísticas Generales</h5>
+                    <p>
+                      <strong>Fecha de Aplicación:</strong>{' '}
+                      {new Date(reporte.fechaAplicacion).toLocaleDateString()}
+                    </p>
+                    <p>
+                      <strong>Total Estudiantes:</strong>{' '}
+                      {reporte.estudiantesResuelto.length +
+                        reporte.estudiantesNoResuelto.length}
+                    </p>
+                    <p>
+                      <strong>Estudiantes que resolvieron:</strong>{' '}
+                      {reporte.estudiantesResuelto.length}
+                    </p>
+                    <p>
+                      <strong>Estudiantes que no resolvieron:</strong>{' '}
+                      {reporte.estudiantesNoResuelto.length}
+                    </p>
+                    <p>
+                      <strong>Promedios por Categoría:</strong>
+                    </p>
+                    <div className="mt-3">
+                      <CRow>
+                        {reporte.categorias.map((categoria, index) => (
+                          <CCol md={6} key={index}>
+                            <p>
+                              <strong>{categoria.nombre}:</strong>{' '}
+                              {Number.isNaN(Number(categoria.valor))
+                                ? 0
+                                : Number(categoria.valor).toFixed(2)}
+                            </p>
+                          </CCol>
+                        ))}
+                      </CRow>
+                    </div>
+                  </CCol>
                   <CCol md={6}>
                     <CChartBar
                       data={{
@@ -292,14 +295,16 @@ const ReporteGrupo = () => {
                         <CTableDataCell>
                           <Link to={`/reporte-estudiante/${estudiante.id}`}>
                             <CButton color="success" size="sm">
-                              <CIcon icon={cilChart} /> 
+                              <CIcon icon={cilChart} />
                             </CButton>
                           </Link>
                         </CTableDataCell>
                       </CTableRow>
                     ))}
                     {reporte.estudiantesNoResuelto.map((estudiante, index) => (
-                      <CTableRow key={reporte.estudiantesResuelto.length + index}>
+                      <CTableRow
+                        key={reporte.estudiantesResuelto.length + index}
+                      >
                         <CTableDataCell>
                           {reporte.estudiantesResuelto.length + index + 1}
                         </CTableDataCell>

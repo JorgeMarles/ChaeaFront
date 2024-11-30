@@ -77,7 +77,11 @@ const ResponderCuestionario = () => {
   }
 
   const handleSubmit = async () => {
-    if (respuestasSeleccionadas.some((respuesta,idx) => {!selMul[idx] && respuesta.opts.length !== 1})) {
+    if (
+      respuestasSeleccionadas.some((respuesta, idx) => {
+        !selMul[idx] && respuesta.opts.length !== 1
+      })
+    ) {
       Swal.fire(
         'Advertencia',
         'Debes seleccionar una opción para cada pregunta que no sea de selección múltiple.',
@@ -85,13 +89,12 @@ const ResponderCuestionario = () => {
       )
       return
     }
-    
-    
+
     const respuestasDTO = {
       cuestionarioId: parseInt(id),
-      opcionesSeleccionadasId: respuestasSeleccionadas.flatMap(el => el.opts),
+      opcionesSeleccionadasId: respuestasSeleccionadas.flatMap((el) => el.opts),
     }
-    
+
     try {
       await responderCuestionario(respuestasDTO)
       Swal.fire(
@@ -204,7 +207,9 @@ const ResponderCuestionario = () => {
                                 checked={respuestasSeleccionadas[
                                   preguntaIndex
                                 ].opts.includes(opcion.id)}
-                                onChange={e => {e.preventDefault()}}
+                                onChange={(e) => {
+                                  e.preventDefault()
+                                }}
                                 className="m-0"
                               />
                             </CCard>

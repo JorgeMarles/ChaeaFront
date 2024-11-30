@@ -263,7 +263,8 @@ export const toggleReporteGrupo = async (idCuestionario, idGrupo) => {
     if (error.response) {
       console.error('Detalles del error:', error.response.data)
       throw new Error(
-        error.response.data.message || 'Error al togglear bloqueado para esta aplicacion.',
+        error.response.data.message ||
+          'Error al togglear bloqueado para esta aplicacion.',
       )
     } else {
       throw new Error('Error desconocido al comunicarse con el servidor.')

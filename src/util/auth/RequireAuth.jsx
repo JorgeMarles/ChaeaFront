@@ -1,8 +1,8 @@
-import {Outlet,useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from './AuthProvider'
 import { useEffect, useState } from 'react'
 import { CSpinner } from '@coreui/react'
-import { getRole} from '../userUtils'
+import { getRole } from '../userUtils'
 
 function RequireAuth({ roles }) {
   const [loading, setLoading] = useState(true)

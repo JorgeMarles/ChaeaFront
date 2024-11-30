@@ -1,26 +1,26 @@
 .hover-shadow {
-    transition: box-shadow 0.3s ease-in-out;
-  }
-  
-  .hover-shadow:hover {
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-  }
-  
-  .hover-button {
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .hover-button:hover {
-    background-color: #90baed  !important;
-    border-color: #90baed  !important;
-  }
-  
-  .hover-button-success {
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .hover-button-success:hover {
-    background-color: #86efac !important;
-    border-color: #4ade80 !important;
-    color: #166534 !important;
-  }
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.hover-shadow:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.hover-button {
+  transition: all 0.3s ease-in-out;
+}
+
+.hover-button:hover {
+  background-color: #90baed !important;
+  border-color: #90baed !important;
+}
+
+.hover-button-success {
+  transition: all 0.3s ease-in-out;
+}
+
+.hover-button-success:hover {
+  background-color: #86efac !important;
+  border-color: #4ade80 !important;
+  color: #166534 !important;
+}

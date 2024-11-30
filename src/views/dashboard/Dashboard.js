@@ -1,47 +1,43 @@
-import React, { useEffect } from 'react';
-import { useNavigate, useOutletContext } from 'react-router-dom';
-import { getRole, Roles } from '../../util/userUtils';
+import React, { useEffect } from 'react'
+import { useNavigate, useOutletContext } from 'react-router-dom'
+import { getRole, Roles } from '../../util/userUtils'
 
 const Dashboard = () => {
-  const user = useOutletContext(); // Obtén la información del usuario del contexto
-  const navigate = useNavigate();
+  const user = useOutletContext() // Obtén la información del usuario del contexto
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (user) {
       try {
-        const role = getRole(user);
-        switch(role) {
+        const role = getRole(user)
+        switch (role) {
           case Roles.ESTUDIANTE_INACTIVO:
           case Roles.ESTUDIANTE_INCOMPLETO:
-            navigate('/cuenta/actualizar-cuenta-estudiante');
-            break;
+            navigate('/cuenta/actualizar-cuenta-estudiante')
+            break
           case Roles.PROFESOR_INACTIVO:
           case Roles.PROFESOR_INCOMPLETO:
-            navigate('/cuenta/actualizar-cuenta-profesor');
-            break;
+            navigate('/cuenta/actualizar-cuenta-profesor')
+            break
           case Roles.PROFESOR_ACTIVO:
           case Roles.ADMINISTRADOR:
-            navigate('/grupos');
-            break;
+            navigate('/grupos')
+            break
           case Roles.ESTUDIANTE_ACTIVO:
-            navigate('/cuestionarios');
-            break;
+            navigate('/cuestionarios')
+            break
           default:
-            navigate('/');
-            break;
+            navigate('/')
+            break
         }
       } catch (error) {
-        console.error('Error determining user role:', error);
-        navigate('/');
+        console.error('Error determining user role:', error)
+        navigate('/')
       }
     }
-  }, [user, navigate]);
+  }, [user, navigate])
 
-  return (
-    <div>
-      {/* Contenido del dashboard (si es necesario) */}
-    </div>
-  );
-};
+  return <></>
+}
 
-export default Dashboard;
+export default Dashboard
