@@ -1,12 +1,7 @@
 import React, { useEffect, useRef } from 'react'
-import { NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CContainer,
-  CDropdown,
-  CDropdownItem,
-  CDropdownMenu,
-  CDropdownToggle,
   CHeader,
   CHeaderNav,
   CHeaderToggler,
@@ -18,24 +13,16 @@ import CIcon from '@coreui/icons-react'
 import { useAuth } from '../util/auth/AuthProvider'
 import { useNavigate } from 'react-router-dom'
 import {
-  cilBell,
-  cilContrast,
-  cilEnvelopeOpen,
-  cilList,
   cilMenu,
-  cilMoon,
-  cilSun,
   cilAccountLogout
 } from '@coreui/icons'
 
-import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 
 const AppHeader = () => {
   const auth = useAuth();
   const navigate = useNavigate();
   const headerRef = useRef()
-  const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
 
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sidebarShow)
@@ -74,7 +61,6 @@ const AppHeader = () => {
         </CHeaderNav>
       </CContainer>
       <CContainer className="px-4" fluid>
-        <AppBreadcrumb />
       </CContainer>
     </CHeader>
   )
