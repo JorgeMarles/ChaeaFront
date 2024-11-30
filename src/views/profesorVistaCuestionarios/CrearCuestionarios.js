@@ -23,6 +23,7 @@ import {
 } from '@coreui/react'
 import Swal from 'sweetalert2'
 import { crearCuestionario } from '../../util/services/cuestionarioService'
+import './CrearCuestionario.css'
 
 const CrearCuestionario = () => {
   const navigate = useNavigate()
@@ -430,7 +431,18 @@ const CrearCuestionario = () => {
               </CButton>
             </CCol>
           </CRow>
-
+          <div className="multiple-selection-container mb-3">
+            <CFormCheck
+              checked={preguntaSelecMulti}
+              id="preguntaSM"
+              onChange={(e) => {
+                setPreguntaSelecMulti(e.target.checked)
+              }}
+              label="La pregunta será de selección Múltiple:"
+              className="multiple-selection-checkbox"
+              labelPosition="right"
+            />
+          </div>
           <CButton
             color="success"
             style={{ color: 'white', marginTop: '0.5rem ' }}
