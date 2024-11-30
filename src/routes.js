@@ -3,9 +3,6 @@ import { Roles } from './util/userUtils.js'
 
 //CHAEA DEVELOP
 //admin grupos
-const AdministrarGrupos = React.lazy(
-  () => import('./views/administrarGrupos/AdministrarGrupos'),
-)
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard.js'))
 
