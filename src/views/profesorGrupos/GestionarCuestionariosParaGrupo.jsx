@@ -58,14 +58,11 @@ const ResultadosGrupo = () => {
 
   const fetchDatos = async () => {
     try {
-      console.log(`Fetching data for group ID: ${currentGrupoId}`)
 
       const grupoData = await getGroupById(currentGrupoId)
-      console.log('Group data received:', grupoData)
 
       const cuestionariosData =
         await obtenerCuestionariosPorGrupo(currentGrupoId)
-      console.log('Cuestionarios data received:', cuestionariosData)
 
       setGrupo({ ...grupoData, cuestionarios: cuestionariosData })
 
@@ -87,7 +84,6 @@ const ResultadosGrupo = () => {
     try {
       
       const cuestionarioId = grupo.cuestionarios[idx].cuestionario.id;
-      console.log('Toggling ', cuestionarioId, ' grupo ', currentGrupoId);
       await toggleReporteGrupo(cuestionarioId, currentGrupoId);
       const cuestionarios = grupo.cuestionarios;
       cuestionarios[idx].bloqueado = !cuestionarios[idx].bloqueado;
@@ -128,12 +124,6 @@ const ResultadosGrupo = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            console.log(
-              'Asignando cuestionario:',
-              selectedCuestionario.id,
-              'al grupo:',
-              currentGrupoId,
-            )
             await asignarCuestionarioAGrupo(
               selectedCuestionario.id,
               currentGrupoId,
@@ -169,7 +159,6 @@ const ResultadosGrupo = () => {
     setLoading(true)
     try {
       const data = await obtenerCuestionario(id)
-      console.log('Cuestionario details:', data)
       setSelectedCuestionario(data)
       setDetailsModalVisible(true)
       setLoading(false)
@@ -259,10 +248,7 @@ const ResultadosGrupo = () => {
                             <CButton
                               color="warning"
                               onClick={() => {
-                                console.log('Navigating to report with:', {
-                                  idCuestionario: item.cuestionario.id,
-                                  idGrupo: currentGrupoId,
-                                })
+
                                 if (item.cuestionario.id && currentGrupoId) {
                                   navigate(
                                     `/reporte/${item.cuestionario.id}/grupo/${currentGrupoId}`,

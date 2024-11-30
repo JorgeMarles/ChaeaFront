@@ -39,7 +39,6 @@ const EstudianteVistaCuestionario = () => {
         if (response.ok) {
           setPendientes(response.data.pendientes)
           setResueltos(response.data.resueltos)
-          console.log(response.data)
         } else {
           throw response
         }

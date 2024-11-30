@@ -24,15 +24,6 @@ function RequireAuth({ roles }) {
         navigate('/login')
       } else {
         const rol = getRole(nuser)
-        
-        console.log(
-          'User ',
-          nuser,
-          ' with rol ',
-          getRoleKey(rol),
-          ' trying access resource with roles ',
-          roles.map((e) => getRoleKey(e)),
-        )
 
         if (!roles.includes(rol)) {
           navigate('/')

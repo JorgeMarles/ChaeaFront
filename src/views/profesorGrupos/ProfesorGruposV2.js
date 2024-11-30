@@ -140,7 +140,6 @@ const ProfesorGrupos = () => {
             (email) => !updatedNewStudents.includes(email),
           )
           setSelectedNewStudents(uniqueCsvStudents)
-          console.log('Estudiantes agregados desde CSV:', uniqueCsvStudents) // Verificar correos añadidos desde CSV
         },
         header: true,
       })
@@ -180,7 +179,6 @@ const ProfesorGrupos = () => {
           )
 
           setSelectedStudents(uniqueCsvStudents)
-          console.log('Estudiantes agregados desde CSV:', uniqueCsvStudents) // Verificar correos añadidos desde CSV
         },
         header: true,
       })
@@ -207,7 +205,6 @@ const ProfesorGrupos = () => {
       estudiantes: emailsArray,
     }
 
-    console.log('grupoDTO:', grupoDTO) // Verificar el objeto grupoDTO
 
     getGroups()
       .then((res) => {
@@ -229,7 +226,6 @@ const ProfesorGrupos = () => {
                 icon: 'success',
               })
               setModalVisible(false)
-              console.log(response);
               const x = {...response, numEstudiantes: response.estudiantes.length}
               setGrupos([...grupos, x])
               clearForm() // Limpiar la lista de estudiantes seleccionados y otros campos del formulario
@@ -300,8 +296,6 @@ const ProfesorGrupos = () => {
 
   const handleAddStudentsToGroup = (e) => {
     e.preventDefault()
-    console.log('Correo ingresado:', newStudentEmail) // Verificar el correo ingresado
-    console.log('ID del Grupo:', currentGrupoId) // Verificar la ID del grupo
 
     if (selectedNewStudents.length === 0) {
       Swal.fire({
@@ -312,13 +306,8 @@ const ProfesorGrupos = () => {
       return
     }
 
-    console.log(
-      'Enviando solicitud para añadir estudiantes:',
-      selectedNewStudents,
-    ) // Verificar estudiantes seleccionados
     addStudentsToGroup(currentGrupoId, selectedNewStudents)
       .then((response) => {
-        console.log('Respuesta del servidor:', response) // Verificar respuesta del servidor
 
         // Hacer una solicitud adicional para obtener la información actualizada del grupo
         getGroupById(currentGrupoId)

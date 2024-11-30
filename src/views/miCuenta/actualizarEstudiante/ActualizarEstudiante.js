@@ -43,7 +43,6 @@ const ActualizarEstudiante = () => {
       return;
     }
 
-    console.log('Form data submitted:', formData);
     const userUpd = {...user, ...formData};
     // Simulación de llamada al backend
     updateUserInfo(userUpd)

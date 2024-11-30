@@ -52,7 +52,6 @@ const ProfesorGrupo = () => {
 
   useEffect(() => {
     getGroupById(id).then((el) => {
-      console.log(el)
 
       setGrupo(el)
       const bools = el.estudiantes.map(() => true)
@@ -115,8 +114,6 @@ const ProfesorGrupo = () => {
 
   const handleAddStudentsToGroup = (e) => {
     e.preventDefault()
-    console.log('Correo ingresado:', newStudentEmail) // Verificar el correo ingresado
-    console.log('ID del Grupo:', currentGrupoId) // Verificar la ID del grupo
 
     if (selectedNewStudents.length === 0) {
       Swal.fire({
@@ -127,13 +124,8 @@ const ProfesorGrupo = () => {
       return
     }
 
-    console.log(
-      'Enviando solicitud para añadir estudiantes:',
-      selectedNewStudents,
-    ) // Verificar estudiantes seleccionados
     addStudentsToGroup(currentGrupoId, selectedNewStudents)
       .then((response) => {
-        console.log('Respuesta del servidor:', response) // Verificar respuesta del servidor
 
         // Hacer una solicitud adicional para obtener la información actualizada del grupo
         getGroupById(currentGrupoId)

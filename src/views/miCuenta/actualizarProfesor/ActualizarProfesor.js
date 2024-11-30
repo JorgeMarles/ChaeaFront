@@ -40,7 +40,6 @@ const ActualizarCuentaProfesor = () => {
       return;
     }
 
-    console.log('Form data submitted:', formData);
     
     // Simulación de llamada al backend
     const userUpd = {...user, ...formData};

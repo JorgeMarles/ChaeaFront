@@ -40,8 +40,6 @@ const ReporteGrupo = () => {
   })
 
   useEffect(() => {
-    console.log('ID Cuestionario:', id1)
-    console.log('ID Grupo:', id2)
 
     if (!id1 || !id2) {
       console.error('Parámetros faltantes.')

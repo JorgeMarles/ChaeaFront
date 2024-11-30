@@ -124,10 +124,7 @@ const CrearCuestionario = () => {
           })),
         }
 
-        console.log(
-          'Cuestionario generado:',
-          JSON.stringify(cuestionario, null, 2),
-        )
+
         // Lógica para enviar el cuestionario al endpoint irá aquí
         crearCuestionario(cuestionario)
           .then((response) => {

@@ -48,9 +48,7 @@ const ResponderCuestionario = () => {
           }
         })
         setRespuestasSeleccionadas(ressel) // Inicializar con null
-        console.log(ressel)
         const sm = data.preguntas.map((el) => el.opcionMultiple)
-        console.log(sm)
         setSelMul(sm)
         setLoading(false)
       } catch (error) {
@@ -93,7 +91,6 @@ const ResponderCuestionario = () => {
       cuestionarioId: parseInt(id),
       opcionesSeleccionadasId: respuestasSeleccionadas.flatMap(el => el.opts),
     }
-    console.log(respuestasDTO);
     
     try {
       await responderCuestionario(respuestasDTO)
@@ -105,7 +102,6 @@ const ResponderCuestionario = () => {
         navigate('/cuestionarios')
       })
     } catch (error) {
-      console.log(error)
       Swal.fire('Error', 'Hubo un problema al enviar el cuestionario.', 'error')
     }
   }

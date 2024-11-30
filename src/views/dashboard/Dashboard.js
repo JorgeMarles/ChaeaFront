@@ -7,13 +7,9 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('User:', user);
-
     if (user) {
       try {
         const role = getRole(user);
-        console.log('User role:', role);
-
         switch(role) {
           case Roles.ESTUDIANTE_INACTIVO:
           case Roles.ESTUDIANTE_INCOMPLETO:
