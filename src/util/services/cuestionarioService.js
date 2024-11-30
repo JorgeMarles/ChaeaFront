@@ -91,9 +91,6 @@ export const obtenerCuestionariosPorGrupo = async (idGrupo) => {
 // Asignar Cuestionario a Grupo
 export const asignarCuestionarioAGrupo = async (idCuestionario, idGrupo) => {
   try {
-    console.log(
-      `Llamada al endpoint para asignar cuestionario ${idCuestionario} al grupo ${idGrupo}`,
-    )
     const response = await axios.post(
       `${API_URL}/api/cuestionarios/${idCuestionario}/asignargrupo/${idGrupo}`,
       {},
@@ -103,7 +100,6 @@ export const asignarCuestionarioAGrupo = async (idCuestionario, idGrupo) => {
         },
       },
     )
-    console.log('Respuesta del servidor:', response)
     return response.status === 201
   } catch (error) {
     console.error('Error en asignarCuestionarioAGrupo:', error)
@@ -144,10 +140,8 @@ export const responderCuestionario = async (respuesta) => {
         },
       },
     )
-    console.log(response)
     return response.status === 201
   } catch (error) {
-    console.log(error)
     throw error.response.data
   }
 }
@@ -182,9 +176,6 @@ export const obtenerReporteGrupo = async (idCuestionario, idGrupo) => {
   }
 
   try {
-    console.log(
-      `Obteniendo reporte para cuestionario ${idCuestionario} y grupo ${idGrupo}`,
-    )
     const response = await axios.get(
       `${API_URL}/api/cuestionarios/reporte/${idCuestionario}/grupo/${idGrupo}`,
       {
@@ -193,7 +184,6 @@ export const obtenerReporteGrupo = async (idCuestionario, idGrupo) => {
         },
       },
     )
-    console.log('Reporte obtenido:', response.data)
     return response.data
   } catch (error) {
     console.error('Error al obtener el reporte:', error)
@@ -259,10 +249,7 @@ export const toggleReporteGrupo = async (idCuestionario, idGrupo) => {
   }
 
   try {
-    console.log(
-      `Toggling bloqueado para cuestionario ${idCuestionario} y grupo ${idGrupo}`,
-    )
-    const response = await axios.patch(
+    await axios.patch(
       `${API_URL}/api/cuestionarios/reporte/${idCuestionario}/grupo/${idGrupo}`,
       {},
       {
@@ -271,13 +258,13 @@ export const toggleReporteGrupo = async (idCuestionario, idGrupo) => {
         },
       },
     )
-    console.log('Toggled:', response.data)
   } catch (error) {
     console.error('Error al obtener el reporte:', error)
     if (error.response) {
       console.error('Detalles del error:', error.response.data)
       throw new Error(
-        error.response.data.message || 'Error al togglear bloqueado para esta aplicacion.',
+        error.response.data.message ||
+          'Error al togglear bloqueado para esta aplicacion.',
       )
     } else {
       throw new Error('Error desconocido al comunicarse con el servidor.')

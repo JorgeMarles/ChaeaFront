@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { CContainer, CSpinner } from '@coreui/react'
 
 // routes config
-import routes, { protectedRoutes } from '../routes'
+import { protectedRoutes } from '../routes'
 import RequireAuth from '../util/auth/RequireAuth'
 
 const AppContent = () => {
@@ -11,19 +11,6 @@ const AppContent = () => {
     <CContainer className="px-4" lg>
       <Suspense fallback={<CSpinner color="primary" />}>
         <Routes>
-          {routes.map((route, idx) => {
-            return (
-              route.element && (
-                <Route
-                  key={idx}
-                  path={route.path}
-                  exact={route.exact}
-                  name={route.name}
-                  element={<route.element />}
-                />
-              )
-            )
-          })}
           {protectedRoutes.map((route, idx) => (
             <Route key={idx} element={<RequireAuth roles={route.roles} />}>
               <Route
@@ -34,7 +21,7 @@ const AppContent = () => {
               />
             </Route>
           ))}
-          
+
           <Route path="/" element={<Navigate to="dashboard" replace />} />
         </Routes>
       </Suspense>

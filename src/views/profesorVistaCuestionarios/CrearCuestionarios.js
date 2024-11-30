@@ -19,13 +19,11 @@ import {
   CTableRow,
   CTableHeaderCell,
   CTableDataCell,
-  CFormSelect,
-  CFormFloating,
   CFormCheck,
 } from '@coreui/react'
 import Swal from 'sweetalert2'
 import { crearCuestionario } from '../../util/services/cuestionarioService'
-import './CrearCuestionario.css';
+import './CrearCuestionario.css'
 
 const CrearCuestionario = () => {
   const navigate = useNavigate()
@@ -125,10 +123,6 @@ const CrearCuestionario = () => {
           })),
         }
 
-        console.log(
-          'Cuestionario generado:',
-          JSON.stringify(cuestionario, null, 2),
-        )
         // Lógica para enviar el cuestionario al endpoint irá aquí
         crearCuestionario(cuestionario)
           .then((response) => {
@@ -317,19 +311,62 @@ const CrearCuestionario = () => {
           <hr />
           <h5>Preguntas</h5>
           <CRow className="mb-3">
-          <CCol md="12">
-            <CFormLabel htmlFor="preguntaTitulo">
-              Título de la Pregunta
-            </CFormLabel>
-            <CFormInput
-              id="preguntaTitulo"
-              value={preguntaTitulo}
-              onChange={(e) => setPreguntaTitulo(e.target.value)}
-              placeholder="Ingrese el título de la pregunta"
-              style={{  height:'3.5rem' }}
-            />
-          </CCol>
-        </CRow>
+            <CCol md="12">
+              <div className="multiple-selection-container mb-3">
+                <CFormCheck
+                  checked={preguntaSelecMulti}
+                  id="preguntaSM"
+                  onChange={(e) => {
+                    setPreguntaSelecMulti(e.target.checked)
+                  }}
+                  label="Será de Selección Múltiple:"
+                  className="multiple-selection-checkbox"
+                  labelPosition="right"
+                />
+              </div>
+              <CFormLabel htmlFor="preguntaTitulo">
+                Título de la Pregunta
+              </CFormLabel>
+              <CFormInput
+                id="preguntaTitulo"
+                value={preguntaTitulo}
+                onChange={(e) => setPreguntaTitulo(e.target.value)}
+                placeholder="Ingrese el título de la pregunta"
+                style={{ height: '3.5rem' }}
+              />
+            </CCol>
+          </CRow>
+
+          <style>
+            {`
+        .multiple-selection-container {
+          background-color: #f0f0f0;
+          border: 2px solid #000000;
+          border-radius: 8px;
+          padding: 10px;
+          margin-bottom: 15px;
+        }
+
+        .multiple-selection-checkbox {
+          font-weight: bold;
+          color: black;
+          display: flex;
+          align-items: center;
+        }
+
+        .multiple-selection-checkbox .form-check-input {
+          transform: scale(1.5);
+          margin-right: 10px;
+          order: 2;
+          margin-left: 10px;
+        }
+
+        .multiple-selection-checkbox .form-check-label {
+          order: 1;
+        }
+        `}
+          </style>
+
           <CRow className="mb-3">
             <CCol md="12">
               {opciones.map((opcion, index) => (
@@ -344,7 +381,7 @@ const CrearCuestionario = () => {
                     }
                     placeholder={`Ingrese la opción ${index + 1}`}
                     className="me-2"
-                    style={{  height:'3.5rem' }}
+                    style={{ height: '3.5rem' }}
                   />
                   <CFormInput
                     type="number"
@@ -358,7 +395,7 @@ const CrearCuestionario = () => {
                       )
                     }
                     className="me-2"
-                    style={{ width: '80px', height:'1rem' }}
+                    style={{ width: '80px', height: '1rem' }}
                   />
                   <select
                     className="form-select me-2"
@@ -370,7 +407,7 @@ const CrearCuestionario = () => {
                         parseInt(e.target.value),
                       )
                     }
-                    style={{  height:'3.5rem' }}
+                    style={{ height: '3.5rem' }}
                   >
                     <option value="">Seleccione Estilo</option>
                     {categorias.map((categoria) => (
@@ -395,17 +432,17 @@ const CrearCuestionario = () => {
             </CCol>
           </CRow>
           <div className="multiple-selection-container mb-3">
-              <CFormCheck
-                checked={preguntaSelecMulti}
-                id="preguntaSM"
-                onChange={(e) => {
-                  setPreguntaSelecMulti(e.target.checked)
-                }}
-                label="La pregunta será de selección Múltiple:"
-                className="multiple-selection-checkbox"
-                labelPosition="right"
-              />
-            </div>
+            <CFormCheck
+              checked={preguntaSelecMulti}
+              id="preguntaSM"
+              onChange={(e) => {
+                setPreguntaSelecMulti(e.target.checked)
+              }}
+              label="La pregunta será de selección Múltiple:"
+              className="multiple-selection-checkbox"
+              labelPosition="right"
+            />
+          </div>
           <CButton
             color="success"
             style={{ color: 'white', marginTop: '0.5rem ' }}
@@ -436,7 +473,9 @@ const CrearCuestionario = () => {
                   >
                     <CTableDataCell>{pregunta.id}</CTableDataCell>
                     <CTableDataCell>{pregunta.titulo}</CTableDataCell>
-                    <CTableDataCell>{pregunta.seleccionMultiple ? 'Sí' : 'No'}</CTableDataCell>
+                    <CTableDataCell>
+                      {pregunta.seleccionMultiple ? 'Sí' : 'No'}
+                    </CTableDataCell>
                     <CTableDataCell>{pregunta.opciones.length}</CTableDataCell>
                     <CTableDataCell className="text-end">
                       <CButton

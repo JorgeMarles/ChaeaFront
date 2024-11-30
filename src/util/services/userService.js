@@ -41,8 +41,7 @@ export const updateUserInfo = async (user) => {
       status: response.status,
     }
     return responseOut
-  } catch (error) {    
-    throw error.response.data;
+  } catch (error) {
+    throw error.response.data
   }
-  
 }

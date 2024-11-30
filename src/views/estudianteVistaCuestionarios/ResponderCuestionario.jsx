@@ -48,9 +48,7 @@ const ResponderCuestionario = () => {
           }
         })
         setRespuestasSeleccionadas(ressel) // Inicializar con null
-        console.log(ressel)
         const sm = data.preguntas.map((el) => el.opcionMultiple)
-        console.log(sm)
         setSelMul(sm)
         setLoading(false)
       } catch (error) {
@@ -79,7 +77,11 @@ const ResponderCuestionario = () => {
   }
 
   const handleSubmit = async () => {
-    if (respuestasSeleccionadas.some((respuesta,idx) => {!selMul[idx] && respuesta.opts.length !== 1})) {
+    if (
+      respuestasSeleccionadas.some((respuesta, idx) => {
+        !selMul[idx] && respuesta.opts.length !== 1
+      })
+    ) {
       Swal.fire(
         'Advertencia',
         'Debes seleccionar una opción para cada pregunta que no sea de selección múltiple.',
@@ -87,14 +89,12 @@ const ResponderCuestionario = () => {
       )
       return
     }
-    
-    
+
     const respuestasDTO = {
       cuestionarioId: parseInt(id),
-      opcionesSeleccionadasId: respuestasSeleccionadas.flatMap(el => el.opts),
+      opcionesSeleccionadasId: respuestasSeleccionadas.flatMap((el) => el.opts),
     }
-    console.log(respuestasDTO);
-    
+
     try {
       await responderCuestionario(respuestasDTO)
       Swal.fire(
@@ -105,7 +105,6 @@ const ResponderCuestionario = () => {
         navigate('/cuestionarios')
       })
     } catch (error) {
-      console.log(error)
       Swal.fire('Error', 'Hubo un problema al enviar el cuestionario.', 'error')
     }
   }
@@ -208,7 +207,9 @@ const ResponderCuestionario = () => {
                                 checked={respuestasSeleccionadas[
                                   preguntaIndex
                                 ].opts.includes(opcion.id)}
-                                onChange={e => {e.preventDefault()}}
+                                onChange={(e) => {
+                                  e.preventDefault()
+                                }}
                                 className="m-0"
                               />
                             </CCard>

@@ -1,5 +1,3 @@
-
-
 /**
  * @author Serif Colakel
  * @name useLocalStorage
@@ -17,11 +15,11 @@ export function useLocalStorage(key) {
    */
   const setItem = (value) => {
     try {
-      window.localStorage.setItem(key, JSON.stringify(value));
+      window.localStorage.setItem(key, JSON.stringify(value))
     } catch (error) {
-      window.console.log(error);
+      window.console.log(error)
     }
-  };
+  }
 
   /**
    * @description A function to get the value from the local storage.
@@ -29,17 +27,17 @@ export function useLocalStorage(key) {
    */
   const getItem = () => {
     try {
-      const item = window.localStorage.getItem(key);
+      const item = window.localStorage.getItem(key)
 
-      if (item === null) return undefined;
+      if (item === null) return undefined
 
-      return JSON.parse(item);
+      return JSON.parse(item)
     } catch (error) {
-      window.console.log(error);
+      window.console.log(error)
 
-      return undefined;
+      return undefined
     }
-  };
+  }
 
   /**
    * @description A function to remove the value from the local storage.
@@ -47,11 +45,11 @@ export function useLocalStorage(key) {
    */
   const removeItem = () => {
     try {
-      window.localStorage.removeItem(key);
+      window.localStorage.removeItem(key)
     } catch (error) {
-      window.console.log(error);
+      window.console.log(error)
     }
-  };
+  }
 
-  return [getItem, setItem, removeItem];
+  return [getItem, setItem, removeItem]
 }

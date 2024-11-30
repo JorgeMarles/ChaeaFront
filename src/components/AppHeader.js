@@ -1,12 +1,7 @@
 import React, { useEffect, useRef } from 'react'
-import { NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CContainer,
-  CDropdown,
-  CDropdownItem,
-  CDropdownMenu,
-  CDropdownToggle,
   CHeader,
   CHeaderNav,
   CHeaderToggler,
@@ -17,25 +12,14 @@ import {
 import CIcon from '@coreui/icons-react'
 import { useAuth } from '../util/auth/AuthProvider'
 import { useNavigate } from 'react-router-dom'
-import {
-  cilBell,
-  cilContrast,
-  cilEnvelopeOpen,
-  cilList,
-  cilMenu,
-  cilMoon,
-  cilSun,
-  cilAccountLogout
-} from '@coreui/icons'
+import { cilMenu, cilAccountLogout } from '@coreui/icons'
 
-import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 
 const AppHeader = () => {
-  const auth = useAuth();
-  const navigate = useNavigate();
+  const auth = useAuth()
+  const navigate = useNavigate()
   const headerRef = useRef()
-  const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
 
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sidebarShow)
@@ -43,12 +27,15 @@ const AppHeader = () => {
   useEffect(() => {
     document.addEventListener('scroll', () => {
       headerRef.current &&
-        headerRef.current.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0)
+        headerRef.current.classList.toggle(
+          'shadow-sm',
+          document.documentElement.scrollTop > 0,
+        )
     })
   }, [])
 
   const handleLogout = () => {
-    auth.signout(()=>navigate("/login"));
+    auth.signout(() => navigate('/login'))
   }
 
   return (
@@ -68,14 +55,12 @@ const AppHeader = () => {
           </li>
           <CNavItem>
             <CNavLink href="#" onClick={handleLogout}>
-            <CIcon icon={cilAccountLogout} size="lg" />
+              <CIcon icon={cilAccountLogout} size="lg" />
             </CNavLink>
           </CNavItem>
         </CHeaderNav>
       </CContainer>
-      <CContainer className="px-4" fluid>
-        <AppBreadcrumb />
-      </CContainer>
+      <CContainer className="px-4" fluid></CContainer>
     </CHeader>
   )
 }

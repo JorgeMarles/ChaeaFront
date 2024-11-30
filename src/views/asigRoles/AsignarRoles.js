@@ -176,7 +176,7 @@ const AsignarRoles = () => {
                         }
                         style={{ marginRight: '10px' }}
                       >
-                        Quitar Admin 
+                        Quitar Admin
                       </CButton>
                     ) : (
                       <CButton

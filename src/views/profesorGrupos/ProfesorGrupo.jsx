@@ -52,8 +52,6 @@ const ProfesorGrupo = () => {
 
   useEffect(() => {
     getGroupById(id).then((el) => {
-      console.log(el)
-
       setGrupo(el)
       const bools = el.estudiantes.map(() => true)
       setSearchStudentList(bools)
@@ -96,7 +94,7 @@ const ProfesorGrupo = () => {
           ),
         })
         setSearchStudentList(new Array(grupo.estudiantes.length - 1).fill(true))
-        setSearch('');
+        setSearch('')
         Swal.fire({
           title: '¡Eliminado!',
           text: 'El estudiante ha sido eliminado.',
@@ -115,8 +113,6 @@ const ProfesorGrupo = () => {
 
   const handleAddStudentsToGroup = (e) => {
     e.preventDefault()
-    console.log('Correo ingresado:', newStudentEmail) // Verificar el correo ingresado
-    console.log('ID del Grupo:', currentGrupoId) // Verificar la ID del grupo
 
     if (selectedNewStudents.length === 0) {
       Swal.fire({
@@ -127,19 +123,15 @@ const ProfesorGrupo = () => {
       return
     }
 
-    console.log(
-      'Enviando solicitud para añadir estudiantes:',
-      selectedNewStudents,
-    ) // Verificar estudiantes seleccionados
     addStudentsToGroup(currentGrupoId, selectedNewStudents)
       .then((response) => {
-        console.log('Respuesta del servidor:', response) // Verificar respuesta del servidor
-
         // Hacer una solicitud adicional para obtener la información actualizada del grupo
         getGroupById(currentGrupoId)
           .then((updatedGrupo) => {
             setGrupo(updatedGrupo)
-            setSearchStudentList(new Array(updatedGrupo.estudiantes.length).fill(true))
+            setSearchStudentList(
+              new Array(updatedGrupo.estudiantes.length).fill(true),
+            )
             setSelectedNewStudents([])
             setModalAddStudentVisible(false)
             Swal.fire({
@@ -172,12 +164,17 @@ const ProfesorGrupo = () => {
 
   const filterStudent = (str) => {
     setSearch(str)
-    if(str === ''){
+    if (str === '') {
       setSearchStudentList(new Array(grupo.estudiantes.length - 1).fill(true))
-    }else{
-      setSearchStudentList(grupo.estudiantes.map(e => {
-        return (e.email.toLowerCase().includes(str) || e.nombre.toLowerCase().includes(str))
-      }))
+    } else {
+      setSearchStudentList(
+        grupo.estudiantes.map((e) => {
+          return (
+            e.email.toLowerCase().includes(str) ||
+            e.nombre.toLowerCase().includes(str)
+          )
+        }),
+      )
     }
   }
 
@@ -212,7 +209,7 @@ const ProfesorGrupo = () => {
                 placeholder="Buscar estudiante..."
                 aria-label="Buscar estudiante"
                 value={search}
-                onChange={e => filterStudent(e.target.value)}
+                onChange={(e) => filterStudent(e.target.value)}
               />
               <CInputGroupText>
                 <CIcon icon={cilSearch} />
@@ -254,25 +251,27 @@ const ProfesorGrupo = () => {
                 </CTableRow>
               </CTableHead>
               <CTableBody>
-                {grupo.estudiantes.map((estudiante, idx) => (
-                  searchStudentList[idx] ?
-                  <CTableRow key={estudiante.email}>
-                    <CTableDataCell>{estudiante.nombre}</CTableDataCell>
-                    <CTableDataCell>{estudiante.email}</CTableDataCell>
-                    <CTableDataCell className="text-center">
-                      <CButton
-                        color="danger"
-                        size="sm"
-                        onClick={() =>
-                          handleDeleteEstudiante(estudiante.email, grupo.id)
-                        }
-                      >
-                        -
-                      </CButton>
-                    </CTableDataCell>
-                  </CTableRow>
-                  : <></>
-                ))}
+                {grupo.estudiantes.map((estudiante, idx) =>
+                  searchStudentList[idx] ? (
+                    <CTableRow key={estudiante.email}>
+                      <CTableDataCell>{estudiante.nombre}</CTableDataCell>
+                      <CTableDataCell>{estudiante.email}</CTableDataCell>
+                      <CTableDataCell className="text-center">
+                        <CButton
+                          color="danger"
+                          size="sm"
+                          onClick={() =>
+                            handleDeleteEstudiante(estudiante.email, grupo.id)
+                          }
+                        >
+                          -
+                        </CButton>
+                      </CTableDataCell>
+                    </CTableRow>
+                  ) : (
+                    <></>
+                  ),
+                )}
               </CTableBody>
             </CTable>
           </div>
