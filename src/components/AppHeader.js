@@ -55,7 +55,28 @@ const AppHeader = () => {
           </li>
           <CNavItem>
             <CNavLink href="#" onClick={handleLogout}>
+              
+            </CNavLink>
+            
+          </CNavItem>
+          <CNavItem>
+            <CNavLink href="#" onClick={handleLogout}>
               <CIcon icon={cilAccountLogout} size="lg" />
+            </CNavLink>
+          </CNavItem>
+           <CNavItem>
+            <CNavLink href="#" onClick={handleLogout}>
+              
+            </CNavLink>
+            </CNavItem>
+           <CNavItem>
+            <CNavLink href="#" onClick={handleLogout}>
+              
+            </CNavLink>
+          </CNavItem>
+           <CNavItem>
+            <CNavLink href="#" onClick={handleLogout}>
+              
             </CNavLink>
           </CNavItem>
         </CHeaderNav>

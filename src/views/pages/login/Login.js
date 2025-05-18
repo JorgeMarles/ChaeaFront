@@ -15,6 +15,7 @@ import googleIcon from 'src/assets/images/google.png'
 import logoUfps from 'src/assets/images/logo_ufps.png'
 import ingSistemas from 'src/assets/images/ingSistemas.png'
 import chaealogo from 'src/assets/images/chaealogo.png'
+import AdelaTitle from 'src/assets/images/ADELA.png'
 import Swal from 'sweetalert2'
 import { decodeJwt } from 'jose'
 import { useLocalStorage } from '../../../util/hooks/useLocalStorage'
@@ -90,33 +91,42 @@ const Login = () => {
 
   return (
     <div className="bg-body-tertiary min-vh-100 d-flex flex-column">
-      <CHeader>
-        <CContainer fluid>
-          <CHeaderBrand className="header-brand d-flex align-items-center justify-content-between w-100">
-            <img
-              src={logoUfps}
-              alt="UFPS Logo"
-              className="img-fluid"
-              style={{ width: '90px', height: '90px', objectFit: 'contain' }}
-            />
-            <img
-              src={ingSistemas}
-              alt="Ingeniería de Sistemas"
-              className="img-fluid mx-3"
-              style={{ width: '90px', height: '90px', objectFit: 'contain' }}
-            />
-            <h1 className="text-center mx-3 my-0 flex-grow-1">
-              APP Web Perfiles de Aprendizaje
-            </h1>
-            <img
-              src={chaealogo}
-              alt="CHAEA Logo"
-              className="img-fluid"
-              style={{ width: '160px', height: '160px', objectFit: 'contain' }}
-            />
-          </CHeaderBrand>
-        </CContainer>
-      </CHeader>
+          <CHeader>
+          <CContainer fluid>
+            <CHeaderBrand className="header-brand d-flex align-items-center justify-content-between w-100">
+              <img
+                src={logoUfps}
+                alt="UFPS Logo"
+                className="img-fluid"
+                style={{ width: '90px', height: '90px', objectFit: 'contain' }}
+              />
+              <img
+                src={ingSistemas}
+                alt="Ingeniería de Sistemas"
+                className="img-fluid mx-3"
+                style={{ width: '90px', height: '90px', objectFit: 'contain' }}
+              />
+              <div className="text-center mx-3 my-0 flex-grow-1 d-flex flex-column align-items-center">
+              <img
+                    src={AdelaTitle}
+                    alt="Adela Title"
+                    className="img-fluid"
+                    style={{ width: '160px', height: 'auto', objectFit: 'contain', display: 'block' }}
+                  />
+
+                <h2 className="mt-1">Aplicativo para la Detección de Estilo del Aprendizaje</h2>
+              </div>
+              <img
+                src={chaealogo}
+                alt="CHAEA Logo"
+                className="img-fluid"
+                style={{ width: '160px', height: '160px', objectFit: 'contain' }}
+              />
+            </CHeaderBrand>
+          </CContainer>
+        </CHeader>
+
+
 
       <CContainer className="flex-grow-1 d-flex align-items-center">
         <CRow className="w-100 justify-content-center">
@@ -142,8 +152,7 @@ const Login = () => {
           <CRow>
             <CCol className="text-center">
               <p className="text-muted mb-0">
-                © {new Date().getFullYear()} Aplicativo Web para la Gestión de
-                Cuestionarios
+                © {new Date().getFullYear()} ADELA - Aplicativo para la Detección de Estilo del Aprendizaje
               </p>
             </CCol>
           </CRow>
