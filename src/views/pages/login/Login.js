@@ -152,7 +152,7 @@ const Login = () => {
           <CRow>
             <CCol className="text-center">
               <p className="text-muted mb-0">
-                © {new Date().getFullYear()} ADELA - Aplicativo para la Detección de Estilo del Aprendizaje
+                © {new Date().getFullYear()} CHAEA - Aplicativo para la Detección de Estilo del Aprendizaje
               </p>
             </CCol>
           </CRow>
